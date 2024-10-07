@@ -10,12 +10,12 @@ import java.util.List;
 public class User {
     private String id;
     private String username;
-    private int password;
+    private String password;
     private String birth;
     private String phoneNum;
     private List<AccountInfo> accounts;
 
-    public User(String id, int password, String username, String phoneNum, String birth) {
+    public User(String id, String password, String username, String phoneNum, String birth) {
         this.id = id;
         this.password = password;
         this.username = username;

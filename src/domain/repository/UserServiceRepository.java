@@ -51,12 +51,12 @@ public class UserServiceRepository {
                 String[] parts = line.split("\t");
                 if (parts.length >= 5) {
                     String id = parts[0];
-                    String name = parts[1];
-                    int password = parseInt(parts[2]);
+                    String password = parts[1];
+                    String name = parts[2];
                     String phoneNumber = parts[3];
-                    String dateOfBirth = parts[4];
+                    String birth = parts[4];
 
-                    User user = new User(id, password, name, phoneNumber, dateOfBirth);
+                    User user = new User(id, password, name, phoneNumber, birth);
                     users.add(user);
                 }
             }
@@ -71,14 +71,15 @@ public class UserServiceRepository {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split("\t");
-                if (parts.length >= 3) {
+                if (parts.length >= 4) {
                     String accountNum = parts[0];
                     String userId = parts[1];
-                    int balance = parseInt(parts[2]);
+                    int accountpw =parseInt(parts[2]);
+                    int balance = parseInt(parts[3]);
 
                     User user = getUserById(userId);
 //                    if (user != null) {
-//                        Account account = new Account(accountNum, balance);
+//                        Account account = new Account(accountNum, accountpw, balance);
 //                        user.getAccounts().add(account);
 //                    }
                 }
@@ -91,8 +92,9 @@ public class UserServiceRepository {
     private void updateUserFile(String filename) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
             for (User user : users) {
-                writer.write(user.getId() + "\t" + user.getUsername() + "\t" +
-                        user.getPassword() + "\t" + user.getPhoneNum() + "\t" +
+                writer.write(user.getId() + "\t" +
+                        user.getPassword() + "\t"
+                        + user.getUsername() + "\t"  + user.getPhoneNum() + "\t" +
                         user.getBirth());
                 writer.newLine();
             }
