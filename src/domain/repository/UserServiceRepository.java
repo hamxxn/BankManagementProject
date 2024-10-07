@@ -15,14 +15,14 @@ public class UserServiceRepository {
     private final List<User> users;
 
     public UserServiceRepository() {
-        UserfileReader("./UserInfo.txt");
-        AccountfileReader("./AccountInfo.txt");
+        UserfileReader("../UserInfo.txt");
+        AccountfileReader("../AccountInfo.txt");
         this.users = new ArrayList<User>();
     }
 
     public void add(User user) {
         users.add(user);
-        updateUserFile("./UserInfo.txt");
+        updateUserFile("../UserInfo.txt");
     }
 
     public User getUserById(String id) {
@@ -42,7 +42,6 @@ public class UserServiceRepository {
         }
         return null;
     }
-
 
     private void UserfileReader(String filename) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
@@ -64,7 +63,6 @@ public class UserServiceRepository {
             System.err.println("파일을 찾을 수 없습니다.");
         }
     }
-
 
     private void AccountfileReader(String filename) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
@@ -100,4 +98,6 @@ public class UserServiceRepository {
             System.err.println("파일 업데이트에 실패했습니다.");
         }
     }
+
+
 }
