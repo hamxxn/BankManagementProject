@@ -12,7 +12,7 @@ import static java.lang.Integer.parseInt;
 
 public class UserServiceRepository {
 
-    private List<User> users;
+    private final List<User> users;
 
     public UserServiceRepository() {
         UserfileReader("./UserInfo.txt");
@@ -52,7 +52,7 @@ public class UserServiceRepository {
                 if (parts.length >= 5) {
                     String id = parts[0];
                     String name = parts[1];
-                    int password = parseInt(parts[2]);
+                    String password = parts[2];
                     String phoneNumber = parts[3];
                     String dateOfBirth = parts[4];
 

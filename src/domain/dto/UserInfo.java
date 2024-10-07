@@ -1,13 +1,7 @@
 package domain.dto;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-
-import java.util.ArrayList;
 import java.util.List;
 
-@Data
 public class UserInfo {
     private String username;
     private int password;
