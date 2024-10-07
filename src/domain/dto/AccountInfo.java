@@ -1,6 +1,6 @@
 package domain.dto;
 
-
+// TODO 이름, 계좌 비번
 public class AccountInfo {
     private String accountNum;
     private int balance;
