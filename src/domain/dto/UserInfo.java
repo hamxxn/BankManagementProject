@@ -14,4 +14,12 @@ public class UserInfo {
     private String id;
     private String phoneNum;
     private List<AccountInfo> accounts;
+
+    public UserInfo(String id, String username, int password, String phoneNum, String birth) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.phoneNum = phoneNum;
+        this.birth = birth;
+    }
 }
