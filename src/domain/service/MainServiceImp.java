@@ -11,7 +11,7 @@ import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class MainServiceImp implements MainService {
-    UserServiceRepository userServiceRepository=new UserServiceRepository();
+    UserServiceRepository userServiceRepository = new UserServiceRepository();
     private boolean isUnder15(String birth) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate birthDate = LocalDate.parse(birth, formatter);

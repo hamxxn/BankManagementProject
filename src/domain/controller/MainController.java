@@ -6,24 +6,25 @@ import domain.service.MainServiceImp;
 import java.util.Scanner;
 
 public class MainController {
-    private int menu;
+    //Todo managerController처럼 얘도 로컬변수로 바꾸기
+    private int userSelection; // 사용자가 선택한 메뉴의 번호를 받는 변수
 
     public void menu() {
         Scanner scanner = new Scanner(System.in);
-        MainService userService = new MainServiceImp();
+        MainService mainService = new MainServiceImp(); //Todo ManagerController처럼 final 변수로 선언할까?
         while (true) {
             try {
                 printMenu();
                 String input = scanner.nextLine().trim();
-                menu = Integer.parseInt(input);
-                if (menu == 1) {
-                    userService.loginMenu();
+                userSelection = Integer.parseInt(input);
+                if (userSelection == 1) {
+                    mainService.loginMenu();
                     break;
-                } else if (menu == 2) {
-                    userService.registerMemberMenu();
+                } else if (userSelection == 2) {
+                    mainService.registerMemberMenu();
                     break;
-                } else if (menu == 3) {
-                    userService.exitMenu();
+                } else if (userSelection == 3) {
+                    mainService.exitMenu();
                     break;
                 } else {
                     System.out.println("1-3 사이의 수를 입력하세요");
