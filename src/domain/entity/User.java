@@ -39,4 +39,8 @@ public class User {
     public String getBirth() {
         return birth;
     }
+
+    public String getAccountNum() {
+        return accountNum;
+    }
 }
