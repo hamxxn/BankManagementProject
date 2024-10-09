@@ -9,5 +9,8 @@ public class AccountInfo {
         this.accountNum = accountNum;
         this.balance = balance;
     }
+    public String getAccountNum() {
+        return accountNum;
+    }
 
 }

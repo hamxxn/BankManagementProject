@@ -40,4 +40,10 @@ public class User {
     public String getBirth() {
         return birth;
     }
+    public int getAccountCount() {
+        return accounts.size();
+    }
+    public void addAccounts(AccountInfo accountInfo){
+        accounts.add(accountInfo);
+    }
 }
