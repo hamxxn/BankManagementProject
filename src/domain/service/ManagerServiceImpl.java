@@ -1,7 +1,9 @@
 package domain.service;
 
+import domain.entity.User;
 import domain.repository.UserServiceRepository;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class ManagerServiceImpl {
@@ -28,7 +30,8 @@ public class ManagerServiceImpl {
                 if(searchName.equals("q")){ // q키 입력시 관리자 메뉴로 돌아감.
                     break;
                 }
-                //Todo userServiceRepository.getUserByName 만들어야 함. (리스트에 담아서 넘기게)
+                List<User> searchResult =  userServiceRepository.getUserByName(searchName);
+                System.out.println(searchResult);
 
                 // 해당 고객이 존재하지 않을 경우
                 System.out.println("해당 고객은 존재하지 않습니다. 계좌 검색 기능을 종료합니다.");
@@ -45,6 +48,8 @@ public class ManagerServiceImpl {
         // q 입력 시, 메인 메뉴로 돌아갑니다.
         // 1개 이상의 계좌가 존재한다면 위와 같이 계좌 정보를 출력한 후 관리자 메뉴로 돌아갑니다.
         // 만약, 어떠한 계좌도 존재하지 않는다면 “계좌가 존재하지 않습니다.”라는 메시지를 출력한 후 관리자 메뉴로 돌아갑니다.
+
+
     }
 
     private void logout(){ // 로그아웃 함수

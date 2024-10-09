@@ -43,6 +43,16 @@ public class UserServiceRepository {
         return null;
     }
 
+    public List<User> getUserByName(String name) {
+        List<User> getUser = new ArrayList<>();
+        for(User user : users) {
+            if(Objects.equals(user.getUsername(), name)) {
+                getUser.add(user);
+            }
+        }
+        return getUser;
+    }
+
     private void UserfileReader(String filename) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line;
