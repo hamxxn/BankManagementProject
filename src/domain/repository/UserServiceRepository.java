@@ -1,6 +1,5 @@
 package domain.repository;
 
-import domain.dto.UserInfo;
 import domain.entity.User;
 
 import java.io.*;
@@ -15,7 +14,7 @@ public class UserServiceRepository {
     private final List<User> users;
 
     public UserServiceRepository() {
-        UserfileReader("../UserInfo.txt");
+        UserFileReader("../UserInfo.txt");
         this.users = new ArrayList<User>();
     }
 
@@ -52,7 +51,7 @@ public class UserServiceRepository {
         return getUser;
     }
 
-    private void UserfileReader(String filename) {
+    private void UserFileReader(String filename) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -66,6 +65,7 @@ public class UserServiceRepository {
                     String accountNum = parts[5];
 
                     User user = new User(id, password, name, phoneNum, birth, accountNum);
+                    assert users != null;
                     users.add(user);
                 }
             }

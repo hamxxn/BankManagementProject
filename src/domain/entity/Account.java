@@ -1,13 +1,15 @@
+package domain.entity;
+
 public class Account {
     private String name;
     private String accountNum;
-    private String accountpw;
+    private String accountPw;
     private int balance;
 
-    public Account(String name, String accountNum, String accountpw, int balance) {
+    public Account(String name, String accountNum, String accountPw, int balance) {
         this.name = name;
         this.accountNum = accountNum;
-        this.accountpw = accountpw;
+        this.accountPw = accountPw;
         this.balance = balance;
     }
 
@@ -19,8 +21,8 @@ public class Account {
         return accountNum;
     }
 
-    public String getAccountpw() {
-        return accountpw;
+    public String getAccountPw() {
+        return accountPw;
     }
 
     public int getBalance() {

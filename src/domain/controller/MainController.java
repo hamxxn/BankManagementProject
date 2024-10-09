@@ -6,17 +6,16 @@ import domain.service.MainServiceImp;
 import java.util.Scanner;
 
 public class MainController {
-    //Todo managerController처럼 얘도 로컬변수로 바꾸기
-    private int userSelection; // 사용자가 선택한 메뉴의 번호를 받는 변수
 
     public void menu() {
         Scanner scanner = new Scanner(System.in);
-        MainService mainService = new MainServiceImp(); //Todo ManagerController처럼 final 변수로 선언할까?
+        MainService mainService = new MainServiceImp();
         while (true) {
             try {
                 printMenu();
                 String input = scanner.nextLine().trim();
-                userSelection = Integer.parseInt(input);
+                // 사용자가 선택한 메뉴의 번호를 받는 변수
+                int userSelection = Integer.parseInt(input);
                 if (userSelection == 1) {
                     mainService.loginMenu();
                     break;

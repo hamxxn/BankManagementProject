@@ -4,14 +4,14 @@ package domain.dto;
 public class AccountInfo {
     private String name;
     private String accountNum;
-    private String accountpw;
+    private String accountPw;
     private int balance;
 
 
-    public AccountInfo(String name, String accountNum, String accountpw, int balance) {
+    public AccountInfo(String name, String accountNum, String accountPw, int balance) {
         this.name = name;
         this.accountNum = accountNum;
-        this.accountpw = accountpw;
+        this.accountPw = accountPw;
         this.balance = balance;
     }
 }
