@@ -233,7 +233,7 @@ public class MainServiceImp implements MainService {
     public void loginMenu() {
         System.out.println("*** 로그인 ***");
         Scanner scanner = new Scanner(System.in);
-
+        User user ;
         while (true) {
             System.out.println("아이디를 입력해주세요. q 입력시 종료됩니다.");
             String userId = scanner.nextLine().trim();
@@ -269,7 +269,7 @@ public class MainServiceImp implements MainService {
             }
 
             // 아이디로 사용자 정보 조회
-            User user = userServiceRepository.getUserById(userId);
+           user=userServiceRepository.getUserById(userId);
 
             // 아이디가 존재하지 않을 경우
             if (user == null) {
@@ -287,7 +287,7 @@ public class MainServiceImp implements MainService {
             System.out.println("로그인 완료");
             break;  // 로그인 성공 시 while 루프 종료
         }
-        UserController userController = new UserController();
+        UserController userController = new UserController(user);
         userController.menu();
     }
 

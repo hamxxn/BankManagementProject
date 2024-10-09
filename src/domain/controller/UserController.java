@@ -1,5 +1,6 @@
 package domain.controller;
 
+import domain.entity.User;
 import domain.service.UserService;
 import domain.service.UserServiceImp;
 
@@ -7,10 +8,13 @@ import java.util.Scanner;
 
 public class UserController {
     private int menu;
-
+    private User user;
+    public UserController(User user) {
+        this.user = user;
+    }
     public void menu() {
         Scanner scanner = new Scanner(System.in);
-        UserService userService = new UserServiceImp();
+        UserService userService = new UserServiceImp(user);
         while (true) {
             try {
                 printMenu();

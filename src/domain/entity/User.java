@@ -40,6 +40,13 @@ public class User {
         return birth;
     }
 
+    public int getAccountCount() {
+        return accounts.size();
+    }
+    public void addAccounts(AccountInfo accountInfo){
+        accounts.add(accountInfo);
+    }
+}
     public String getAccountNum() {
         return accountNum;
     }
