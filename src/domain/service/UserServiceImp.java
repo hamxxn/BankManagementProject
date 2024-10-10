@@ -17,7 +17,7 @@ public class UserServiceImp implements UserService {
     public void withdraw(){}
     
     public void createAccount() {
-        if (user.getAccountCount() > 0) {
+        if (user.getAccountsCount()>=1) {
             System.out.println(user.getUsername() + "님, 계좌를 개설하실 수 없습니다. 메뉴로 이동합니다.");
             return;
         }
@@ -58,9 +58,12 @@ public class UserServiceImp implements UserService {
             }
 
             // 모든 조건이 만족되면 계좌 생성
-            String accountNum = "151" + user.getPhoneNum();
-            AccountInfo accountInfo = new AccountInfo(accountNum, 0);
-            user.addAccounts(accountInfo);
+            //010 빼고 계좌생성
+            String accountNum = "151" + user.getPhoneNum().substring(3);
+            System.out.println(accountNum);
+
+            AccountInfo accountInfo = new AccountInfo(user.getUsername() ,accountNum, password,0);
+            user.addAccount(accountInfo);
 
             System.out.println("계좌 개설이 완료되었습니다.");
             System.out.println(user.getUsername() + "님의 계좌번호는 " + accountInfo.getAccountNum() + "입니다.");
