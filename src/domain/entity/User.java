@@ -1,6 +1,5 @@
 package domain.entity;
 
-import domain.dto.AccountInfo;
 
 import java.util.ArrayList;
 import java.util.List;
