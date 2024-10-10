@@ -1,6 +1,7 @@
 package domain.repository;
 
 import domain.dto.AccountInfo;
+import domain.entity.Account;
 import domain.entity.User;
 
 import java.io.*;
@@ -64,7 +65,7 @@ public class UserServiceRepository {
                     String phoneNum = parts[3];
                     String birth= parts[4];
                     String accountNum = parts[5];
-                    ArrayList<AccountInfo> accounts = new ArrayList<>();
+                    ArrayList<Account> accounts = new ArrayList<>();
 
                     User user = new User(id, password, name, phoneNum, birth, accounts);
                     assert users != null;
