@@ -14,12 +14,12 @@ public class AccountServiceRepository {
 
     public AccountServiceRepository() { // 변경
         this.accounts = new ArrayList<Account>();
-        AccountFileReader("../AccountInfo.txt");
+        AccountFileReader("AccountInfo.txt");
     }
 
     public void addAccount(Account account) {
         accounts.add(account);
-        updateAccountFile("../AccountInfo.txt");
+        updateAccountFile("AccountInfo.txt");
     }
 
     public Account getAccountByAccountNum(String accountNum) {
