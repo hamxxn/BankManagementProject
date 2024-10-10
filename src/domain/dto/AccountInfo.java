@@ -18,8 +18,7 @@ public class AccountInfo {
     public String getAccountNum() {
         return accountNum;
     }
-
 }
 
-}
+
 

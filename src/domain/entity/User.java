@@ -1,7 +1,10 @@
 package domain.entity;
 
 import domain.dto.AccountInfo;
+
 import java.util.ArrayList;
+import java.util.List;
+
 
 public class User {
     private String id;
@@ -9,15 +12,15 @@ public class User {
     private String password;
     private String birth;
     private String phoneNum;
-    private String accountNum;
+    private List<AccountInfo> accounts;
 
-    public User(String id, String password, String username, String phoneNum, String birth, String accountNum) {
+    public User(String id, String password, String username, String phoneNum, String birth) {
         this.id = id;
         this.password = password;
         this.username = username;
         this.phoneNum= phoneNum;
         this.birth = birth;
-        this.accountNum = accountNum;
+        accounts=new ArrayList<>();
     }
 
     public String getId() {
@@ -40,14 +43,14 @@ public class User {
         return birth;
     }
 
-    public int getAccountCount() {
+    public int getAccountsCount() {
         return accounts.size();
     }
-    public void addAccounts(AccountInfo accountInfo){
-        accounts.add(accountInfo);
+    public void addAccount(AccountInfo account) {
+        accounts.add(account);
     }
+
+
 }
-    public String getAccountNum() {
-        return accountNum;
-    }
-}
+
+
