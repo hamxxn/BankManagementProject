@@ -1,18 +1,20 @@
 package domain.repository;
 
 import domain.entity.Account;
+import domain.entity.User;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class AccountServiceRepository {
 
     private final List<Account> accounts;
 
     public AccountServiceRepository() { // 변경
-        AccountFileReader("../AccountInfo.txt");
         this.accounts = new ArrayList<Account>();
+        AccountFileReader("../AccountInfo.txt");
     }
 
     public void addAccount(Account account) {
@@ -44,10 +46,15 @@ public class AccountServiceRepository {
     }
 
     private void AccountFileReader(String filename) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
+        try (Scanner fileScanner = new Scanner(new FileReader(filename))){
+            if (!new File(filename).exists()) {
+                System.out.println(filename + " 파일이 존재하지 않습니다.");
+                return;
+            }
+            while (fileScanner.hasNextLine()) {
+                String line = fileScanner.nextLine();
                 String[] parts = line.split("\t");
+
                 if (parts.length >= 4) {
                     String name= parts[0];
                     String accountNum = parts[1];
@@ -59,7 +66,8 @@ public class AccountServiceRepository {
                     accounts.add(account);
                 }
             }
-        } catch (IOException e) {
+
+        } catch (FileNotFoundException  e) {
             System.err.println("파일을 찾을 수 없습니다.");
         }
     }

@@ -1,21 +1,20 @@
 package domain.service;
 
+
 import domain.dto.AccountInfo;
 import domain.entity.Account;
 import domain.entity.User;
 
 import java.util.Scanner;
 
+
 public class UserServiceImp implements UserService {
-    private User user;
-    public UserServiceImp(User user) {
-        this.user = user;
-    }
     public void deposit(){};
 
     public void transfer(){}
 
     public void withdraw(){}
+
     
     public void createAccount() {
         if (user.getAccountsCount()>=1) {
@@ -73,4 +72,6 @@ public class UserServiceImp implements UserService {
         }
     }
 
+
+    public void createAccount(){}
 }

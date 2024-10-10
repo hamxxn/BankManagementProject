@@ -14,11 +14,4 @@ public class AccountInfo {
         this.accountPw = accountPw;
         this.balance = balance;
     }
-
-    public String getAccountNum() {
-        return accountNum;
-    }
 }
-
-
-
