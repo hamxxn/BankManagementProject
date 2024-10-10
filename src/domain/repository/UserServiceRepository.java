@@ -1,6 +1,5 @@
 package domain.repository;
 
-import domain.dto.UserInfo;
 import domain.entity.User;
 
 import java.io.*;
@@ -75,28 +74,6 @@ public class UserServiceRepository {
         }
     }
 
-
-    private void AccountfileReader(String filename) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split("\t");
-                if (parts.length >= 3) {
-                    String accountNum = parts[0];
-                    String userId = parts[1];
-                    int balance = parseInt(parts[2]);
-
-                    User user = getUserById(userId);
-//                    if (user != null) {
-//                        Account account = new Account(accountNum, balance);
-//                        user.getAccounts().add(account);
-//                    }
-                }
-            }
-        } catch (IOException e) {
-            System.err.println("파일을 찾을 수 없습니다.");
-        }
-    }
 
     private void updateUserFile(String filename) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
