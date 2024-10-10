@@ -45,11 +45,15 @@ public class User {
     public int getAccountsCount() {
         return accounts.size();
     }
+
     public void addAccount(Account account) {
         accounts.add(account);
     }
 
-
+    public List<Account> getAccounts() {
+        return accounts;
+    }
 }
+
 
 

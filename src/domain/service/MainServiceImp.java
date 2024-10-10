@@ -248,7 +248,7 @@ public class MainServiceImp implements MainService {
 
         // 회원 정보 저장 및 회원가입 완료
         // 회원 정보 저장 및 회원가입 완료
-        User user = new User(userId, userName, birth, phoneNumber, userPassword, new ArrayList<>());
+        User user = new User(userId, userPassword,userName, phoneNumber, birth, new ArrayList<>());
         userServiceRepository.add(user);
         System.out.println("회원가입에 성공하셨습니다.");
     }

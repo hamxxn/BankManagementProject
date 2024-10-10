@@ -16,8 +16,8 @@ public class UserServiceRepository {
     private final List<User> users;
 
     public UserServiceRepository() {
-        UserFileReader("../UserInfo.txt");
         this.users = new ArrayList<User>();
+        UserFileReader("../UserInfo.txt");
     }
 
     public void add(User user) {
@@ -56,6 +56,7 @@ public class UserServiceRepository {
     private void UserFileReader(String filename) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line;
+
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split("\t");
                 if (parts.length >= 6) {
@@ -64,8 +65,19 @@ public class UserServiceRepository {
                     String name= parts[2];
                     String phoneNum = parts[3];
                     String birth= parts[4];
-                    String accountNum = parts[5];
+
+                    String accountData = parts[5];
                     ArrayList<Account> accounts = new ArrayList<>();
+                    String[] accountentry = accountData.split(",");
+                    for (String accentry : accountentry) {
+                        String[] accparts = accentry.split(" ");
+                        if (accparts.length == 3) {
+                            String accnum = accparts[0];
+                            String accpw = accparts[1];
+                            int accbalnce = Integer.parseInt(accparts[2]);
+                            accounts.add(new Account(name, accnum, accpw, accbalnce));
+                        }
+                    }
 
                     User user = new User(id, password, name, phoneNum, birth, accounts);
                     assert users != null;
@@ -81,9 +93,27 @@ public class UserServiceRepository {
     private void updateUserFile(String filename) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
             for (User user : users) {
+                StringBuilder accountData= new StringBuilder();
+                for (Account account : user.getAccounts()) {
+                    accountData.append(account.getAccountNum())
+                            .append(" ")
+                            .append(account.getAccountPw())
+                            .append(" ")
+                            .append(account.getBalance())
+                            .append(",");
+                }
+                if (accountData.length() > 0) {
+                    accountData.setLength(accountData.length() - 1);
+                }
+                System.out.println("ID: " + user.getId());
+                System.out.println("Password: " + user.getPassword());
+                System.out.println("Username: " + user.getUsername());
+                System.out.println("PhoneNum: " + user.getPhoneNum());
+                System.out.println("Birth: " + user.getBirth());
+
                 writer.write(user.getId() + "\t" + user.getPassword()+ "\t" +
                         user.getUsername()  + "\t" + user.getPhoneNum() + "\t" +
-                        user.getBirth() + "\t" +user.getAccountsCount());
+                        user.getBirth() + "\t" + accountData);
                 writer.newLine();
             }
         } catch (IOException e) {
