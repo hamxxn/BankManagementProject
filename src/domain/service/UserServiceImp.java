@@ -1,6 +1,7 @@
 package domain.service;
 
 import domain.dto.AccountInfo;
+import domain.entity.Account;
 import domain.entity.User;
 
 import java.util.Scanner;
@@ -62,11 +63,11 @@ public class UserServiceImp implements UserService {
             String accountNum = "151" + user.getPhoneNum().substring(3);
             System.out.println(accountNum);
 
-            AccountInfo accountInfo = new AccountInfo(user.getUsername() ,accountNum, password,0);
-            user.addAccount(accountInfo);
+            Account account = new Account(user.getUsername() ,accountNum, password,0);
+            user.addAccount(account);
 
             System.out.println("계좌 개설이 완료되었습니다.");
-            System.out.println(user.getUsername() + "님의 계좌번호는 " + accountInfo.getAccountNum() + "입니다.");
+            System.out.println(user.getUsername() + "님의 계좌번호는 " + account.getAccountNum() + "입니다.");
             System.out.println("메인화면으로 돌아갑니다");
             return;
         }

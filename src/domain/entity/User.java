@@ -12,9 +12,9 @@ public class User {
     private String password;
     private String birth;
     private String phoneNum;
-    private List<AccountInfo> accounts;
+    private List<Account> accounts;
 
-    public User(String id, String password, String username, String phoneNum, String birth,ArrayList<AccountInfo> accounts) {
+    public User(String id, String password, String username, String phoneNum, String birth,ArrayList<Account> accounts) {
         this.id = id;
         this.password = password;
         this.username = username;
@@ -46,7 +46,7 @@ public class User {
     public int getAccountsCount() {
         return accounts.size();
     }
-    public void addAccount(AccountInfo account) {
+    public void addAccount(Account account) {
         accounts.add(account);
     }
 
