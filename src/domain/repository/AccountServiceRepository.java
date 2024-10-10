@@ -54,7 +54,6 @@ public class AccountServiceRepository {
             while (fileScanner.hasNextLine()) {
                 String line = fileScanner.nextLine();
                 String[] parts = line.split("\t");
-
                 if (parts.length >= 4) {
                     String name= parts[0];
                     String accountNum = parts[1];
