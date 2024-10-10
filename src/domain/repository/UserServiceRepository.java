@@ -105,11 +105,6 @@ public class UserServiceRepository {
                 if (accountData.length() > 0) {
                     accountData.setLength(accountData.length() - 1);
                 }
-                System.out.println("ID: " + user.getId());
-                System.out.println("Password: " + user.getPassword());
-                System.out.println("Username: " + user.getUsername());
-                System.out.println("PhoneNum: " + user.getPhoneNum());
-                System.out.println("Birth: " + user.getBirth());
 
                 writer.write(user.getId() + "\t" + user.getPassword()+ "\t" +
                         user.getUsername()  + "\t" + user.getPhoneNum() + "\t" +
