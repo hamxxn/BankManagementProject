@@ -12,6 +12,11 @@ public class User {
     private String accountNum;
 
     public User(String id, String password, String username, String phoneNum, String birth, String accountNum) {
+
+    private List<Account> accounts;
+
+    public User(String id, String password, String username, String phoneNum, String birth,ArrayList<Account> accounts) {
+
         this.id = id;
         this.password = password;
         this.username = username;
@@ -43,4 +48,13 @@ public class User {
     public String getAccountNum() {
         return accountNum;
     }
+
+    public void addAccount(Account account) {
+        accounts.add(account);
+    }
+
+
 }
+
+
+
