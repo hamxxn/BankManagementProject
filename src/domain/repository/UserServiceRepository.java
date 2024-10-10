@@ -12,17 +12,16 @@ import static java.lang.Integer.parseInt;
 
 public class UserServiceRepository {
 
-    private List<User> users;
+    private final List<User> users;
 
     public UserServiceRepository() {
-        UserfileReader("./UserInfo.txt");
-        AccountfileReader("./AccountInfo.txt");
+        UserFileReader("../UserInfo.txt");
         this.users = new ArrayList<User>();
     }
 
     public void add(User user) {
         users.add(user);
-        updateUserFile("./UserInfo.txt");
+        updateUserFile("../UserInfo.txt");
     }
 
     public User getUserById(String id) {
@@ -43,20 +42,31 @@ public class UserServiceRepository {
         return null;
     }
 
+    public List<User> getUserByName(String name) {
+        List<User> getUser = new ArrayList<>();
+        for(User user : users) {
+            if(Objects.equals(user.getUsername(), name)) {
+                getUser.add(user);
+            }
+        }
+        return getUser;
+    }
 
-    private void UserfileReader(String filename) {
+    private void UserFileReader(String filename) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split("\t");
-                if (parts.length >= 5) {
+                if (parts.length >= 6) {
                     String id = parts[0];
                     String password = parts[1];
-                    String name = parts[2];
-                    String phoneNumber = parts[3];
-                    String birth = parts[4];
+                    String name= parts[2];
+                    String phoneNum = parts[3];
+                    String birth= parts[4];
+                    String accountNum = parts[5];
 
-                    User user = new User(id, password, name, phoneNumber, birth);
+                    User user = new User(id, password, name, phoneNum, birth, accountNum);
+                    assert users != null;
                     users.add(user);
                 }
             }
@@ -71,15 +81,14 @@ public class UserServiceRepository {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split("\t");
-                if (parts.length >= 4) {
+                if (parts.length >= 3) {
                     String accountNum = parts[0];
                     String userId = parts[1];
-                    int accountpw =parseInt(parts[2]);
-                    int balance = parseInt(parts[3]);
+                    int balance = parseInt(parts[2]);
 
                     User user = getUserById(userId);
 //                    if (user != null) {
-//                        Account account = new Account(accountNum, accountpw, balance);
+//                        Account account = new Account(accountNum, balance);
 //                        user.getAccounts().add(account);
 //                    }
                 }
@@ -92,14 +101,15 @@ public class UserServiceRepository {
     private void updateUserFile(String filename) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
             for (User user : users) {
-                writer.write(user.getId() + "\t" +
-                        user.getPassword() + "\t"
-                        + user.getUsername() + "\t"  + user.getPhoneNum() + "\t" +
-                        user.getBirth());
+                writer.write(user.getId() + "\t" + user.getPassword()+ "\t" +
+                        user.getUsername()  + "\t" + user.getPhoneNum() + "\t" +
+                        user.getBirth() + "\t" +user.getAccountNum());
                 writer.newLine();
             }
         } catch (IOException e) {
             System.err.println("파일 업데이트에 실패했습니다.");
         }
     }
+
+
 }
