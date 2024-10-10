@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class MainServiceImp implements MainService {
@@ -214,7 +215,7 @@ public class MainServiceImp implements MainService {
         }
 
         // 새로운 회원 추가
-        User user = new User(userId, userName, birth, phoneNumber, userPassword);
+        User user = new User(userId, userName, birth, phoneNumber, userPassword,new ArrayList<>());
         userServiceRepository.add(user);
         System.out.println("회원가입에 성공하셨습니다.");
 

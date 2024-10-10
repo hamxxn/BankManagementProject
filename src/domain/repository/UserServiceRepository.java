@@ -1,5 +1,6 @@
 package domain.repository;
 
+import domain.dto.AccountInfo;
 import domain.entity.User;
 
 import java.io.*;
@@ -63,8 +64,9 @@ public class UserServiceRepository {
                     String phoneNum = parts[3];
                     String birth= parts[4];
                     String accountNum = parts[5];
+                    ArrayList<AccountInfo> accounts = new ArrayList<>();
 
-                    User user = new User(id, password, name, phoneNum, birth, accountNum);
+                    User user = new User(id, password, name, phoneNum, birth, accounts);
                     assert users != null;
                     users.add(user);
                 }
@@ -80,7 +82,7 @@ public class UserServiceRepository {
             for (User user : users) {
                 writer.write(user.getId() + "\t" + user.getPassword()+ "\t" +
                         user.getUsername()  + "\t" + user.getPhoneNum() + "\t" +
-                        user.getBirth() + "\t" +user.getAccountNum());
+                        user.getBirth() + "\t" +user.getAccountsCount());
                 writer.newLine();
             }
         } catch (IOException e) {
