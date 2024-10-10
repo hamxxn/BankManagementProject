@@ -1,6 +1,5 @@
 package domain.service;
 
-import domain.controller.ManagerController;
 import domain.controller.UserController;
 import domain.entity.User;
 import domain.repository.UserServiceRepository;
@@ -9,10 +8,11 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class MainServiceImp implements MainService {
-    UserServiceRepository userServiceRepository = new UserServiceRepository();
+    UserServiceRepository userServiceRepository=new UserServiceRepository();
     private boolean isUnder15(String birth) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate birthDate = LocalDate.parse(birth, formatter);
@@ -58,10 +58,7 @@ public class MainServiceImp implements MainService {
             }
 
             // 해당 월의 일수 검증
-            if (!isValidDayForMonth(year, month, day)) {
-                return false;
-            }
-            return true; // 모든 조건이 통과하면 true 반환
+            return isValidDayForMonth(year, month, day);// 모든 조건이 통과하면 true 반환
         } catch (DateTimeParseException | NumberFormatException e) {
             return false;
         }
@@ -217,10 +214,8 @@ public class MainServiceImp implements MainService {
             }
         }
 
-        //Todo 자동으로 계좌번호 만들어서 넣어주기. 151+전화번호8자리
         // 새로운 회원 추가
-        String accountNum = "151" + phoneNumber.substring(phoneNumber.length() - 8);
-        User user = new User(userId, userPassword, userName, phoneNumber, birth, accountNum);
+        User user = new User(userId, userName, birth, phoneNumber, userPassword,new ArrayList<>());
         userServiceRepository.add(user);
         System.out.println("회원가입에 성공하셨습니다.");
 
@@ -233,7 +228,7 @@ public class MainServiceImp implements MainService {
     public void loginMenu() {
         System.out.println("*** 로그인 ***");
         Scanner scanner = new Scanner(System.in);
-
+        User user ;
         while (true) {
             System.out.println("아이디를 입력해주세요. q 입력시 종료됩니다.");
             String userId = scanner.nextLine().trim();
@@ -241,20 +236,6 @@ public class MainServiceImp implements MainService {
             // q를 입력하면 로그인 프로세스를 종료
             if (userId.equalsIgnoreCase("q")) {
                 System.out.println("로그인을 종료하고 메인 메뉴로 돌아갑니다.");
-                return;
-            }
-
-            // 관리자 모드 입장, 관리자 비밀번호는 admin1234
-            if(userId.equalsIgnoreCase("admin")){
-                System.out.println("관리자 모드 입장 비밀번호를 입력해주세요.");
-                String managerPassword = scanner.nextLine().trim();
-                if(managerPassword.equalsIgnoreCase("admin1234")){
-                    ManagerController managerController = new ManagerController();
-                    managerController.menu(); // 관리자 모드로 들어감
-                    return; // 끝나면
-                }
-                // 관리자 모드는 비밀번호 한 번 틀리면 로그인 함수 종료시키기
-                System.out.println("관리자 모드 입장 비밀번호가 아닙니다. 로그인을 종료합니다.");
                 return;
             }
 
@@ -269,7 +250,7 @@ public class MainServiceImp implements MainService {
             }
 
             // 아이디로 사용자 정보 조회
-            User user = userServiceRepository.getUserById(userId);
+           user=userServiceRepository.getUserById(userId);
 
             // 아이디가 존재하지 않을 경우
             if (user == null) {
@@ -287,12 +268,12 @@ public class MainServiceImp implements MainService {
             System.out.println("로그인 완료");
             break;  // 로그인 성공 시 while 루프 종료
         }
-        UserController userController = new UserController();
+        UserController userController = new UserController(user);
         userController.menu();
     }
 
     public void exitMenu(){
         System.out.println("프로그램을 종료합니다");
         System.exit(0);
-    };
+    }
 }
