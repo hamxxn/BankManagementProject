@@ -14,13 +14,13 @@ public class User {
     private String phoneNum;
     private List<AccountInfo> accounts;
 
-    public User(String id, String password, String username, String phoneNum, String birth) {
+    public User(String id, String password, String username, String phoneNum, String birth,ArrayList<AccountInfo> accounts) {
         this.id = id;
         this.password = password;
         this.username = username;
         this.phoneNum= phoneNum;
         this.birth = birth;
-        accounts=new ArrayList<>();
+        this.accounts = accounts;
     }
 
     public String getId() {
