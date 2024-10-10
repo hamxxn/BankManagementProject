@@ -53,7 +53,6 @@ public class AccountServiceRepository {
             }
             while (fileScanner.hasNextLine()) {
                 String line = fileScanner.nextLine();
-                System.out.println(line);
                 String[] parts = line.split("\t");
 
                 if (parts.length >= 4) {

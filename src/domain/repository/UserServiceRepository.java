@@ -1,5 +1,7 @@
 package domain.repository;
 
+import domain.dto.AccountInfo;
+import domain.entity.Account;
 import domain.entity.User;
 
 import java.io.*;
@@ -8,7 +10,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
-import static java.lang.Integer.parseInt;
 
 public class UserServiceRepository {
 
@@ -60,7 +61,6 @@ public class UserServiceRepository {
             }
             while (fileScanner.hasNextLine()) {
                 String line = fileScanner.nextLine();
-                System.out.println(line);
                 String[] parts = line.split("\t");
 
                 if (parts.length >= 6) {
@@ -69,9 +69,21 @@ public class UserServiceRepository {
                     String name = parts[2];
                     String phoneNum = parts[3];
                     String birth = parts[4];
-                    String accountNum = parts[5];
 
-                    User user = new User(id, password, name, phoneNum, birth, accountNum);
+                    String accountData = parts[5];
+                    ArrayList<Account> accounts = new ArrayList<>();
+                    String[] accountentry = accountData.split(",");
+                    for (String accentry : accountentry) {
+                        String[] accparts = accentry.split(" ");
+                        if (accparts.length == 3) {
+                            String accnum = accparts[0];
+                            String accpw = accparts[1];
+                            int accbalnce = Integer.parseInt(accparts[2]);
+                            accounts.add(new Account(name, accnum, accpw, accbalnce));
+                        }
+                    }
+
+                    User user = new User(id, password, name, phoneNum, birth, accounts);
                     assert users != null;
                     users.add(user);
                 }
@@ -85,9 +97,19 @@ public class UserServiceRepository {
     private void updateUserFile(String filename) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
             for (User user : users) {
+                String accountData="";
+                for (Account account : user.getAccounts()) {
+                    accountData += account.getAccountNum() + " " +
+                            account.getAccountPw() + " " +
+                            account.getBalance() + ",";
+                }
+                if (!accountData.isEmpty()) {
+                    accountData = accountData.substring(0, accountData.length() - 1);
+                }
+
                 writer.write(user.getId() + "\t" + user.getPassword()+ "\t" +
                         user.getUsername()  + "\t" + user.getPhoneNum() + "\t" +
-                        user.getBirth() + "\t" +user.getAccountNum());
+                        user.getBirth() + "\t" + accountData);
                 writer.newLine();
             }
         } catch (IOException e) {
