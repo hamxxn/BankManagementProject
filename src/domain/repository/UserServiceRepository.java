@@ -8,8 +8,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Scanner;
 
+import static java.lang.Integer.parseInt;
 
 public class UserServiceRepository {
 
@@ -54,21 +54,18 @@ public class UserServiceRepository {
     }
 
     private void UserFileReader(String filename) {
-        try (Scanner fileScanner = new Scanner(new FileReader(filename))) {
-            if (!new File(filename).exists()) {
-                System.out.println(filename + " 파일이 존재하지 않습니다.");
-                return;
-            }
-            while (fileScanner.hasNextLine()) {
-                String line = fileScanner.nextLine();
-                String[] parts = line.split("\t");
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
 
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+                String[] parts = line.split("\t");
                 if (parts.length >= 6) {
                     String id = parts[0];
                     String password = parts[1];
-                    String name = parts[2];
+                    String name= parts[2];
                     String phoneNum = parts[3];
-                    String birth = parts[4];
+                    String birth= parts[4];
 
                     String accountData = parts[5];
                     ArrayList<Account> accounts = new ArrayList<>();
@@ -88,7 +85,7 @@ public class UserServiceRepository {
                     users.add(user);
                 }
             }
-        } catch (FileNotFoundException  e) {
+        } catch (IOException e) {
             System.err.println("파일을 찾을 수 없습니다.");
         }
     }
@@ -97,15 +94,23 @@ public class UserServiceRepository {
     private void updateUserFile(String filename) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
             for (User user : users) {
-                String accountData="";
+                StringBuilder accountData= new StringBuilder();
                 for (Account account : user.getAccounts()) {
-                    accountData += account.getAccountNum() + " " +
-                            account.getAccountPw() + " " +
-                            account.getBalance() + ",";
+                    accountData.append(account.getAccountNum())
+                            .append(" ")
+                            .append(account.getAccountPw())
+                            .append(" ")
+                            .append(account.getBalance())
+                            .append(",");
                 }
-                if (!accountData.isEmpty()) {
-                    accountData = accountData.substring(0, accountData.length() - 1);
+                if (accountData.length() > 0) {
+                    accountData.setLength(accountData.length() - 1);
                 }
+                System.out.println("ID: " + user.getId());
+                System.out.println("Password: " + user.getPassword());
+                System.out.println("Username: " + user.getUsername());
+                System.out.println("PhoneNum: " + user.getPhoneNum());
+                System.out.println("Birth: " + user.getBirth());
 
                 writer.write(user.getId() + "\t" + user.getPassword()+ "\t" +
                         user.getUsername()  + "\t" + user.getPhoneNum() + "\t" +
