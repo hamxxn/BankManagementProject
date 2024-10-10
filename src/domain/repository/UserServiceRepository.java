@@ -6,6 +6,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Scanner;
 
 import static java.lang.Integer.parseInt;
 
@@ -14,8 +15,8 @@ public class UserServiceRepository {
     private final List<User> users;
 
     public UserServiceRepository() {
-        UserFileReader("../UserInfo.txt");
         this.users = new ArrayList<User>();
+        UserFileReader("../UserInfo.txt");
     }
 
     public void add(User user) {
@@ -52,16 +53,22 @@ public class UserServiceRepository {
     }
 
     private void UserFileReader(String filename) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
+        try (Scanner fileScanner = new Scanner(new FileReader(filename))) {
+            if (!new File(filename).exists()) {
+                System.out.println(filename + " 파일이 존재하지 않습니다.");
+                return;
+            }
+            while (fileScanner.hasNextLine()) {
+                String line = fileScanner.nextLine();
+                System.out.println(line);
                 String[] parts = line.split("\t");
+
                 if (parts.length >= 6) {
                     String id = parts[0];
                     String password = parts[1];
-                    String name= parts[2];
+                    String name = parts[2];
                     String phoneNum = parts[3];
-                    String birth= parts[4];
+                    String birth = parts[4];
                     String accountNum = parts[5];
 
                     User user = new User(id, password, name, phoneNum, birth, accountNum);
@@ -69,7 +76,7 @@ public class UserServiceRepository {
                     users.add(user);
                 }
             }
-        } catch (IOException e) {
+        } catch (FileNotFoundException  e) {
             System.err.println("파일을 찾을 수 없습니다.");
         }
     }
