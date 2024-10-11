@@ -31,7 +31,7 @@ public class ManagerController {
                     System.out.println("1-3 사이의 수를 입력하세요");
                 }
             } catch (NumberFormatException e) {
-                System.out.println("유효하지 않은 입력입니다. 1-3 사이의 수를 입력하세요.");
+                System.out.println("잘못된 입력입니다. 1-3 사이의 수를 입력하세요.");
             }
         }
         return;
