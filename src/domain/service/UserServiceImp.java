@@ -11,11 +11,71 @@ public class UserServiceImp implements UserService {
     public UserServiceImp(User user) {
         this.user = user;
     }
-    public void deposit(){};
+    // 입금
+    public void deposit(){
+        //Todo 로그인 후 1번을 선택하면 입금 기능.
+        // 비밀번호 검증 -> 실패시 틀렸다는 메시지 출력 후 입금 기능 종료
+        // q 입력시 입금 기능 종료
+        // 금액 입력
+        // 현재 날짜 입력
+        // 성공 메시지 출력 후 기능 종료
+        System.out.println("************** 입금 **************");
+        System.out.println("비밀번호를 입력해주세요. (q 입력시 종료)");
+        Scanner scanner = new Scanner(System.in);
+        String password = scanner.nextLine().trim();
 
-    public void transfer(){}
+    };
+    //이체
+    public void transfer(){
+    }
+    //출금
+    public void withdraw(){
+        Scanner scanner = new Scanner(System.in);
+        Account account = user.getAccounts().get(0);
+        while (true) {
+            System.out.println("출금할 금액을 입력해주세요: ");
+            String input = scanner.nextLine().trim();
 
-    public void withdraw(){}
+            if (input.equals("q")) {
+                System.out.println("메뉴로 이동합니다.");
+                break;
+            }
+
+            if (Integer.parseInt(input)<0 || Integer.parseInt(input)>account.getBalance()) {
+                System.out.println("출금에 실패하였습니다. 메뉴로 이동합니다.");
+                break;
+            }
+
+            System.out.println("날짜를 입력해주세요. (YYYY-MM-DD)");
+            String birth = scanner.nextLine().trim();
+            // 날짜 받아서 머하지?
+
+            if (birth.equals("q")) {
+                System.out.println("메뉴로 이동합니다.");
+                break;
+            }
+
+            System.out.println("계좌 비밀번호를 입력해주세요.");
+            String password = scanner.nextLine().trim();
+
+            if (password.equals("q")) {
+                System.out.println("메뉴로 이동합니다.");
+                break;
+            }
+
+            if (!password.equals(account.getAccountPw())) {
+                System.out.println("비밀번호가 일치하지 않습니다.");
+                break;
+            }
+
+            account.setBalance(account.getBalance()-Integer.parseInt(input));
+            System.out.println("출금에 성공하셨습니다!");
+            System.out.println(account.getName()+"님의 현재 잔액은 "+ account.getBalance()+"원입니다.");
+
+        }
+
+
+    }
     
     public void createAccount() {
         if (user.getAccountsCount()>=1) {
