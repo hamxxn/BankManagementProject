@@ -1,7 +1,6 @@
 package domain.repository;
 
 import domain.entity.Account;
-import domain.entity.User;
 
 import java.io.*;
 import java.util.ArrayList;
