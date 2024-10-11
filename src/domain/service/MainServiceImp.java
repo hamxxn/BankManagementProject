@@ -206,7 +206,7 @@ public class MainServiceImp implements MainService {
         while (true) {
             System.out.println("전화번호를 입력해주세요.");
             System.out.println("01011112222 형식입니다.");
-            System.out.println("메뉴로 돌아갑니다.");
+            System.out.println("q 입력시 메뉴로 돌아갑니다.");
             phoneNumber = scanner.nextLine().trim();
 
             if (phoneNumber.equalsIgnoreCase("q")) {

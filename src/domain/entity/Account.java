@@ -5,12 +5,14 @@ public class Account {
     private String accountNum;
     private String accountPw;
     private int balance;
+    private String lastTransferDate;
 
     public Account(String name, String accountNum, String accountPw, int balance) {
         this.name = name;
         this.accountNum = accountNum;
         this.accountPw = accountPw;
         this.balance = balance;
+        this.lastTransferDate = "1";
     }
 
     public String getName() {
@@ -31,6 +33,13 @@ public class Account {
 
     public void setBalance(int balance) {
         this.balance = balance;
+    }
+
+    public String getLastTransferDate() {
+        return lastTransferDate;
+    }
+    public void setLastTransferDate(String lastTransferDate) {
+        this.lastTransferDate = lastTransferDate;
     }
 
 }
