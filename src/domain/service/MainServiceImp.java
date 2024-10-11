@@ -1,5 +1,6 @@
 package domain.service;
 
+import domain.controller.ManagerController;
 import domain.controller.UserController;
 import domain.entity.User;
 import domain.repository.UserServiceRepository;
@@ -96,6 +97,20 @@ public class MainServiceImp implements MainService {
         while (true) {
             System.out.println("아이디를 입력해주세요. q 입력시 종료됩니다.");
             String userId = scanner.nextLine().trim();
+
+            // 관리자 모드 입장, 관리자 비밀번호는 admin1234
+            if(userId.equalsIgnoreCase("admin")){
+                System.out.println("관리자 모드 입장 비밀번호를 입력해주세요.");
+                String managerPassword = scanner.nextLine().trim();
+                if(managerPassword.equalsIgnoreCase("admin1234")){
+                    ManagerController managerController = new ManagerController();
+                    managerController.menu(); // 관리자 모드로 들어감
+                    return; // 끝나면
+                }
+                // 관리자 모드는 비밀번호 한 번 틀리면 로그인 함수 종료시키기
+                System.out.println("관리자 모드 입장 비밀번호가 아닙니다. 로그인을 종료합니다.");
+                return;
+            }
 
             if (userId.equalsIgnoreCase("q")) {
                 System.out.println("로그인을 종료하고 메인 메뉴로 돌아갑니다.");
