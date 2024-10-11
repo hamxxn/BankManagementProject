@@ -17,12 +17,12 @@ public class UserServiceRepository {
 
     public UserServiceRepository() {
         this.users = new ArrayList<User>();
-        UserFileReader("../UserInfo.txt");
+        UserFileReader("UserInfo.txt");
     }
 
     public void add(User user) {
         users.add(user);
-        updateUserFile("../UserInfo.txt");
+        updateUserFile("UserInfo.txt");
     }
 
     public User getUserById(String id) {
