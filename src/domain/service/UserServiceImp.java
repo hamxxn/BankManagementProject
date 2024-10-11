@@ -11,20 +11,7 @@ public class UserServiceImp implements UserService {
     public UserServiceImp(User user) {
         this.user = user;
     }
-    public void deposit(){
-        //Todo 로그인 후 1번을 선택하면 입금 기능.
-        // 비밀번호 검증 -> 실패시 틀렸다는 메시지 출력 후 입금 기능 종료
-        // q 입력시 입금 기능 종료
-        // 금액 입력
-        // 현재 날짜 입력
-        // 성공 메시지 출력 후 기능 종료
-        System.out.println("************** 입금 **************");
-        System.out.println("비밀번호를 입력해주세요. (q 입력시 종료)");
-        Scanner scanner = new Scanner(System.in);
-        String password = scanner.nextLine().trim();
-
-
-    };
+    public void deposit(){};
 
     public void transfer(){}
 
