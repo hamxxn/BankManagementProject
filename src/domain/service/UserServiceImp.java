@@ -11,11 +11,59 @@ public class UserServiceImp implements UserService {
     public UserServiceImp(User user) {
         this.user = user;
     }
+    // 입금
     public void deposit(){};
+    //이체
+    public void transfer(){
+    }
+    //출금
+    public void withdraw(){
+        Scanner scanner = new Scanner(System.in);
+        Account account = user.getAccounts().get(0);
+        while (true) {
+            System.out.println("출금할 금액을 입력해주세요: ");
+            String input = scanner.nextLine().trim();
 
-    public void transfer(){}
+            if (input.equals("q")) {
+                System.out.println("메뉴로 이동합니다.");
+                break;
+            }
 
-    public void withdraw(){}
+            if (Integer.parseInt(input)<0 || Integer.parseInt(input)>account.getBalance()) {
+                System.out.println("출금에 실패하였습니다. 메뉴로 이동합니다.");
+                break;
+            }
+
+            System.out.println("날짜를 입력해주세요. (YYYY-MM-DD)");
+            String birth = scanner.nextLine().trim();
+            // 날짜 받아서 머하지?
+
+            if (birth.equals("q")) {
+                System.out.println("메뉴로 이동합니다.");
+                break;
+            }
+
+            System.out.println("계좌 비밀번호를 입력해주세요.");
+            String password = scanner.nextLine().trim();
+
+            if (password.equals("q")) {
+                System.out.println("메뉴로 이동합니다.");
+                break;
+            }
+
+            if (!password.equals(account.getAccountPw())) {
+                System.out.println("비밀번호가 일치하지 않습니다.");
+                break;
+            }
+
+            account.setBalance(account.getBalance()-Integer.parseInt(input));
+            System.out.println("출금에 성공하셨습니다!");
+            System.out.println(account.getName()+"님의 현재 잔액은 "+ account.getBalance()+"원입니다.");
+
+        }
+
+
+    }
     
     public void createAccount() {
         if (user.getAccountsCount()>=1) {
