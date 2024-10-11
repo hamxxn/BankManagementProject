@@ -3,6 +3,7 @@ package domain.service;
 import domain.dto.AccountInfo;
 import domain.entity.Account;
 import domain.entity.User;
+import domain.repository.AccountServiceRepository;
 
 import java.util.Scanner;
 
@@ -11,6 +12,9 @@ public class UserServiceImp implements UserService {
     public UserServiceImp(User user) {
         this.user = user;
     }
+
+    AccountServiceRepository accountServiceRepository = new AccountServiceRepository();
+
     // 입금
     public void deposit(){
         //Todo 로그인 후 1번을 선택하면 입금 기능.
@@ -23,7 +27,6 @@ public class UserServiceImp implements UserService {
         System.out.println("비밀번호를 입력해주세요. (q 입력시 종료)");
         Scanner scanner = new Scanner(System.in);
         String password = scanner.nextLine().trim();
-
     };
     //이체
     public void transfer(){
@@ -76,7 +79,7 @@ public class UserServiceImp implements UserService {
 
 
     }
-    
+
     public void createAccount() {
         if (user.getAccountsCount()>=1) {
             System.out.println(user.getUsername() + "님, 계좌를 개설하실 수 없습니다. 메뉴로 이동합니다.");
@@ -124,6 +127,7 @@ public class UserServiceImp implements UserService {
 
             Account account = new Account(user.getUsername() ,accountNum, password,0);
             user.addAccount(account);
+            accountServiceRepository.addAccount(account);
 
             System.out.println("계좌 개설이 완료되었습니다.");
             System.out.println(user.getUsername() + "님의 계좌번호는 " + account.getAccountNum() + "입니다.");
