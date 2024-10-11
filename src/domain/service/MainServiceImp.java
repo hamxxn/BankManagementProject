@@ -100,7 +100,8 @@ public class MainServiceImp implements MainService {
 
             // 관리자 모드 입장, 관리자 비밀번호는 admin1234
             if(userId.equalsIgnoreCase("admin")){
-                System.out.println("관리자 모드 입장 비밀번호를 입력해주세요.");
+                System.out.println("*** 관리자 모드 입장 ***");
+                System.out.println("비밀번호를 입력해주세요.");
                 String managerPassword = scanner.nextLine().trim();
                 if(managerPassword.equalsIgnoreCase("admin1234")){
                     ManagerController managerController = new ManagerController();
@@ -108,12 +109,12 @@ public class MainServiceImp implements MainService {
                     return; // 끝나면
                 }
                 // 관리자 모드는 비밀번호 한 번 틀리면 로그인 함수 종료시키기
-                System.out.println("관리자 모드 입장 비밀번호가 아닙니다. 로그인을 종료합니다.");
+                System.out.println("관리자 모드 입장 비밀번호가 아닙니다. 메뉴로 돌아갑니다.");
                 return;
             }
 
             if (userId.equalsIgnoreCase("q")) {
-                System.out.println("로그인을 종료하고 메인 메뉴로 돌아갑니다.");
+                System.out.println("메뉴로 돌아갑니다.");
                 return;
             }
 
@@ -121,7 +122,7 @@ public class MainServiceImp implements MainService {
             String userPassword = scanner.nextLine();
 
             if (userPassword.equalsIgnoreCase("q")) {
-                System.out.println("로그인을 종료하고 메인 메뉴로 돌아갑니다.");
+                System.out.println("메뉴로 돌아갑니다.");
                 return;
             }
 
@@ -137,7 +138,7 @@ public class MainServiceImp implements MainService {
                 continue;
             }
 
-            System.out.println("로그인 완료");
+            System.out.println("로그인 완료이 완료되었습니다.");
             break;
         }
         UserController userController = new UserController(user);
@@ -157,7 +158,9 @@ public class MainServiceImp implements MainService {
 
         // 이름 입력
         while (true) {
-            System.out.println("이름을 입력해주세요(한국어만 가능하며 길이는 2이상 5이하입니다), q를 입력하면 메뉴로 돌아갑니다.");
+            System.out.println("이름을 입력해주세요.");
+            System.out.println("한국어만 가능하며 길이는 2이상 5이하입니다");
+            System.out.println("q 입력시 메뉴로 돌아갑니다.");
             userName = scanner.nextLine().trim();
 
             if (userName.equalsIgnoreCase("q")) {
@@ -176,7 +179,9 @@ public class MainServiceImp implements MainService {
 
         // 생년월일 입력
         while (true) {
-            System.out.println("생년월일을 입력해주세요 (YYYY-MM-DD), q를 입력하면 메뉴로 돌아갑니다.");
+            System.out.println("생년월일을 입력해주세요");
+            System.out.println("YYYY-MM-DD 형식입니다.");
+            System.out.println("q 입력시 메뉴로 돌아갑니다.");
             birth = scanner.nextLine().trim();
 
             if (birth.equalsIgnoreCase("q")) {
@@ -188,6 +193,7 @@ public class MainServiceImp implements MainService {
                 System.out.println("잘못된 날짜 형식입니다. 다시 입력해주세요.");
             } else if (isUnder15(birth)) {
                 System.out.println("만 15세 이하는 계좌 개설이 불가합니다.");
+                System.out.println("메뉴로 돌아갑니다.");
                 return;
             } else {
                 break;
@@ -198,7 +204,9 @@ public class MainServiceImp implements MainService {
 
         // 전화번호 입력
         while (true) {
-            System.out.println("전화번호를 입력해주세요 (숫자만 입력 가능합니다), q를 입력하면 메뉴로 돌아갑니다.");
+            System.out.println("전화번호를 입력해주세요.");
+            System.out.println("01011112222 형식입니다.");
+            System.out.println("메뉴로 돌아갑니다.");
             phoneNumber = scanner.nextLine().trim();
 
             if (phoneNumber.equalsIgnoreCase("q")) {
@@ -209,9 +217,10 @@ public class MainServiceImp implements MainService {
             phoneNumber = sanitizePhoneNumber(phoneNumber);
 
             if (!isValidPhoneNumber(phoneNumber)) {
-                System.out.println("전화번호는 숫자 11자리여야 합니다. 다시 입력해주세요.");
+                System.out.println("잘못된 형식입니다. 다시 입력해주세요.");
             } else if (userServiceRepository.getUserByPhoneNumber(phoneNumber) != null) {
                 System.out.println("이미 등록된 전화번호입니다.");
+                System.out.println("메뉴로 돌아갑니다.");
                 return;
             } else {
                 break;
@@ -222,7 +231,9 @@ public class MainServiceImp implements MainService {
 
         // 아이디 입력
         while (true) {
-            System.out.println("아이디를 입력해주세요 (영어 또는 숫자 외 입력이 불가합니다), q를 입력하면 메뉴로 돌아갑니다.");
+            System.out.println("아이디를 입력해주세요.");
+            System.out.println("영어 또는 숫자 외 입력이 불가합니다. 또한, admin은 사용할 수 없습니다.");
+            System.out.println("q 입력시 메뉴로 돌아갑니다.");
             userId = scanner.nextLine().trim();
 
             if (userId.equalsIgnoreCase("q")) {
@@ -231,10 +242,9 @@ public class MainServiceImp implements MainService {
             }
 
             if (!isValidUserId(userId)) {
-                System.out.println("아이디는 영문자 또는 숫자로만 구성되어야 하며, 공백이 없어야 하고, 'admin'은 사용할 수 없습니다.");
+                System.out.println("잘못된 형식입니다. 다시 입력해주세요.");
             } else if (userServiceRepository.getUserById(userId) != null) {
                 System.out.println("이미 등록된 아이디입니다.");
-                return;
             } else {
                 break;
             }
@@ -244,7 +254,9 @@ public class MainServiceImp implements MainService {
 
         // 비밀번호 입력
         while (true) {
-            System.out.println("비밀번호를 입력해주세요 (알파벳 대소문자, 숫자, 특수문자로만 구성되며, 길이는 7이상 15이하 입니다), q를 입력하면 메뉴로 돌아갑니다.");
+            System.out.println("비밀번호를 입력해주세요.");
+            System.out.println("알파벳 대소문자, 숫자, 특수문자로만 구성되며, 길이는 7이상 15이하 입니다");
+            System.out.println("q 입력시 메뉴로 돌아갑니다.");
             userPassword = scanner.nextLine().trim();
 
             if (userPassword.equalsIgnoreCase("q")) {
@@ -253,7 +265,7 @@ public class MainServiceImp implements MainService {
             }
 
             if (!isValidPassword(userPassword)) {
-                System.out.println("비밀번호는 7자 이상 15자 이하이어야 하며, 공백이 없어야 하고 알파벳 대소문자, 숫자 또는 특수문자로만 구성되어야 합니다.");
+                System.out.println("잘못된 형식입니다. 다시 입력해주세요.");
             } else {
                 break;
             }
