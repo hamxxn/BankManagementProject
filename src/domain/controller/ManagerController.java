@@ -15,6 +15,7 @@ public class ManagerController {
         ManagerService managerService = new ManagerServiceImpl();
 
         while (true) {
+            System.out.println();
             try {
                 printMenu();
                 String input = scanner.nextLine().trim();
