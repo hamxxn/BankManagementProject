@@ -28,7 +28,8 @@ public class UserServiceImp implements UserService {
         }
         Account account = user.getAccounts().get(0);
         System.out.println("*** 입금 ***");
-        System.out.println("비밀번호를 입력해주세요. q 입력시 메뉴로 돌아갑니다.");
+        System.out.println("비밀번호를 입력해주세요. ");
+        System.out.println("q 입력시 메뉴로 돌아갑니다.");
         Scanner scanner = new Scanner(System.in);
         String password = scanner.nextLine().trim();
 
@@ -128,7 +129,8 @@ public class UserServiceImp implements UserService {
         System.out.println("*** 이체 ***");
 
         // 받는 계좌 입력
-        System.out.println("이체할 계좌를 입력해주세요. q 입력시 메뉴로 돌아갑니다.");
+        System.out.println("이체할 계좌를 입력해주세요. ");
+        System.out.println("q 입력시 메뉴로 돌아갑니다.");
         String targetAccountNum = scanner.nextLine().trim();
 
         if (targetAccountNum.equals("q")) {
@@ -207,7 +209,8 @@ public class UserServiceImp implements UserService {
         }
 
         // 입력받을 비밀번호 체크
-        System.out.println("비밀번호를 입력해주세요. q 입력시 메뉴로 돌아갑니다.");
+        System.out.println("비밀번호를 입력해주세요. ");
+        System.out.println("q 입력시 메뉴로 돌아갑니다.");
         String password = scanner.nextLine().trim();
 
         if (password.equals("q")) {
@@ -253,7 +256,8 @@ public class UserServiceImp implements UserService {
         }
 
         if (Integer.parseInt(input) <= 0 || Integer.parseInt(input) > account.getBalance()) {
-            System.out.println("출금에 실패하였습니다. 메뉴로 돌아갑니다.");
+            System.out.println("출금에 실패하였습니다.");
+            System.out.println("메뉴로 돌아갑니다.");
             return;
         }
 
@@ -292,7 +296,8 @@ public class UserServiceImp implements UserService {
         }
 
 
-        System.out.println("비밀번호를 입력해주세요. q 입력시 메뉴로 돌아갑니다.");
+        System.out.println("비밀번호를 입력해주세요. ");
+        System.out.println("q 입력시 메뉴로 돌아갑니다.");
         String password = scanner.nextLine().trim();
 
         if (password.equals("q")) {
@@ -317,7 +322,9 @@ public class UserServiceImp implements UserService {
 
     public void createAccount() {
         if (user.getAccountsCount() >= 1) {
-            System.out.println(user.getUsername() + "님, 계좌를 개설하실 수 없습니다. 메뉴로 이동합니다.");
+            System.out.println(user.getUsername() + "님, 계좌를 개설하실 수 없습니다.");
+            System.out.println();
+            System.out.println("메뉴로 이동합니다.");
             return;
         }
 
@@ -328,7 +335,9 @@ public class UserServiceImp implements UserService {
         String passwordCheck;
 
         while (true) {
-            System.out.println("계좌에 사용할 비밀번호 4자리를 입력해주세요. q 입력 시 메뉴로 이동합니다.");
+            System.out.println();
+            System.out.println("계좌에 사용할 비밀번호 4자리를 입력해주세요.");
+            System.out.println("q 입력 시 메뉴로 돌아갑니다");
             password = scanner.nextLine().trim();
 
             if (password.equals("q")) {
@@ -342,7 +351,8 @@ public class UserServiceImp implements UserService {
                 continue; // 조건이 맞지 않으면 다시 입력받음
             }
 
-            System.out.println("계좌에 사용할 비밀번호 4자리를 재입력해주세요. q 입력 시 메뉴로 이동합니다.");
+            System.out.println("계좌에 사용할 비밀번호 4자리를 재입력해주세요. ");
+            System.out.println("q 입력 시 메뉴로 돌아갑니다");
             passwordCheck = scanner.nextLine().trim();
 
             if (passwordCheck.equals("q")) {
@@ -367,6 +377,8 @@ public class UserServiceImp implements UserService {
 
             System.out.println("계좌 개설이 완료되었습니다.");
             System.out.println(user.getUsername() + "님의 계좌번호는 " + account.getAccountNum() + "입니다.");
+
+            System.out.println();
             System.out.println("메인화면으로 돌아갑니다");
             break;
         }

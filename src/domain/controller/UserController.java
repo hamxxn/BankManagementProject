@@ -16,6 +16,7 @@ public class UserController {
         Scanner scanner = new Scanner(System.in);
         UserService userService = new UserServiceImp(user);
         while (true) {
+            System.out.println();
             try {
                 printMenu();
                 String input = scanner.nextLine();
