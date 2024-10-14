@@ -1,6 +1,5 @@
 package domain.repository;
 
-import domain.dto.AccountInfo;
 import domain.entity.Account;
 import domain.entity.User;
 
@@ -9,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static java.lang.Integer.parseInt;
 
 public class UserServiceRepository {
 

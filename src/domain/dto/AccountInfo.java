@@ -6,13 +6,14 @@ public class AccountInfo {
     private String accountNum;
     private String accountPw;
     private int balance;
-
+    private String lastTransferDate;
 
     public AccountInfo(String name, String accountNum, String accountPw, int balance) {
         this.name = name;
         this.accountNum = accountNum;
         this.accountPw = accountPw;
         this.balance = balance;
+
     }
 
     public String getAccountNum() {
