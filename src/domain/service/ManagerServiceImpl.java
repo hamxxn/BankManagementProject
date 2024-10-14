@@ -53,6 +53,7 @@ public class ManagerServiceImpl implements ManagerService {
 
     public void showAccountList() { // 계좌 목록 조회 함수
         // <이름, 계좌번호, 잔액> 출력
+
         List<Account> allAccounts = accountServiceRepository.getAccountsAll();
         System.out.println("*** 계좌 목록 조회 ***");
 

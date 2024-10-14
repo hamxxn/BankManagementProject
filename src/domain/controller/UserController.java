@@ -2,7 +2,7 @@ package domain.controller;
 
 import domain.entity.User;
 import domain.service.UserService;
-import domain.service.UserServiceImp;
+import domain.service.UserServiceImpl;
 
 import java.util.Scanner;
 
@@ -14,7 +14,7 @@ public class UserController {
     }
     public void menu() {
         Scanner scanner = new Scanner(System.in);
-        UserService userService = new UserServiceImp(user);
+        UserService userService = new UserServiceImpl(user);
         while (true) {
             System.out.println();
             try {
