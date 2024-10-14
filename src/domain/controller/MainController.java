@@ -1,7 +1,7 @@
 package domain.controller;
 
 import domain.service.MainService;
-import domain.service.MainServiceImp;
+import domain.service.MainServiceImpl;
 
 import java.util.Scanner;
 
@@ -13,7 +13,7 @@ public class MainController {
 
     public void menu() {
         Scanner scanner = new Scanner(System.in);
-        MainService mainService = new MainServiceImp();
+        MainService mainService = new MainServiceImpl();
         boolean isRunning = true;  // 프로그램이 계속 실행되도록 제어할 플래그
 
         while (isRunning) {  // 프로그램이 종료될 때까지 반복

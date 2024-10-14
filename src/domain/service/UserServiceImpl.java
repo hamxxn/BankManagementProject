@@ -9,10 +9,10 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
-public class UserServiceImp implements UserService {
+public class UserServiceImpl implements UserService {
     private User user;
 
-    public UserServiceImp(User user) {
+    public UserServiceImpl(User user) {
         this.user = user;
     }
 
@@ -28,21 +28,31 @@ public class UserServiceImp implements UserService {
         }
         Account account = user.getAccounts().get(0);
         System.out.println("*** 입금 ***");
-        System.out.println("비밀번호를 입력해주세요. ");
-        System.out.println("q 입력시 메뉴로 돌아갑니다.");
         Scanner scanner = new Scanner(System.in);
-        String password = scanner.nextLine().trim();
 
-        // q 입력했을 시
-        if (password.equals("q")) {
+        // 입금 금액 입력
+        int depositAmount = 0;
+        System.out.println("입금하실 금액을 입력해주세요.");
+        System.out.println("숫자 형식입니다.");
+        System.out.println("q 입력시 메뉴로 돌아갑니다.");
+        String depositAmountInput = scanner.nextLine().trim();
+
+        if (depositAmountInput.equals("q")) { //q 입력시
             System.out.println("메뉴로 돌아갑니다.");
             return;
         }
 
-        // 비밀번호 틀렸을 시
-        if (!password.equals(account.getAccountPw())) {
-            System.out.println("비밀번호가 일치하지 않습니다.");
-            System.out.println("메뉴로 돌아갑니다.");
+        try {
+            depositAmount = Integer.parseInt(depositAmountInput); // 입력을 정수로 변환
+
+            if (depositAmount <= 0) { // 양수 입력이 아닐 경우 return
+                System.out.println("유효한 숫자가 아닙니다.");
+                System.out.println("메뉴로 돌아갑니다.");
+                return;
+            }
+
+        } catch (NumberFormatException e) {
+            System.out.println("유효한 숫자가 아닙니다.");
             return;
         }
 
@@ -53,24 +63,20 @@ public class UserServiceImp implements UserService {
             System.out.println("q 입력시 메뉴로 돌아갑니다.");
             String dayInput = scanner.nextLine().trim();
 
-            // q 입력시
-            if (dayInput.equals("q")) {
+            if (dayInput.equals("q")) { // q 입력시
                 System.out.println("메뉴로 돌아갑니다.");
                 return;
             }
 
-            // 입력된 값이 8자리가 아닐 경우
-            if (dayInput.length() != 8) {
+            if (dayInput.length() != 8) { // 입력된 값이 8자리가 아닐 경우
                 System.out.println("잘못된 날짜 형식입니다.");
                 System.out.println("메뉴로 돌아갑니다.");
                 return;
             }
 
-            // 날짜 형식 지정
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");  // 날짜 형식 지정
 
-            // 날짜 파싱 및 유효성 확인
-            LocalDate date = LocalDate.parse(dayInput, formatter);
+            LocalDate date = LocalDate.parse(dayInput, formatter); // 날짜 파싱 및 유효성 확인
 
         } catch (DateTimeParseException e) {
             System.out.println("잘못된 날짜 형식입니다.");
@@ -80,41 +86,30 @@ public class UserServiceImp implements UserService {
             throw new RuntimeException(e);
         }
 
-        //입금 금액 입력
-        int depositAmount = 0;
-        System.out.println("입금하실 금액을 입력해주세요.");
-        System.out.println("숫자 형식입니다.");
-        System.out.println("q 입력시 메뉴로 돌아갑니다.");
-        String depositAmountInput = scanner.nextLine().trim();
 
-        //q 입력시
-        if (depositAmountInput.equals("q")) {
+        // 비밀번호 입력
+        System.out.println("비밀번호를 입력해주세요. ");
+        System.out.println("q 입력시 메뉴로 돌아갑니다.");
+        String password = scanner.nextLine().trim();
+
+        if (password.equals("q")) { // q 입력했을 시
             System.out.println("메뉴로 돌아갑니다.");
             return;
         }
 
-        try {
-            // 입력을 정수로 변환
-            depositAmount = Integer.parseInt(depositAmountInput);
-
-            if (depositAmount <= 0) { // 양수 입력이 아닐 경우 return
-                System.out.println("유효한 숫자가 아닙니다.");
-                System.out.println("메뉴로 돌아갑니다.");
-                return;
-            }
-
-            System.out.println("입력하신 금액: " + depositAmount + "원");
-            account.setBalance(account.getBalance() + depositAmount); // 계좌에 입금 적용
-            System.out.println("입금이 완료되었습니다.");
-            System.out.println(account.getName() + "님의 현재 잔액은 " + account.getBalance() + "원입니다.");
-
-        } catch (NumberFormatException e) {
-            System.out.println("유효한 숫자가 아닙니다.");
+        if (!password.equals(account.getAccountPw())) { // 비밀번호 틀렸을 시
+            System.out.println("비밀번호가 일치하지 않습니다.");
+            System.out.println("메뉴로 돌아갑니다.");
             return;
         }
+
+        // 최종 출력
+        System.out.println("입력하신 금액: " + depositAmount + "원");
+        account.setBalance(account.getBalance() + depositAmount); // 계좌에 입금 적용
+        System.out.println("입금이 완료되었습니다.");
+        System.out.println(account.getName() + "님의 현재 잔액은 " + account.getBalance() + "원입니다.");
     }
 
-    ;
 
     //이체
     public void transfer() {

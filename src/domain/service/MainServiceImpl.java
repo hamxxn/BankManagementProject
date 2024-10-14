@@ -12,7 +12,7 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class MainServiceImp implements MainService {
+public class MainServiceImpl implements MainService {
     UserServiceRepository userServiceRepository = new UserServiceRepository();
 
     // 나이 확인 메서드 (15세 이하인지 확인)
