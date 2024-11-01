@@ -28,13 +28,13 @@ public class UserServiceImpl implements UserService {
         }
         Account account = user.getAccounts().get(0);
         System.out.println("*** 입금 ***");
+        System.out.println(" ");
         Scanner scanner = new Scanner(System.in);
 
         // 입금 금액 입력
         int depositAmount = 0;
-        System.out.println("입금하실 금액을 입력해주세요.");
-        System.out.println("숫자 형식입니다.");
-        System.out.println("q 입력시 메뉴로 돌아갑니다.");
+        System.out.println("입금하실 금액을 입력해주세요. 숫자만 입력 가능합니다.");
+        System.out.println("(q 입력시 메뉴로 돌아갑니다.)");
         String depositAmountInput = scanner.nextLine().trim();
 
         if (depositAmountInput.equals("q")) { //q 입력시
@@ -58,9 +58,8 @@ public class UserServiceImpl implements UserService {
 
         // 날짜 입력
         try {
-            System.out.println("날짜를 입력해주세요.");
-            System.out.println("YYYYMMDD 형식입니다.");
-            System.out.println("q 입력시 메뉴로 돌아갑니다.");
+            System.out.println("날짜를 입력해주세요. YYYY-MM-DD 형식입니다.");
+            System.out.println("(q 입력시 메뉴로 돌아갑니다.)");
             String dayInput = scanner.nextLine().trim();
 
             if (dayInput.equals("q")) { // q 입력시
@@ -88,8 +87,8 @@ public class UserServiceImpl implements UserService {
 
 
         // 비밀번호 입력
-        System.out.println("비밀번호를 입력해주세요. ");
-        System.out.println("q 입력시 메뉴로 돌아갑니다.");
+        System.out.println("계좌 비밀번호 4자리를 입력해주세요.");
+        System.out.println("(q 입력시 메뉴로 돌아갑니다.)");
         String password = scanner.nextLine().trim();
 
         if (password.equals("q")) { // q 입력했을 시
@@ -121,11 +120,12 @@ public class UserServiceImpl implements UserService {
 
         Scanner scanner = new Scanner(System.in);
         Account sourceAccount = user.getAccounts().get(0);
-        System.out.println("*** 이체 ***");
+        System.out.println("*** 계좌 이체 ***");
+        System.out.println(" ");
 
         // 받는 계좌 입력
-        System.out.println("이체할 계좌를 입력해주세요. ");
-        System.out.println("q 입력시 메뉴로 돌아갑니다.");
+        System.out.println("이체할 계좌의 계좌번호를 입력해주세요.");
+        System.out.println("(q 입력시 메뉴로 돌아갑니다.)");
         String targetAccountNum = scanner.nextLine().trim();
 
         if (targetAccountNum.equals("q")) {
@@ -136,13 +136,14 @@ public class UserServiceImpl implements UserService {
         // 찾으려는 계좌가 있는지 확인
         Account targetAccount = accountServiceRepository.getAccountByAccountNum(targetAccountNum);
         if (targetAccount == null) {
-            System.out.println("입력하신 계좌번호를 찾을 수 없습니다.");
+            System.out.println("입력하신 계좌는 존재하지 않습니다.");
             System.out.println("메뉴로 돌아갑니다.");
             return;
         }
 
         // 이체할 금액 입력
-        System.out.println("이체하실 금액을 입력해주세요.");
+        System.out.println("이체하실 금액을 입력해주세요. 숫자만 입력 가능합니다.");
+        System.out.println("(q 입력시 메뉴로 돌아갑니다.)");
         String transferInput = scanner.nextLine().trim();
 
         if (transferInput.equals("q")) {
@@ -150,19 +151,17 @@ public class UserServiceImpl implements UserService {
             return;
         }
 
-
         // 금액 확인 확인
         if (Integer.parseInt(transferInput)<=0 || sourceAccount.getBalance() < Integer.parseInt(transferInput)) {
-            System.out.println("계좌 이체를 실패했습니다.");
+            System.out.println("유효한 금액이 아니므로 계좌 이체에 실패하였습니다.");
             System.out.println("메뉴로 돌아갑니다.");
             return;
         }
 
         // 날짜 입력
         try {
-            System.out.println("날짜를 입력해주세요.");
-            System.out.println("YYYYMMDD 형식입니다.");
-            System.out.println("q 입력시 메뉴로 돌아갑니다.");
+            System.out.println("날짜를 입력해주세요. YYYY-MM-DD 형식입니다.");
+            System.out.println("(q 입력시 메뉴로 돌아갑니다.)");
             String dayInput = scanner.nextLine().trim();
 
             // q 입력시
@@ -204,8 +203,8 @@ public class UserServiceImpl implements UserService {
         }
 
         // 입력받을 비밀번호 체크
-        System.out.println("비밀번호를 입력해주세요. ");
-        System.out.println("q 입력시 메뉴로 돌아갑니다.");
+        System.out.println("계좌 비밀번호 4자리를 입력해주세요.");
+        System.out.println("(q 입력시 메뉴로 돌아갑니다.)");
         String password = scanner.nextLine().trim();
 
         if (password.equals("q")) {
@@ -224,7 +223,7 @@ public class UserServiceImpl implements UserService {
         targetAccount.setBalance(targetAccount.getBalance() + Integer.parseInt(transferInput));
 
         // 이체 성공 메시지
-        System.out.println("계좌이체에 성공하셨습니다!");
+        System.out.println("계좌 이체에 성공하셨습니다!");
         System.out.println(sourceAccount.getName() + "님의 현재 잔액은 " + sourceAccount.getBalance() + "원입니다.");
 
     }
@@ -240,9 +239,10 @@ public class UserServiceImpl implements UserService {
         Scanner scanner = new Scanner(System.in);
         Account account = user.getAccounts().get(0);
         System.out.println("*** 출금 ***");
-        System.out.println("출금하실 금액을 입력해주세요.");
-        System.out.println("숫자 형식입니다.");
-        System.out.println("q 입력시 메뉴로 돌아갑니다.");
+        System.out.println(" ");
+
+        System.out.println("출금하실 금액을 입력해주세요. 숫자 형식입니다.");
+        System.out.println("(q 입력시 메뉴로 돌아갑니다.)");
         String input = scanner.nextLine().trim();
 
         if (input.equals("q")) {
@@ -251,16 +251,15 @@ public class UserServiceImpl implements UserService {
         }
 
         if (Integer.parseInt(input) <= 0 || Integer.parseInt(input) > account.getBalance()) {
-            System.out.println("출금에 실패하였습니다.");
+            System.out.println("유효한 금액이 아니므로 출금에 실패하였습니다.");
             System.out.println("메뉴로 돌아갑니다.");
             return;
         }
 
         // 날짜 입력
         try {
-            System.out.println("날짜를 입력해주세요.");
-            System.out.println("YYYYMMDD 형식입니다.");
-            System.out.println("q 입력시 메뉴로 돌아갑니다.");
+            System.out.println("날짜를 입력해주세요. YYYY-MM-DD 형식입니다.");
+            System.out.println("(q 입력시 메뉴로 돌아갑니다.)");
             String dayInput = scanner.nextLine().trim();
 
             // q 입력시
@@ -291,8 +290,8 @@ public class UserServiceImpl implements UserService {
         }
 
 
-        System.out.println("비밀번호를 입력해주세요. ");
-        System.out.println("q 입력시 메뉴로 돌아갑니다.");
+        System.out.println("계좌 비밀번호 4자리를 입력해주세요. ");
+        System.out.println("(q 입력시 메뉴로 돌아갑니다.)");
         String password = scanner.nextLine().trim();
 
         if (password.equals("q")) {
@@ -316,6 +315,9 @@ public class UserServiceImpl implements UserService {
 
 
     public void createAccount() {
+        System.out.println("*** 계좌 개설 ***");
+        System.out.println(" ");
+
         if (user.getAccountsCount() >= 1) {
             System.out.println(user.getUsername() + "님, 계좌를 개설하실 수 없습니다.");
             System.out.println();
@@ -332,7 +334,7 @@ public class UserServiceImpl implements UserService {
         while (true) {
             System.out.println();
             System.out.println("계좌에 사용할 비밀번호 4자리를 입력해주세요.");
-            System.out.println("q 입력 시 메뉴로 돌아갑니다");
+            System.out.println("(q 입력 시 메뉴로 돌아갑니다.)");
             password = scanner.nextLine().trim();
 
             if (password.equals("q")) {
@@ -347,7 +349,7 @@ public class UserServiceImpl implements UserService {
             }
 
             System.out.println("계좌에 사용할 비밀번호 4자리를 재입력해주세요. ");
-            System.out.println("q 입력 시 메뉴로 돌아갑니다");
+            System.out.println("(q 입력 시 메뉴로 돌아갑니다.)");
             passwordCheck = scanner.nextLine().trim();
 
             if (passwordCheck.equals("q")) {

@@ -46,7 +46,7 @@ public class UserController {
     }
     // 메뉴 프린트
     public void printMenu() {
-        System.out.println("------입출금 기능------");
+        System.out.println("------ 메뉴 ------");
         System.out.println("1) 입금");
         System.out.println("2) 출금");
         System.out.println("3) 계좌 이체");

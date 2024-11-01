@@ -20,8 +20,9 @@ public class ManagerServiceImpl implements ManagerService {
         while (true) {
             try {
                 System.out.println("*** 계좌 검색 ***");
+                System.out.println(" ");
                 System.out.println("검색할 고객명을 입력해주세요. ");
-                System.out.println("q 입력시 메뉴로 돌아갑니다.");
+                System.out.println("(q 입력시 메뉴로 돌아갑니다.)");
                 String searchName = scanner.nextLine().trim(); // 검색할 이름 입력
 
                 if (searchName.equals("q")) { // q키 입력시 관리자 메뉴로 돌아감.
@@ -56,6 +57,7 @@ public class ManagerServiceImpl implements ManagerService {
 
         List<Account> allAccounts = accountServiceRepository.getAccountsAll();
         System.out.println("*** 계좌 목록 조회 ***");
+        System.out.println(" ");
 
         if (allAccounts.isEmpty()) { // 단 하나의 계좌도 존재하지 않을 경우
             System.out.println("현재 존재하는 계좌가 없습니다.");
