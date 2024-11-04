@@ -11,10 +11,9 @@ import java.util.Objects;
 
 public class UserServiceRepository {
 
-    private final List<User> users;
+    List<User> users = new ArrayList<>();
 
     public UserServiceRepository() {
-        this.users = new ArrayList<User>();
         UserFileReader("UserInfo.txt");
     }
 
@@ -51,30 +50,43 @@ public class UserServiceRepository {
         return getUser;
     }
 
-    private void UserFileReader(String filename) {
+    public void UserFileReader(String filename) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line;
 
             while ((line = reader.readLine()) != null) {
+                System.out.println("유저 파일 라인 출력 : "+ line);
                 String[] parts = line.split("\t");
-                if (parts.length >= 6) {
+                if (parts.length >= 5) {
                     String id = parts[0];
                     String password = parts[1];
                     String name= parts[2];
                     String phoneNum = parts[3];
                     String birth= parts[4];
 
-                    String accountData = parts[5];
+
                     ArrayList<Account> accounts = new ArrayList<>();
-                    String[] accountentry = accountData.split(",");
-                    for (String accentry : accountentry) {
-                        String[] accparts = accentry.split(" ");
-                        if (accparts.length == 3) {
-                            String accnum = accparts[0];
-                            String accpw = accparts[1];
-                            int accbalnce = Integer.parseInt(accparts[2]);
-                            accounts.add(new Account(name, accnum, accpw, accbalnce));
+                    if (parts.length>=6) {
+                        String accountData = parts[5];
+                        System.out.println("accountData: "+ accountData);
+                        String[] accountentry = accountData.split(",");
+                        for (String accentry : accountentry) {
+                            System.out.println("accentry: "+ accentry);
+                            String[] accparts = accentry.split(" ");
+                            if (accparts.length == 3) {
+                                System.out.println("accparts- 0 : "+ accparts[0]);
+                                System.out.println("accparts- 1 : "+ accparts[1]);
+                                System.out.println("accparts- 2 : "+ accparts[2]);
+
+                                String accnum = accparts[0];
+                                String accpw = accparts[1];
+                                int accbalnce = Integer.parseInt(accparts[2]);
+                                accounts.add(new Account(name, accnum, accpw, accbalnce));
+                            }
                         }
+                    }
+                    else {
+                        System.out.println("계좌정보없음");
                     }
 
                     User user = new User(id, password, name, phoneNum, birth, accounts);
@@ -88,25 +100,27 @@ public class UserServiceRepository {
     }
 
 
-    private void updateUserFile(String filename) {
+    public void updateUserFile(String filename) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
             for (User user : users) {
                 StringBuilder accountData= new StringBuilder();
                 for (Account account : user.getAccounts()) {
+                    System.out.println("계좌 번호: "+account.getAccountNum());
+                    System.out.println("계좌 비번: "+account.getAccountPw());
+                    System.out.println("계좌 잔액: "+account.getBalance());
                     accountData.append(account.getAccountNum())
-                            .append(" ")
-                            .append(account.getAccountPw())
-                            .append(" ")
-                            .append(account.getBalance())
+                            .append(" ").append(account.getAccountPw())
+                            .append(" ").append(account.getBalance())
                             .append(",");
-                }
-                if (accountData.length() > 0) {
-                    accountData.setLength(accountData.length() - 1);
                 }
 
                 writer.write(user.getId() + "\t" + user.getPassword()+ "\t" +
                         user.getUsername()  + "\t" + user.getPhoneNum() + "\t" +
-                        user.getBirth() + "\t" + accountData);
+                        user.getBirth());
+                if (!accountData.isEmpty()) {
+                    accountData.deleteCharAt(accountData.length()-1);
+                    writer.write("\t"+accountData);
+                }
                 writer.newLine();
             }
         } catch (IOException e) {

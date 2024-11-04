@@ -1,6 +1,8 @@
 package domain.controller;
 
 import domain.entity.User;
+import domain.repository.AccountServiceRepository;
+import domain.repository.UserServiceRepository;
 import domain.service.UserService;
 import domain.service.UserServiceImpl;
 
@@ -9,12 +11,17 @@ import java.util.Scanner;
 public class UserController {
     private int menu;
     private User user;
+    private UserServiceRepository userServiceRepository;
+    private AccountServiceRepository accountServiceRepository;
+
     public UserController(User user) {
         this.user = user;
+        this.userServiceRepository = new UserServiceRepository();
+        this.accountServiceRepository = new AccountServiceRepository();
     }
     public void menu() {
         Scanner scanner = new Scanner(System.in);
-        UserService userService = new UserServiceImpl(user);
+        UserService userService = new UserServiceImpl(user,userServiceRepository, accountServiceRepository);
         while (true) {
             System.out.println();
             try {
