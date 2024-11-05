@@ -53,4 +53,13 @@ public class User {
     public List<Account> getAccounts() {
         return accounts;
     }
+
+    public void printAccounts() {
+        System.out.println("* "+username+"님의 계좌 리스트 *");
+        for (int i = 0; i < accounts.size(); i++) {
+            Account account = accounts.get(i);
+            System.out.println(i+". "+account.getName() +" "+account.getAccountNum()
+                    +" "+ account.getBalance()+"원");
+        }
+    }
 }

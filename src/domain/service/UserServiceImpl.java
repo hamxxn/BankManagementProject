@@ -1,7 +1,6 @@
 package domain.service;
 
-import domain.entity.Account;
-import domain.entity.User;
+import domain.entity.*;
 import domain.repository.AccountServiceRepository;
 import domain.repository.UserServiceRepository;
 
@@ -29,12 +28,27 @@ public class UserServiceImpl implements UserService {
             return;
         }
 
-        Account account = user.getAccounts().get(0);
         System.out.println("*** 입금 ***");
         System.out.println(" ");
         Scanner scanner = new Scanner(System.in);
 
         try {
+            user.printAccounts();
+            System.out.println("계좌를 선택해주세요.");
+            System.out.println("(q 입력시 메뉴로 돌아갑니다.)");
+            String in=scanner.nextLine().trim();
+
+            if (in.equals("q")) {
+                System.out.println("메뉴로 돌아갑니다.");
+                return;
+            }
+            int accountNum=Integer.parseInt(in);
+            if(accountNum-1>user.getAccounts().size()) {
+                System.out.println("1-"+user.getAccounts().size()+" 사이의 수만 입력가능합니다. 메뉴로 돌아갑니다.");
+                return;
+            }
+            Account account = user.getAccounts().get(accountNum-1);
+
             // 입금 금액 입력
             int depositAmount = 0;
             System.out.println("입금하실 금액을 입력해주세요. 숫자만 입력 가능합니다.");
@@ -131,7 +145,23 @@ public class UserServiceImpl implements UserService {
         System.out.println("*** 계좌 이체 ***");
         System.out.println(" ");
 
+
         try {
+            user.printAccounts();
+            System.out.println("계좌를 선택해주세요.");
+            System.out.println("(q 입력시 메뉴로 돌아갑니다.)");
+            String in=scanner.nextLine().trim();
+
+            if (in.equals("q")) {
+                System.out.println("메뉴로 돌아갑니다.");
+                return;
+            }
+            int accountNum=Integer.parseInt(in);
+            if(accountNum-1>user.getAccounts().size()) {
+                System.out.println("1-"+user.getAccounts().size()+" 사이의 수만 입력가능합니다. 메뉴로 돌아갑니다.");
+                return;
+            }
+            Account account = user.getAccounts().get(accountNum-1);
             // 받는 계좌 입력
             System.out.println("이체할 계좌의 계좌번호를 입력해주세요.");
             System.out.println("(q 입력시 메뉴로 돌아갑니다.)");
@@ -237,11 +267,28 @@ public class UserServiceImpl implements UserService {
         }
 
         Scanner scanner = new Scanner(System.in);
-        Account account = user.getAccounts().get(0);
+
         System.out.println("*** 출금 ***");
         System.out.println(" ");
 
+
+
         try {
+            user.printAccounts();
+            System.out.println("계좌를 선택해주세요.");
+            System.out.println("(q 입력시 메뉴로 돌아갑니다.)");
+            String in=scanner.nextLine().trim();
+
+            if (in.equals("q")) {
+                System.out.println("메뉴로 돌아갑니다.");
+                return;
+            }
+            int accountNum=Integer.parseInt(in);
+            if(accountNum-1>user.getAccounts().size()) {
+                System.out.println("1-"+user.getAccounts().size()+" 사이의 수만 입력가능합니다. 메뉴로 돌아갑니다.");
+                return;
+            }
+            Account account = user.getAccounts().get(accountNum-1);
             // 출금 금액 입력
             System.out.println("출금하실 금액을 입력해주세요. 숫자 형식입니다.");
             System.out.println("(q 입력시 메뉴로 돌아갑니다.)");
@@ -303,7 +350,7 @@ public class UserServiceImpl implements UserService {
             accountServiceRepository.updateAccountFile("AccountInfo.txt");
 
         } catch (NumberFormatException e) {
-            System.out.println("금액은 숫자 형식이어야 합니다. 메뉴로 돌아갑니다.");
+            System.out.println("숫자 형식이어야 합니다. 메뉴로 돌아갑니다.");
             return;
         } catch (DateTimeParseException e) {
             System.out.println("날짜는 YYYY-MM-DD 형식이어야 합니다. 메뉴로 돌아갑니다.");
@@ -319,7 +366,7 @@ public class UserServiceImpl implements UserService {
         System.out.println("*** 계좌 개설 ***");
         System.out.println(" ");
 
-        if (user.getAccountsCount() >= 1) {
+        if (user.getAccountsCount() >= 3) {
             System.out.println(user.getUsername() + "님, 계좌를 개설하실 수 없습니다.");
             System.out.println();
             System.out.println("메뉴로 이동합니다.");
@@ -367,10 +414,28 @@ public class UserServiceImpl implements UserService {
 
                 // 모든 조건이 만족되면 계좌 생성
                 //010 빼고 계좌생성
-                String accountNum = "151" + user.getPhoneNum().substring(3);
-                System.out.println(accountNum);
+                String accountNum="";
+                if(user.getAccounts().size()==0){
+                    accountNum = "151" + user.getPhoneNum().substring(3);
 
-                Account account = new Account(user.getUsername(), accountNum, password, 0);
+                } else if (user.getAccounts().size()==1) {
+                    accountNum = "152" + user.getPhoneNum().substring(3);
+
+                } else if (user.getAccounts().size()==2) {
+                    accountNum = "153" + user.getPhoneNum().substring(3);
+                }
+
+                System.out.println(accountNum);
+                Account account =null;
+                if(user.getAccounts().size()==0){
+                 account = new Account151(user.getUsername(), accountNum, password, 0);
+
+                } else if (user.getAccounts().size()==1) {
+                    account = new Account152(user.getUsername(), accountNum, password, 0);
+                } else if (user.getAccounts().size()==2) {
+                    account = new Account153(user.getUsername(), accountNum, password, 0);
+                }
+
                 user.addAccount(account);
                 userServiceRepository.updateUserFile("UserInfo.txt");
                 accountServiceRepository.addAccount(account);
