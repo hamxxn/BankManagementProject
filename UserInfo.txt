@@ -1,1 +1,2 @@
-simchae	simchaekey	채현	01012341000	2001-01-01	
+simchae	simchaekey	채현	01012341000	2001-01-01
+hamin	ehdgml!	메뉴	01012341234	2003-11-21
