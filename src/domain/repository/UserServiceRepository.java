@@ -55,7 +55,7 @@ public class UserServiceRepository {
             String line;
 
             while ((line = reader.readLine()) != null) {
-                System.out.println("유저 파일 라인 출력 : "+ line);
+                //System.out.println("유저 파일 라인 출력 : "+ line);
                 String[] parts = line.split("\t");
                 if (parts.length >= 5) {
                     String id = parts[0];
@@ -68,15 +68,15 @@ public class UserServiceRepository {
                     ArrayList<Account> accounts = new ArrayList<>();
                     if (parts.length>=6) {
                         String accountData = parts[5];
-                        System.out.println("accountData: "+ accountData);
+                        //System.out.println("accountData: "+ accountData);
                         String[] accountentry = accountData.split(",");
                         for (String accentry : accountentry) {
-                            System.out.println("accentry: "+ accentry);
+                            //System.out.println("accentry: "+ accentry);
                             String[] accparts = accentry.split(" ");
                             if (accparts.length == 3) {
-                                System.out.println("accparts- 0 : "+ accparts[0]);
-                                System.out.println("accparts- 1 : "+ accparts[1]);
-                                System.out.println("accparts- 2 : "+ accparts[2]);
+                                //System.out.println("accparts- 0 : "+ accparts[0]);
+                                //System.out.println("accparts- 1 : "+ accparts[1]);
+                                //System.out.println("accparts- 2 : "+ accparts[2]);
 
                                 String accnum = accparts[0];
                                 String accpw = accparts[1];
@@ -86,7 +86,7 @@ public class UserServiceRepository {
                         }
                     }
                     else {
-                        System.out.println("계좌정보없음");
+                        //System.out.println("계좌정보없음");
                     }
 
                     User user = new User(id, password, name, phoneNum, birth, accounts);
@@ -105,9 +105,9 @@ public class UserServiceRepository {
             for (User user : users) {
                 StringBuilder accountData= new StringBuilder();
                 for (Account account : user.getAccounts()) {
-                    System.out.println("계좌 번호: "+account.getAccountNum());
-                    System.out.println("계좌 비번: "+account.getAccountPw());
-                    System.out.println("계좌 잔액: "+account.getBalance());
+                    //System.out.println("계좌 번호: "+account.getAccountNum());
+                    //System.out.println("계좌 비번: "+account.getAccountPw());
+                    //System.out.println("계좌 잔액: "+account.getBalance());
                     accountData.append(account.getAccountNum())
                             .append(" ").append(account.getAccountPw())
                             .append(" ").append(account.getBalance())
