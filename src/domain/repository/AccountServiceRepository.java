@@ -16,6 +16,17 @@ public class AccountServiceRepository {
         AccountFileReader("AccountInfo.txt");
     }
 
+    // 계좌 저장 (새로 추가하거나 기존 계좌 업데이트)
+    public void save(Account account) {
+        for (int i = 0; i < accounts.size(); i++) {
+            if (accounts.get(i).getAccountNum().equals(account.getAccountNum())) {
+                accounts.set(i, account); // 이미 있으면 업데이트
+                return;
+            }
+        }
+        accounts.add(account); // 없으면 새로 추가
+    }
+
     public void addAccount(Account account) {
         accounts.add(account);
         updateAccountFile("AccountInfo.txt");

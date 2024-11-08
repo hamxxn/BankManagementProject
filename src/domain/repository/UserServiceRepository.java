@@ -1,5 +1,4 @@
 package domain.repository;
-
 import domain.entity.Account;
 import domain.entity.User;
 
@@ -15,6 +14,28 @@ public class UserServiceRepository {
 
     public UserServiceRepository() {
         UserFileReader("UserInfo.txt");
+    }
+
+    // 사용자를 저장하는 메서드
+    public void save(User user) {
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getId().equals(user.getId())) {
+                users.set(i, user); // 이미 있으면 업데이트
+                return;
+            }
+        }
+        users.add(user); // 없으면 새로 추가
+    }
+
+    public User getUserByAccount(String accountnum) {
+        for (User user : users) {
+            for (Account userAccount : user.getAccounts()) {
+                if (userAccount.getAccountNum().equals(accountnum)) {
+                    return user; // 계좌를 가진 사용자 반환
+                }
+            }
+        }
+        return null; // 계좌가 없으면 null 반환
     }
 
     public void add(User user) {
@@ -105,9 +126,9 @@ public class UserServiceRepository {
             for (User user : users) {
                 StringBuilder accountData= new StringBuilder();
                 for (Account account : user.getAccounts()) {
-                    //System.out.println("계좌 번호: "+account.getAccountNum());
-                    //System.out.println("계좌 비번: "+account.getAccountPw());
-                    //System.out.println("계좌 잔액: "+account.getBalance());
+                    System.out.println("계좌 번호: "+account.getAccountNum());
+                    System.out.println("계좌 비번: "+account.getAccountPw());
+                    System.out.println("계좌 잔액: "+account.getBalance());
                     accountData.append(account.getAccountNum())
                             .append(" ").append(account.getAccountPw())
                             .append(" ").append(account.getBalance())
@@ -127,6 +148,7 @@ public class UserServiceRepository {
             System.err.println("파일 업데이트에 실패했습니다.");
         }
     }
+
 
 
 }
