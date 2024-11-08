@@ -89,15 +89,11 @@ public class UserServiceRepository {
                     ArrayList<Account> accounts = new ArrayList<>();
                     if (parts.length>=6) {
                         String accountData = parts[5];
-                        //System.out.println("accountData: "+ accountData);
+
                         String[] accountentry = accountData.split(",");
                         for (String accentry : accountentry) {
-                            //System.out.println("accentry: "+ accentry);
                             String[] accparts = accentry.split(" ");
                             if (accparts.length == 3) {
-                                //System.out.println("accparts- 0 : "+ accparts[0]);
-                                //System.out.println("accparts- 1 : "+ accparts[1]);
-                                //System.out.println("accparts- 2 : "+ accparts[2]);
 
                                 String accnum = accparts[0];
                                 String accpw = accparts[1];
@@ -126,9 +122,6 @@ public class UserServiceRepository {
             for (User user : users) {
                 StringBuilder accountData= new StringBuilder();
                 for (Account account : user.getAccounts()) {
-                    System.out.println("계좌 번호: "+account.getAccountNum());
-                    System.out.println("계좌 비번: "+account.getAccountPw());
-                    System.out.println("계좌 잔액: "+account.getBalance());
                     accountData.append(account.getAccountNum())
                             .append(" ").append(account.getAccountPw())
                             .append(" ").append(account.getBalance())
