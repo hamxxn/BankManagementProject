@@ -58,7 +58,7 @@ public class User {
         System.out.println("* "+username+"님의 계좌 리스트 *");
         for (int i = 0; i < accounts.size(); i++) {
             Account account = accounts.get(i);
-            System.out.println(i+". "+account.getName() +" "+account.getAccountNum()
+            System.out.println(i+1+". "+account.getName() +" "+account.getAccountNum()
                     +" "+ account.getBalance()+"원");
         }
     }

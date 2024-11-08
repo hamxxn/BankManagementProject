@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService {
         this.userServiceRepository = userServiceRepository;
         this.accountServiceRepository = accountServiceRepository;
     }
-    
+
     // 입금
     public void deposit() {
         if (user.getAccounts().isEmpty()) {
@@ -115,6 +115,9 @@ public class UserServiceImpl implements UserService {
             System.out.println("입금이 완료되었습니다.");
             System.out.println(account.getName() + "님의 현재 잔액은 " + account.getBalance() + "원입니다.");
 
+            userServiceRepository.save(user);
+            accountServiceRepository.save(account);
+
             userServiceRepository.updateUserFile("UserInfo.txt");
             accountServiceRepository.updateAccountFile("AccountInfo.txt");
 
@@ -139,8 +142,7 @@ public class UserServiceImpl implements UserService {
         }
 
         Scanner scanner = new Scanner(System.in);
-        Account sourceAccount = user.getAccounts().get(0);
-        Account targetAccount = null;
+
 
         System.out.println("*** 계좌 이체 ***");
         System.out.println(" ");
@@ -148,6 +150,7 @@ public class UserServiceImpl implements UserService {
 
         try {
             user.printAccounts();
+            //보내는 계좌 입력
             System.out.println("계좌를 선택해주세요.");
             System.out.println("(q 입력시 메뉴로 돌아갑니다.)");
             String in=scanner.nextLine().trim();
@@ -161,7 +164,7 @@ public class UserServiceImpl implements UserService {
                 System.out.println("1-"+user.getAccounts().size()+" 사이의 수만 입력가능합니다. 메뉴로 돌아갑니다.");
                 return;
             }
-            Account account = user.getAccounts().get(accountNum-1);
+            Account sourceAccount = user.getAccounts().get(accountNum-1);
             // 받는 계좌 입력
             System.out.println("이체할 계좌의 계좌번호를 입력해주세요.");
             System.out.println("(q 입력시 메뉴로 돌아갑니다.)");
@@ -173,7 +176,21 @@ public class UserServiceImpl implements UserService {
             }
 
             // 찾으려는 계좌가 있는지 확인
-            targetAccount = accountServiceRepository.getAccountByAccountNum(targetAccountNum);
+            User targetUser;
+            targetUser = userServiceRepository.getUserByAccount(targetAccountNum);
+
+            if (targetUser == null) {
+                System.out.println("입력하신 계좌는 존재하지 않습니다.");
+                System.out.println("메뉴로 돌아갑니다.");
+                return;
+            }
+
+            // 해당 사용자에서 계좌 찾기
+            Account targetAccount = targetUser.getAccounts().stream()
+                    .filter(account -> account.getAccountNum().equals(targetAccountNum))
+                    .findFirst()
+                    .orElse(null);
+
             if (targetAccount == null) {
                 System.out.println("입력하신 계좌는 존재하지 않습니다.");
                 System.out.println("메뉴로 돌아갑니다.");
@@ -243,6 +260,35 @@ public class UserServiceImpl implements UserService {
             System.out.println("계좌 이체에 성공하셨습니다!");
             System.out.println(sourceAccount.getName() + "님의 현재 잔액은 " + sourceAccount.getBalance() + "원입니다.");
 
+            // targetUser의 accounts에서 targetAccount를 갱신
+            targetUser.getAccounts().stream()
+                    .filter(account -> account.getAccountNum().equals(targetAccount.getAccountNum()))
+                    .forEach(account -> {
+                        account.setBalance(targetAccount.getBalance()); // targetAccount의 새로운 잔액으로 갱신
+                    });
+
+            accountServiceRepository.save(sourceAccount);
+            accountServiceRepository.save(targetAccount);
+
+            if (user.getId().equals(targetUser.getId())) {
+                // source 계좌와 target 계좌 모두 동일한 사용자에게 속할 경우
+                Account newtargetAccount = null;
+                for (Account a : user.getAccounts()) {
+                    if (a.getAccountNum().equals(targetAccountNum)) {
+                        newtargetAccount = a;
+                    }
+                }
+                if (newtargetAccount!=null) {
+                    newtargetAccount.setBalance(targetAccount.getBalance());
+                }
+                // 동일한 사용자이므로, user를 한 번만 저장함.
+                userServiceRepository.save(user);
+            } else {
+                // 만약 user와 targetUser가 다를 경우, 각각 다른 계좌에 대해 저장
+                userServiceRepository.save(user); // user의 계좌 업데이트
+                userServiceRepository.save(targetUser); // targetUser의 계좌 업데이트
+            }
+
             userServiceRepository.updateUserFile("UserInfo.txt");
             accountServiceRepository.updateAccountFile("AccountInfo.txt");
 
@@ -270,8 +316,6 @@ public class UserServiceImpl implements UserService {
 
         System.out.println("*** 출금 ***");
         System.out.println(" ");
-
-
 
         try {
             user.printAccounts();
@@ -344,6 +388,9 @@ public class UserServiceImpl implements UserService {
             account.setBalance(account.getBalance() - withdrawInput);
             System.out.println("출금에 성공하셨습니다!");
             System.out.println(account.getName() + "님의 현재 잔액은 " + account.getBalance() + "원입니다.");
+
+            userServiceRepository.save(user);
+            accountServiceRepository.save(account);
 
             // 데이터 업데이트
             userServiceRepository.updateUserFile("UserInfo.txt");
@@ -428,7 +475,7 @@ public class UserServiceImpl implements UserService {
                 System.out.println(accountNum);
                 Account account =null;
                 if(user.getAccounts().size()==0){
-                 account = new Account151(user.getUsername(), accountNum, password, 0);
+                    account = new Account151(user.getUsername(), accountNum, password, 0);
 
                 } else if (user.getAccounts().size()==1) {
                     account = new Account152(user.getUsername(), accountNum, password, 0);
@@ -437,6 +484,8 @@ public class UserServiceImpl implements UserService {
                 }
 
                 user.addAccount(account);
+                userServiceRepository.save(user);
+
                 userServiceRepository.updateUserFile("UserInfo.txt");
                 accountServiceRepository.addAccount(account);
 
