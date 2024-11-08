@@ -20,10 +20,10 @@ public class ManagerController {
                 int userSelection = Integer.parseInt(input); // 사용자가 선택한 메뉴의 번호를 받는 변수
                 if (userSelection == 1) {
                     managerService.accountSearch();
-                    break;
+                    //break;
                 } else if (userSelection == 2) {
                     managerService.showAccountList();
-                    break;
+                    //break;
                 } else if (userSelection == 3) {
                     break;
                 } else {

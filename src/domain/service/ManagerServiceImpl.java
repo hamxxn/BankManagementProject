@@ -41,7 +41,7 @@ public class ManagerServiceImpl implements ManagerService {
                     System.out.println(account.getName() + ", " + account.getAccountNum() + ", " + account.getBalance());
                 }
                 System.out.println("****************************************************");
-
+                break;
             } catch (Exception e) {
                 System.out.println("잘못된 형식입니다.");
                 System.out.println();
