@@ -30,16 +30,16 @@ public class UserController {
                 menu = Integer.parseInt(input);
                 if (menu == 1) {
                     userService.deposit();
-                    break;
+                    //break;
                 } else if (menu == 2) {
                     userService.withdraw();
-                    break;
+                    //break;
                 } else if (menu == 3) {
                     userService.transfer();
-                    break;
+                    //break;
                 } else if (menu == 4) {
                     userService.createAccount();
-                    break;
+                    //break;
                 } else if (menu == 5) {
                     System.out.println("로그아웃 되었습니다.");
                     return;
