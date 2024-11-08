@@ -158,6 +158,7 @@ public class MainServiceImpl implements MainService {
         String phoneNumber = "";
         String userId = "";
         String userPassword = "";
+        String passwordCheck;
         boolean isReturningToMenu = false;  // 메뉴로 돌아가는 플래그 추가
         System.out.println("*** 회원가입 ***");
         System.out.println(" ");
@@ -274,6 +275,28 @@ public class MainServiceImpl implements MainService {
 
             if (!isValidPassword(userPassword)) {
                 System.out.println("잘못된 형식입니다. 다시 입력해주세요.");
+            } else {
+                break;
+            }
+        }
+        if (isReturningToMenu) return;
+
+        //비밀번호 재입력
+        while(true) {
+            System.out.println();
+            System.out.println("비밀번호를 재입력해주세요.");
+            System.out.println("(q 입력 시 메뉴로 돌아갑니다.)");
+            passwordCheck = scanner.nextLine().trim();
+
+            if (passwordCheck.equalsIgnoreCase("q")) {
+                isReturningToMenu = true;
+                break;
+            }
+
+            if (!isValidPassword(passwordCheck)) {
+                System.out.println("잘못된 형식입니다. 다시 입력해주세요.");
+            } else if ((!userPassword.equals(passwordCheck))) {
+                System.out.println("비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
             } else {
                 break;
             }
