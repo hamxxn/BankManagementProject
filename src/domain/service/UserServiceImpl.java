@@ -128,7 +128,7 @@ public class UserServiceImpl implements UserService {
             accountServiceRepository.updateAccountFile("AccountInfo.txt");
 
         } catch (NumberFormatException e) {
-            System.out.println("유효한 숫자가 아닙니다. 메뉴로 돌아갑니다.");
+            System.out.println("잘못된 입력 형식입니다. 메뉴로 돌아갑니다.");
             return;
         } catch (DateTimeParseException e) {
             System.out.println("잘못된 날짜 형식입니다. 메뉴로 돌아갑니다.");
@@ -238,7 +238,7 @@ public class UserServiceImpl implements UserService {
             accountServiceRepository.updateAccountFile("AccountInfo.txt");
 
         } catch (NumberFormatException e) {
-            System.out.println("숫자 형식이어야 합니다. 메뉴로 돌아갑니다.");
+            System.out.println("잘못된 입력 형식입니다. 메뉴로 돌아갑니다.");
             return;
         } catch (DateTimeParseException e) {
             System.out.println("잘못된 날짜 형식입니다. 메뉴로 돌아갑니다.");
@@ -420,7 +420,7 @@ public class UserServiceImpl implements UserService {
             accountServiceRepository.updateAccountFile("AccountInfo.txt");
 
         } catch (NumberFormatException e) {
-            System.out.println("금액은 숫자 형식으로 입력해야 합니다. 메뉴로 돌아갑니다.");
+            System.out.println("잘못된 입력 형식입니다. 메뉴로 돌아갑니다.");
             return;
         } catch (DateTimeParseException e) {
             System.out.println("잘못된 날짜 형식입니다. 메뉴로 돌아갑니다.");
