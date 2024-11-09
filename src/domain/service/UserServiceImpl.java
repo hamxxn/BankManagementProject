@@ -173,7 +173,12 @@ public class UserServiceImpl implements UserService {
             if (targetAccountNum.equals("q")) {
                 System.out.println("메뉴로 돌아갑니다.");
                 return;
+            } else if (targetAccountNum.equals(sourceAccount.getAccountNum())) {
+                System.out.println("출금 계좌와 입금 계좌가 동일합니다.");
+                System.out.println("메뉴로 돌아갑니다.");
+                return;
             }
+
 
             // 찾으려는 계좌가 있는지 확인
             User targetUser;
