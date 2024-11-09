@@ -241,7 +241,7 @@ public class UserServiceImpl implements UserService {
             System.out.println("숫자 형식이어야 합니다. 메뉴로 돌아갑니다.");
             return;
         } catch (DateTimeParseException e) {
-            System.out.println("날짜는 YYYY-MM-DD 형식이어야 합니다. 메뉴로 돌아갑니다.");
+            System.out.println("잘못된 날짜 형식입니다. 메뉴로 돌아갑니다.");
             return;
         } catch (Exception e) {
             System.out.println("잘못된 입력 형식입니다. 메뉴로 돌아갑니다.");
@@ -423,7 +423,7 @@ public class UserServiceImpl implements UserService {
             System.out.println("금액은 숫자 형식으로 입력해야 합니다. 메뉴로 돌아갑니다.");
             return;
         } catch (DateTimeParseException e) {
-            System.out.println("날짜는 YYYY-MM-DD 형식이어야 합니다. 메뉴로 돌아갑니다.");
+            System.out.println("잘못된 날짜 형식입니다. 메뉴로 돌아갑니다.");
             return;
         } catch (Exception e) {
             System.out.println("잘못된 입력 형식입니다. 메뉴로 돌아갑니다.");
