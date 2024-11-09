@@ -6,6 +6,7 @@ import domain.repository.UserServiceRepository;
 import domain.service.UserService;
 import domain.service.UserServiceImpl;
 
+import java.time.LocalDate;
 import java.util.Scanner;
 
 public class UserController {
@@ -19,7 +20,7 @@ public class UserController {
         this.userServiceRepository = new UserServiceRepository();
         this.accountServiceRepository = new AccountServiceRepository();
     }
-    public void menu() {
+    public void menu(LocalDate todayDate) {
         Scanner scanner = new Scanner(System.in);
         UserService userService = new UserServiceImpl(user,userServiceRepository, accountServiceRepository);
         while (true) {
@@ -29,13 +30,13 @@ public class UserController {
                 String input = scanner.nextLine().trim();
                 menu = Integer.parseInt(input);
                 if (menu == 1) {
-                    userService.deposit();
+                    userService.deposit(todayDate);
                     //break;
                 } else if (menu == 2) {
-                    userService.withdraw();
+                    userService.withdraw(todayDate);
                     //break;
                 } else if (menu == 3) {
-                    userService.transfer();
+                    userService.transfer(todayDate);
                     //break;
                 } else if (menu == 4) {
                     userService.createAccount();

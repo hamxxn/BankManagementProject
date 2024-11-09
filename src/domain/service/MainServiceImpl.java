@@ -147,7 +147,32 @@ public class MainServiceImpl implements MainService {
             break;
         }
         UserController userController = new UserController(user);
-        userController.menu();
+        LocalDate date;
+        while(true){
+            try {
+                // 날짜 입력
+                System.out.println("날짜를 입력해주세요. YYYY-MM-DD 형식입니다.");
+                System.out.println("(q 입력시 메뉴로 돌아갑니다.)");
+                String dayInput = scanner.nextLine().trim();
+
+                if (dayInput.equals("q")) { // q 입력시
+                    System.out.println("메뉴로 돌아갑니다.");
+                    return;
+                }
+
+                if (dayInput.length() != 10) { // 입력된 값이 10자리가 아닐 경우
+                    System.out.println("잘못된 날짜 형식입니다. 다시 입력해 주세요.");
+                    continue;
+                }
+
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");  // 날짜 형식 지정
+                date = LocalDate.parse(dayInput, formatter); // 날짜 파싱 및 유효성 확인
+                break;
+            } catch (DateTimeParseException e) {
+                System.out.println("잘못된 날짜 형식입니다. 다시 입력해 주세요.");
+            }
+        }
+        userController.menu(date);
     }
 
     // 회원가입 메뉴

@@ -1,12 +1,14 @@
 package domain.service;
 
+import java.time.LocalDate;
+
 public interface UserService {
 
-    void deposit();
+    void deposit(LocalDate todayDate);
 
-    void transfer();
+    void withdraw(LocalDate todayDate);
 
-    void withdraw();
+    void transfer(LocalDate todayDate);
 
     void createAccount();
 }
