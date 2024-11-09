@@ -26,7 +26,7 @@ public class UserController {
             System.out.println();
             try {
                 printMenu();
-                String input = scanner.nextLine();
+                String input = scanner.nextLine().trim();
                 menu = Integer.parseInt(input);
                 if (menu == 1) {
                     userService.deposit();
