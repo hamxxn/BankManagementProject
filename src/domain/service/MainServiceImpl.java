@@ -191,7 +191,7 @@ public class MainServiceImpl implements MainService {
         // 이름 입력
         while (true) {
             System.out.println();
-            System.out.println("이름을 입력해주세요. 한국어만 가능하며 길이는 2이상 5이하입니다. 공백이 포함되서는 안됩니다.");
+            System.out.println("이름을 입력해주세요. 한국어만 가능하며 길이는 2이상 5이하입니다. 중간에 공백이 포함되서는 안됩니다.");
             System.out.println("(q 입력시 메뉴로 돌아갑니다.)");
             userName = scanner.nextLine().trim();
 
@@ -239,7 +239,7 @@ public class MainServiceImpl implements MainService {
         // 전화번호 입력
         while (true) {
             System.out.println();
-            System.out.println("전화번호를 입력해주세요. 01011112222 형식입니다.");
+            System.out.println("전화번호를 입력해주세요. 숫자 11자리 형식으로 입력해주세요.");
             System.out.println("(q 입력시 메뉴로 돌아갑니다.)");
             phoneNumber = scanner.nextLine().trim();
 

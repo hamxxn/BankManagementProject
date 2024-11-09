@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
                 return;
             }
             int accountNum=Integer.parseInt(in);
-            if(accountNum-1>user.getAccounts().size()) {
+            if(accountNum>user.getAccounts().size()) {
                 System.out.println("1-"+user.getAccounts().size()+" 사이의 수만 입력가능합니다. 메뉴로 돌아갑니다.");
                 return;
             }
@@ -163,7 +163,7 @@ public class UserServiceImpl implements UserService {
                 return;
             }
             int accountNum=Integer.parseInt(in);
-            if(accountNum-1>user.getAccounts().size()) {
+            if(accountNum>user.getAccounts().size()) {
                 System.out.println("1-"+user.getAccounts().size()+" 사이의 수만 입력가능합니다. 메뉴로 돌아갑니다.");
                 return;
             }
@@ -276,7 +276,7 @@ public class UserServiceImpl implements UserService {
                 return;
             }
             int accountNum=Integer.parseInt(in);
-            if(accountNum-1>user.getAccounts().size()) {
+            if(accountNum>user.getAccounts().size()) {
                 System.out.println("1-"+user.getAccounts().size()+" 사이의 수만 입력가능합니다. 메뉴로 돌아갑니다.");
                 return;
             }
