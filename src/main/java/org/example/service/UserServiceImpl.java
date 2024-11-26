@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
     }
 
     // 입금
-    public void deposit(LocalDate todayDate) {
+    public void deposit() {
         if (user.getAccounts().isEmpty()) {
             System.out.println("계좌가 존재하지 않습니다.");
             System.out.println("메뉴로 돌아갑니다.");
@@ -64,31 +64,6 @@ public class UserServiceImpl implements UserService {
 
             if (depositAmount <= 0) { // 양수 입력이 아닐 경우 return
                 System.out.println("유효한 숫자가 아닙니다.");
-                System.out.println("메뉴로 돌아갑니다.");
-                return;
-            }
-
-            // 날짜 입력
-            System.out.println("날짜를 입력해주세요. YYYY-MM-DD 형식입니다.");
-            System.out.println("(q 입력시 메뉴로 돌아갑니다.)");
-            String dayInput = scanner.nextLine().trim();
-
-            if (dayInput.equals("q")) { // q 입력시
-                System.out.println("메뉴로 돌아갑니다.");
-                return;
-            }
-
-            if (dayInput.length() != 10) { // 입력된 값이 10자리가 아닐 경우
-                System.out.println("잘못된 날짜 형식입니다.");
-                System.out.println("메뉴로 돌아갑니다.");
-                return;
-            }
-
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");  // 날짜 형식 지정
-            LocalDate date = LocalDate.parse(dayInput, formatter); // 날짜 파싱 및 유효성 확인
-
-            if(!date.equals(todayDate)){ // 현재 날짜(로그인 할 때 받은 날짜)인지 확인
-                System.out.println("현재 날짜가 아닙니다.");
                 System.out.println("메뉴로 돌아갑니다.");
                 return;
             }
@@ -140,7 +115,7 @@ public class UserServiceImpl implements UserService {
     }
 
     //출금
-    public void withdraw(LocalDate todayDate) {
+    public void withdraw() {
         if (user.getAccounts().isEmpty()) {
             System.out.println("계좌가 존재하지 않습니다.");
             System.out.println("메뉴로 돌아갑니다.");
@@ -185,30 +160,6 @@ public class UserServiceImpl implements UserService {
                 return;
             }
 
-            // 날짜 입력
-            System.out.println("날짜를 입력해주세요. YYYY-MM-DD 형식입니다.");
-            System.out.println("(q 입력시 메뉴로 돌아갑니다.)");
-            String dayInput = scanner.nextLine().trim();
-
-            if (dayInput.equals("q")) {
-                System.out.println("메뉴로 돌아갑니다.");
-                return;
-            }
-
-            if (dayInput.length() != 10) {
-                System.out.println("잘못된 날짜 형식입니다. 메뉴로 돌아갑니다.");
-                return;
-            }
-
-            // 날짜 형식 지정 및 파싱
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            LocalDate date = LocalDate.parse(dayInput, formatter);
-
-            if(!date.equals(todayDate)){ // 현재 날짜(로그인 할 때 받은 날짜)인지 확인
-                System.out.println("현재 날짜가 아닙니다.");
-                System.out.println("메뉴로 돌아갑니다.");
-                return;
-            }
 
             // 비밀번호 입력 확인
             System.out.println("계좌 비밀번호 4자리를 입력해주세요.");
@@ -335,34 +286,14 @@ public class UserServiceImpl implements UserService {
                 return;
             }
 
-            // 날짜 입력
-            System.out.println("날짜를 입력해주세요. YYYY-MM-DD 형식입니다.");
-            System.out.println("(q 입력시 메뉴로 돌아갑니다.)");
-            String dayInput = scanner.nextLine().trim();
-
-            if (dayInput.equals("q")) {
-                System.out.println("메뉴로 돌아갑니다.");
-                return;
-            }
-
-            // 날짜 형식 지정
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            LocalDate date = LocalDate.parse(dayInput, formatter);
-
-            if(!date.equals(todayDate)){ // 현재 날짜(로그인 할 때 받은 날짜)인지 확인
-                System.out.println("현재 날짜가 아닙니다.");
-                System.out.println("메뉴로 돌아갑니다.");
-                return;
-            }
-
             String lastTransferDate = sourceAccount.getLastTransferDate();
-            if (lastTransferDate.equals(dayInput)) {
+            if (lastTransferDate.equals(todayDate.toString())) {
                 System.out.println("1일 제한 횟수를 초과하여 계좌 이체에 실패하였습니다.");
                 System.out.println("메뉴로 돌아갑니다.");
                 return;
             }
 
-            sourceAccount.setLastTransferDate(dayInput);
+            sourceAccount.setLastTransferDate(todayDate.toString());
 
             // 비밀번호 체크
             System.out.println("계좌 비밀번호 4자리를 입력해주세요.");
@@ -436,7 +367,9 @@ public class UserServiceImpl implements UserService {
         System.out.println("*** 계좌 개설 ***");
         System.out.println(" ");
 
-        if (user.getAccountsCount() >= 3) {
+        int totalacc = accountServiceRepository.getAccountsAll().size();
+
+        if (totalacc >= 100000000 || user.getAccountsCount() >= 100000000) {
             System.out.println(user.getUsername() + "님, 계좌를 개설하실 수 없습니다.");
             System.out.println();
             System.out.println("메뉴로 이동합니다.");

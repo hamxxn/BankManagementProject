@@ -30,10 +30,10 @@ public class UserController {
                 String input = scanner.nextLine().trim();
                 menu = Integer.parseInt(input);
                 if (menu == 1) {
-                    userService.deposit(todayDate);
+                    userService.deposit();
                     //break;
                 } else if (menu == 2) {
-                    userService.withdraw(todayDate);
+                    userService.withdraw();
                     //break;
                 } else if (menu == 3) {
                     userService.transfer(todayDate);

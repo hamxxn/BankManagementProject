@@ -4,6 +4,7 @@ import org.example.entity.Account;
 import org.example.entity.User;
 
 import java.io.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -11,6 +12,7 @@ import java.util.Objects;
 public class UserServiceRepository {
 
     List<User> users = new ArrayList<>();
+    List<String> loginHistory = new ArrayList<>();
 
     public UserServiceRepository() {
         UserFileReader("UserInfo.txt");
@@ -69,6 +71,59 @@ public class UserServiceRepository {
             }
         }
         return getUser;
+    }
+
+    public void LoginFileReader(String filename) {
+        loginHistory.clear();
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                loginHistory.add(line);
+            }
+        } catch (IOException e) {
+            System.err.println("로그인 기록 파일을 읽을 수 없습니다: " + filename);
+        }
+
+        for (String s : loginHistory) {
+            System.out.println("loginfileread 확인"+s);
+        }
+    }
+
+    public void addLoginRecord(String filename, String userid, LocalDate logindate) {
+        String record = userid + "\t" + logindate.toString();
+        loginHistory.add(record);
+        updateLoginFile(filename);
+    }
+
+    public void updateLoginFile(String filename) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+            for (String record : loginHistory) {
+                System.out.println("updateloginfile 확인"+ record);
+                writer.write(record);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            System.err.println("로그인 기록 파일을 업데이트할 수 없습니다: " + filename);
+        }
+    }
+
+    public LocalDate getLastLogin(String filename) {
+        if (loginHistory.isEmpty()) {
+            return LocalDate.MIN;
+        }
+        for (String s: loginHistory) {
+            System.out.println("getlastlogin확인"+s);
+        }
+        String last = loginHistory.get(loginHistory.size()-1);
+        String[] parts = last.split("\t");
+        if (parts.length>=2) {
+            System.out.println(("parts[1]" + parts[1]));
+            return LocalDate.parse(parts[1]);
+        } else {
+            System.out.println("parts.length<2");
+            return null;
+        }
+
     }
 
     public void UserFileReader(String filename) {

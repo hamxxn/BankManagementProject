@@ -11,6 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.function.LongConsumer;
 
 public class MainServiceImpl implements MainService {
     UserServiceRepository userServiceRepository = new UserServiceRepository();
@@ -167,11 +168,21 @@ public class MainServiceImpl implements MainService {
 
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");  // 날짜 형식 지정
                 date = LocalDate.parse(dayInput, formatter); // 날짜 파싱 및 유효성 확인
+                userServiceRepository.LoginFileReader("LoginRecord.txt");
+                LocalDate last = userServiceRepository.getLastLogin("LoginRecord.txt");
+                System.out.println(last);
+                if (last == null || date.isBefore(last)) {
+                    System.out.println("과거 날짜는 입력할 수 없습니다. 다시 입력해 주세요.");
+                    continue;
+                }
                 break;
             } catch (DateTimeParseException e) {
                 System.out.println("잘못된 날짜 형식입니다. 다시 입력해 주세요.");
             }
         }
+
+        userServiceRepository.addLoginRecord("LoginRecord.txt",user.getId(), date);
+        userServiceRepository.LoginFileReader(("LoginRecord.txt"));
         userController.menu(date);
     }
 
