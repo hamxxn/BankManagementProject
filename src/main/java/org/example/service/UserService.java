@@ -4,9 +4,9 @@ import java.time.LocalDate;
 
 public interface UserService {
 
-    void deposit(LocalDate todayDate);
+    void deposit();
 
-    void withdraw(LocalDate todayDate);
+    void withdraw();
 
     void transfer(LocalDate todayDate);
 
