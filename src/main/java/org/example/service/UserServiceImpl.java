@@ -351,7 +351,7 @@ public class UserServiceImpl implements UserService {
 
             sourceAccount.setLastTransferDate(todayDate.toString());
 
-            // Todo 메모 입력
+            // Todo 메모 입력 -------------
 
             // 비밀번호 체크
             System.out.println("계좌 비밀번호 4자리를 입력해주세요.");
