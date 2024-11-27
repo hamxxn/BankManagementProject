@@ -42,6 +42,9 @@ public class UserController {
                     userService.createAccount();
                     //break;
                 } else if (menu == 5) {
+                    userService.myPage();
+                    //break;
+                } else if (menu == 6) {
                     System.out.println("로그아웃 되었습니다.");
                     return;
                 } else {
@@ -59,7 +62,8 @@ public class UserController {
         System.out.println("2) 출금");
         System.out.println("3) 계좌 이체");
         System.out.println("4) 계좌 개설");
-        System.out.println("5) 로그아웃");
+        System.out.println("5) 마이페이지");
+        System.out.println("6) 로그아웃");
         System.out.println("----------------------");
         System.out.println("메뉴 번호를 입력하세요!");
     }
