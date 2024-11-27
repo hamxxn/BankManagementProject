@@ -20,6 +20,59 @@ public class UserServiceImpl implements UserService {
         this.accountServiceRepository = accountServiceRepository;
     }
 
+    public void myPage() {
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            System.out.println();
+            printMyPageMenu();
+            String input = scanner.nextLine().trim();
+            switch (input) {
+                case "1":
+                    // 이름 변경
+                    changeUserName();
+                    break;
+                case "2":
+                    // 전화번호 변경
+                    changePhoneNumber();
+                    break;
+                case "3":
+                    // 입출금 내역 조회
+                    showAccountHistory();
+                    break;
+                case "q":
+                    return; // 돌아가기
+                default:
+                    System.out.println("유효하지 않은 입력입니다. 1-3 사이의 수를 입력하세요.");
+            }
+        }
+    }
+
+    public void printMyPageMenu() {
+        System.out.println("---------------------");
+        System.out.println("My Page Menu");
+        System.out.println("---------------------");
+        System.out.println("1) 이름 변경");
+        System.out.println("2) 전화번호 변경");
+        System.out.println("3) 입출금 내역 조회");
+        System.out.println("---------------------");
+        System.out.println("메뉴 번호를 입력하세요! (q: 돌아가기)");
+    }
+
+    // 사용자 이름 변경
+    public void changeUserName(){
+        return;
+    }
+
+    // 전화번호 변경
+    public void changePhoneNumber(){
+        return;
+    }
+
+    // 입출금 내역 조회
+    public void showAccountHistory(){
+        return;
+    }
+
     // 입금
     public void deposit() {
         if (user.getAccounts().isEmpty()) {
@@ -67,6 +120,8 @@ public class UserServiceImpl implements UserService {
                 System.out.println("메뉴로 돌아갑니다.");
                 return;
             }
+
+            // Todo 메모 입력
 
             // 계좌 비밀번호 입력
             System.out.println("계좌 비밀번호 4자리를 입력해주세요.");
@@ -160,6 +215,7 @@ public class UserServiceImpl implements UserService {
                 return;
             }
 
+            // Todo 메모 입력
 
             // 비밀번호 입력 확인
             System.out.println("계좌 비밀번호 4자리를 입력해주세요.");
@@ -294,6 +350,8 @@ public class UserServiceImpl implements UserService {
             }
 
             sourceAccount.setLastTransferDate(todayDate.toString());
+
+            // Todo 메모 입력
 
             // 비밀번호 체크
             System.out.println("계좌 비밀번호 4자리를 입력해주세요.");
