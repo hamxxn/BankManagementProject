@@ -52,6 +52,14 @@ public class User {
         return accounts;
     }
 
+    public void changeUsername(String username) {
+        this.username = username;
+    }
+
+    public void changePhoneNum(String phoneNum) {
+        this.phoneNum = phoneNum;
+    }
+
     public void printAccounts() {
         System.out.println("* "+username+"님의 계좌 리스트 *");
         for (int i = 0; i < accounts.size(); i++) {

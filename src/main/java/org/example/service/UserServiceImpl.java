@@ -7,6 +7,7 @@ import org.example.repository.UserServiceRepository;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 import java.util.Scanner;
 
 public class UserServiceImpl implements UserService {
@@ -40,6 +41,7 @@ public class UserServiceImpl implements UserService {
                     showAccountHistory();
                     break;
                 case "q":
+                    System.out.println("이전 메뉴로 돌아갑니다.");
                     return; // 돌아가기
                 default:
                     System.out.println("유효하지 않은 입력입니다. 1-3 사이의 수를 입력하세요.");
@@ -58,14 +60,76 @@ public class UserServiceImpl implements UserService {
         System.out.println("메뉴 번호를 입력하세요! (q: 돌아가기)");
     }
 
+    // 이름 유효성 검증 (한글, 길이, 공백, admin 제외)
+    private boolean isValidName(String name) {
+        String koreanNamePattern = "^[가-힣]{2,5}$";
+        if (name.equalsIgnoreCase("admin")) {
+            return false;
+        }
+        return name.matches(koreanNamePattern);
+    }
+
     // 사용자 이름 변경
     public void changeUserName(){
-        return;
+        System.out.println();
+        System.out.println("*** 이름 변경 ***");
+        System.out.println("새로운 이름을 입력해주세요. 한국어만 가능하며 길이는 2이상 5이하입니다. 중간에 공백이 포함되어서는 안됩니다.");
+        Scanner scanner = new Scanner(System.in);
+        String newName = scanner.nextLine().trim();
+
+        if(newName.equals("q")){ // q 입력 시 로그인 후 메뉴로 돌아감.
+            System.out.println("메뉴로 돌아갑니다.");
+            return;
+        }
+
+        if(!isValidName(newName)){
+            System.out.println("이름 형식에 맞지 않습니다. 메뉴로 돌아갑니다.");
+            return;
+        }
+
+        user.changeUsername(newName); // user 정보 수정
+        userServiceRepository.save(user);
+
+        List<Account> targetAccountList = accountServiceRepository.getAccountsByUserId(user.getId()); // account 정보 수정
+        for (Account account : targetAccountList) {
+            account.changeUserName(newName);
+            accountServiceRepository.save(account);
+        }
+
+        userServiceRepository.updateUserFile("UserInfo.txt");
+        accountServiceRepository.updateAccountFile("AccountInfo.txt");
+
+        System.out.println("새로운 이름 <"+newName+">으로 변경되었습니다.");
+    }
+
+    // 전화번호 유효성 검증 (숫자 11자리인지 확인)
+    private boolean isValidPhoneNumber(String phoneNumber) {
+        return phoneNumber.matches("\\d{11}");
     }
 
     // 전화번호 변경
     public void changePhoneNumber(){
-        return;
+        System.out.println();
+        System.out.println("*** 전화번호 변경 ***");
+        System.out.println("새로운 전화번호를 입력해주세요. 숫자 11자리 형식만 가능합니다."); //Todo 전화번호 입력 예외 처리 해야 함
+        Scanner scanner = new Scanner(System.in);
+        String newPhoneNum = scanner.nextLine().trim();
+
+        if(newPhoneNum.equals("q")){ // q 입력 시 로그인 후 메뉴로 돌아감.
+            System.out.println("메뉴로 돌아갑니다.");
+            return;
+        }
+
+        if(!isValidPhoneNumber(newPhoneNum)){
+            System.out.println("전화번호 형식에 맞지 않습니다. 메뉴로 돌아갑니다.");
+            return;
+        }
+
+        user.changePhoneNum(newPhoneNum); // user 정보 수정
+        userServiceRepository.save(user);
+        userServiceRepository.updateUserFile("UserInfo.txt");
+
+        System.out.println("새로운 전화번호 <"+newPhoneNum+">으로 변경되었습니다.");
     }
 
     // 입출금 내역 조회
@@ -489,12 +553,11 @@ public class UserServiceImpl implements UserService {
                 System.out.println(accountNum);
                 Account account =null;
                 if(user.getAccounts().size()==0){
-                    account = new Account151(user.getUsername(), accountNum, password, 0);
-
+                    account = new Account151(user.getId(), user.getUsername(), accountNum, password, 0);
                 } else if (user.getAccounts().size()==1) {
-                    account = new Account152(user.getUsername(), accountNum, password, 0);
+                    account = new Account152(user.getId(), user.getUsername(), accountNum, password, 0);
                 } else if (user.getAccounts().size()==2) {
-                    account = new Account153(user.getUsername(), accountNum, password, 0);
+                    account = new Account153(user.getId(), user.getUsername(), accountNum, password, 0);
                 }
 
                 user.addAccount(account);
