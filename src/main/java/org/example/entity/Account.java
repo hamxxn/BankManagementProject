@@ -1,18 +1,23 @@
 package org.example.entity;
 
 public class Account {
+    private String userId;
     private String name;
     private String accountNum;
     private String accountPw;
     private int balance;
     private String lastTransferDate;
 
-    public Account(String name, String accountNum, String accountPw, int balance) {
+    public Account(String userId, String name, String accountNum, String accountPw, int balance) {
+        this.userId = userId;
         this.name = name;
         this.accountNum = accountNum;
         this.accountPw = accountPw;
         this.balance = balance;
         this.lastTransferDate = "1";
+    }
+    public String getUserId() {
+        return userId;
     }
 
     public String getName() {
@@ -40,6 +45,10 @@ public class Account {
     }
     public void setLastTransferDate(String lastTransferDate) {
         this.lastTransferDate = lastTransferDate;
+    }
+
+    public void changeUserName(String name) {
+        this.name = name;
     }
 
 }

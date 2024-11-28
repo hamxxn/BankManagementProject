@@ -6,7 +6,6 @@ import org.example.entity.User;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class AccountServiceRepository {
 
@@ -40,6 +39,15 @@ public class AccountServiceRepository {
         }
         return null;
     }
+    public List<Account> getAccountsByUserId(String userId) {
+        List<Account> targetAccountList = new ArrayList<>();
+        for (Account account : accounts) {
+            if (account.getUserId().equals(userId)) {
+                targetAccountList.add(account);
+            }
+        }
+        return targetAccountList;
+    }
 
     public List<Account> getAccountsByName(String userName) {
         List<Account> accountList = new ArrayList<>();
@@ -60,20 +68,22 @@ public class AccountServiceRepository {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split("\t");
-                if (parts.length >= 4) {
-                    String name= parts[0];
-                    String accountNum = parts[1];
-                    String accountPw= parts[2];
-                    int balance = Integer.parseInt(parts[3]);
+                if (parts.length >= 5) { // ID 포함 5개 필드 체크
+                    String userId = parts[0];
+                    String name = parts[1];
+                    String accountNum = parts[2];
+                    String accountPw = parts[3];
+                    int balance = Integer.parseInt(parts[4]);
 
-                    Account account = new Account(name,accountNum, accountPw, balance);
+                    Account account = new Account(userId, name, accountNum, accountPw, balance);
                     assert accounts != null;
                     accounts.add(account);
                 }
-
             }
         } catch (IOException e) {
             System.err.println("파일을 찾을 수 없습니다.");
+        } catch (NumberFormatException e) {
+            System.err.println("잔액을 정수로 변환하는 중 오류 발생.");
         }
     }
 
@@ -81,11 +91,19 @@ public class AccountServiceRepository {
     public void updateAccountFile(String filename) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
             for (Account account : accounts) {
-                writer.write(account.getName() + "\t"+ account.getAccountNum() + "\t" + account.getAccountPw() + "\t" + account.getBalance());
+                StringBuilder accountData = new StringBuilder();
+                accountData.append(account.getUserId()).append("\t") // UserId 추가
+                        .append(account.getName()).append("\t")
+                        .append(account.getAccountNum()).append("\t")
+                        .append(account.getAccountPw()).append("\t")
+                        .append(account.getBalance());
+
+                writer.write(accountData.toString());
                 writer.newLine();
             }
         } catch (IOException e) {
             System.err.println("파일 업데이트에 실패했습니다.");
         }
     }
+
 }

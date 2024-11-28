@@ -202,7 +202,7 @@ public class MainServiceImpl implements MainService {
         // 이름 입력
         while (true) {
             System.out.println();
-            System.out.println("이름을 입력해주세요. 한국어만 가능하며 길이는 2이상 5이하입니다. 중간에 공백이 포함되서는 안됩니다.");
+            System.out.println("이름을 입력해주세요. 한국어만 가능하며 길이는 2이상 5이하입니다. 중간에 공백이 포함되어서는 안됩니다.");
             System.out.println("(q 입력시 메뉴로 돌아갑니다.)");
             userName = scanner.nextLine().trim();
 
