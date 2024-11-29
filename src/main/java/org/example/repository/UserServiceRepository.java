@@ -83,10 +83,6 @@ public class UserServiceRepository {
         } catch (IOException e) {
             System.err.println("로그인 기록 파일을 읽을 수 없습니다: " + filename);
         }
-
-        for (String s : loginHistory) {
-            System.out.println("loginfileread 확인"+s);
-        }
     }
 
     public void addLoginRecord(String filename, String userid, LocalDate logindate) {
@@ -98,7 +94,6 @@ public class UserServiceRepository {
     public void updateLoginFile(String filename) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
             for (String record : loginHistory) {
-                System.out.println("updateloginfile 확인"+ record);
                 writer.write(record);
                 writer.newLine();
             }
@@ -111,16 +106,11 @@ public class UserServiceRepository {
         if (loginHistory.isEmpty()) {
             return LocalDate.MIN;
         }
-        for (String s: loginHistory) {
-            System.out.println("getlastlogin확인"+s);
-        }
         String last = loginHistory.get(loginHistory.size()-1);
         String[] parts = last.split("\t");
         if (parts.length>=2) {
-            System.out.println(("parts[1]" + parts[1]));
             return LocalDate.parse(parts[1]);
         } else {
-            System.out.println("parts.length<2");
             return null;
         }
 
