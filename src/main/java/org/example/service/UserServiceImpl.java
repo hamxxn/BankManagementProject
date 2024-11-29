@@ -138,7 +138,7 @@ public class UserServiceImpl implements UserService {
     }
 
     // 입금
-    public void deposit() {
+    public void deposit(LocalDate todayDate) {
         if (user.getAccounts().isEmpty()) {
             System.out.println("계좌가 존재하지 않습니다.");
             System.out.println("메뉴로 돌아갑니다.");
@@ -234,7 +234,7 @@ public class UserServiceImpl implements UserService {
     }
 
     //출금
-    public void withdraw() {
+    public void withdraw(LocalDate todayDate) {
         if (user.getAccounts().isEmpty()) {
             System.out.println("계좌가 존재하지 않습니다.");
             System.out.println("메뉴로 돌아갑니다.");

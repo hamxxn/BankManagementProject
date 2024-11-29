@@ -8,9 +8,9 @@ public interface UserService {
 
     void printMyPageMenu();
 
-    void deposit();
+    void deposit(LocalDate todayDate);
 
-    void withdraw();
+    void withdraw(LocalDate todayDate);
 
     void transfer(LocalDate todayDate);
 
