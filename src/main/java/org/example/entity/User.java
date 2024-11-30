@@ -48,6 +48,7 @@ public class User {
     public void addAccount(Account account) {
         accounts.add(account);
     }
+    public void removeAccount(Account account) {accounts.remove(account);}
 
     public List<Account> getAccounts() {
         return accounts;
