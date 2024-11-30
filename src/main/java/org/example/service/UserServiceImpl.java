@@ -485,7 +485,7 @@ public class UserServiceImpl implements UserService {
     }
 
     // 계좌 개설
-    public void createAccount() {
+    public void createAccount(LocalDate todayDate) {
         System.out.println("*** 계좌 개설 ***");
         System.out.println(" ");
 
@@ -559,6 +559,10 @@ public class UserServiceImpl implements UserService {
                 } else if (user.getAccounts().size()==2) {
                     account = new Account153(user.getId(), user.getUsername(), accountNum, password, 0);
                 }
+
+                //이자 날짜
+                account.setLastInterestDate(todayDate.toString());
+
 
                 user.addAccount(account);
                 userServiceRepository.save(user);

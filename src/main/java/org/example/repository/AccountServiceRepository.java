@@ -68,14 +68,16 @@ public class AccountServiceRepository {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split("\t");
-                if (parts.length >= 5) { // ID 포함 5개 필드 체크
+                if (parts.length >= 6) { // ID 포함 5개 필드 체크
                     String userId = parts[0];
                     String name = parts[1];
                     String accountNum = parts[2];
                     String accountPw = parts[3];
                     int balance = Integer.parseInt(parts[4]);
+                    String lastinterestDate = parts[5];
 
                     Account account = new Account(userId, name, accountNum, accountPw, balance);
+                    account.setLastInterestDate(lastinterestDate);
                     assert accounts != null;
                     accounts.add(account);
                 }
@@ -96,7 +98,8 @@ public class AccountServiceRepository {
                         .append(account.getName()).append("\t")
                         .append(account.getAccountNum()).append("\t")
                         .append(account.getAccountPw()).append("\t")
-                        .append(account.getBalance());
+                        .append(account.getBalance()).append("\t")
+                        .append(account.getLastInterestDate());;
 
                 writer.write(accountData.toString());
                 writer.newLine();
