@@ -1,5 +1,6 @@
 package org.example.entity;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,12 +61,18 @@ public class User {
         this.phoneNum = phoneNum;
     }
 
-    public void printAccounts() {
+    public void printAccounts( ) {
         System.out.println("* "+username+"님의 계좌 리스트 *");
         for (int i = 0; i < accounts.size(); i++) {
             Account account = accounts.get(i);
             System.out.println(i+1+". "+account.getName() +" "+account.getAccountNum()
                     +" "+ account.getBalance()+"원");
+        }
+    }
+
+    public void giveInterest(LocalDate localDate) {
+        for(Account account : accounts){
+            account.giveInterest(localDate);
         }
     }
 }

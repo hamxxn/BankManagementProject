@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 public class UserServiceImpl implements UserService {
@@ -506,80 +507,126 @@ public class UserServiceImpl implements UserService {
 
         try {
             while (true) {
-                System.out.println();
-                System.out.println("계좌에 사용할 비밀번호 4자리를 입력해주세요.");
-                System.out.println("(q 입력 시 메뉴로 돌아갑니다.)");
-                password = scanner.nextLine().trim();
+                // 계좌 유형 선택
+                int accountType = 0;
+                while (true) {
+                    System.out.println("-------------------------------");
+                    System.out.println("계좌 유형을 선택해주세요:");
+                    System.out.println("1. 자유입출금 계좌");
+                    System.out.println("2. 정기 적금 계좌");
+                    System.out.println("3. 모임통장 (아직 사용할 수 없는 메뉴)");
+                    System.out.println("(q 입력 시 메뉴로 돌아갑니다)");
+                    System.out.println("-------------------------------");
+                    String typeInput = scanner.nextLine().trim();
 
-                if (password.equals("q")) {
-                    System.out.println("메뉴로 이동합니다.");
-                    return;  // q 입력 시 즉시 종료
+                    if (typeInput.equalsIgnoreCase("q")) {
+                        System.out.println("메뉴로 돌아갑니다.");
+                        return;
+                    }
+
+                    try {
+                        accountType = Integer.parseInt(typeInput);
+                        if (accountType == 3) {
+                            System.out.println("모임통장은 아직 사용할 수 없는 메뉴입니다. 다른 옵션을 선택해주세요.");
+                            continue;
+                        } else if (accountType < 1 || accountType > 3) {
+                            System.out.println("1, 2번 중 하나를 선택해주세요.");
+                            continue;
+                        }
+                        break;
+                    } catch (NumberFormatException e) {
+                        System.out.println("올바른 숫자를 입력해주세요.");
+                    }
                 }
 
-                // 비밀번호 길이 확인 및 숫자로만 구성되었는지 확인
-                if (password.length() != 4 || !password.matches("\\d+")) {
-                    System.out.println("비밀번호는 4자리 숫자로만 구성되어야 합니다. 다시 입력해주세요.");
-                    continue; // 조건이 맞지 않으면 다시 입력받음
+
+                // 비밀번호 설정
+                while (true) {
+                    System.out.println();
+                    System.out.println("계좌에 사용할 비밀번호 4자리를 입력해주세요.");
+                    System.out.println("(q 입력 시 메뉴로 돌아갑니다.)");
+                    password = scanner.nextLine().trim();
+
+                    if (password.equals("q")) {
+                        System.out.println("메뉴로 이동합니다.");
+                        return;
+                    }
+
+                    // 비밀번호 길이 확인 및 숫자로만 구성되었는지 확인
+                    if (password.length() != 4 || !password.matches("\\d+")) {
+                        System.out.println("비밀번호는 4자리 숫자로만 구성되어야 합니다. 다시 입력해주세요.");
+                        continue;
+                    }
+
+                    System.out.println("계좌에 사용할 비밀번호 4자리를 재입력해주세요.");
+                    System.out.println("(q 입력 시 메뉴로 돌아갑니다.)");
+                    passwordCheck = scanner.nextLine().trim();
+
+                    if (passwordCheck.equals("q")) {
+                        System.out.println("메뉴로 이동합니다.");
+                        return;
+                    }
+
+                    // 비밀번호가 일치하는지 확인
+                    if (!password.equals(passwordCheck)) {
+                        System.out.println("비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
+                        continue;
+                    }
+                    String accountTypeToString;
+                    switch (accountType){
+                        case 1:accountTypeToString="151";break;
+                        case 2:accountTypeToString="152";break;
+                        default:accountTypeToString="153";break;
+                    }
+
+
+                    // 계좌 생성
+
+                    String accountNum = "";
+                    boolean isValid = false;
+                    while (!isValid) {
+                        Random random = new Random();
+                        StringBuilder num = new StringBuilder();
+                        for (int i = 0; i < 8; i++) {
+                            num.append(random.nextInt(10)); // 각 자리 0~9 랜덤 숫자 생성
+                        }
+                        accountNum = accountTypeToString + num.toString(); // 계좌 유형 + 8자리 랜덤 숫자
+                        isValid = accountServiceRepository.checkNewAccount(accountNum);
+                    }
+
+                    System.out.println(accountNum);
+
+                    Account account = null;
+                    switch (accountType) {
+                        case 1:
+                            account = new Account151(user.getId(), user.getUsername(), accountNum, password, 0);
+                            break;
+                        case 2:
+                            account = new Account152(user.getId(), user.getUsername(), accountNum, password, 0);
+                            break;
+                    }
+
+                    // 이자 날짜 설정
+                    account.setLastInterestDate(todayDate.toString());
+
+                    user.addAccount(account);
+                    userServiceRepository.save(user);
+
+                    userServiceRepository.updateUserFile("UserInfo.txt");
+                    accountServiceRepository.addAccount(account);
+
+                    System.out.println("계좌 개설이 완료되었습니다.");
+                    System.out.println(user.getUsername() + "님의 계좌번호는 " + account.getAccountNum() + "입니다.");
+                    System.out.println();
+                    System.out.println("메인화면으로 돌아갑니다.");
+                    break; // 모든 작업이 완료되면 반복 종료
                 }
-
-                System.out.println("계좌에 사용할 비밀번호 4자리를 재입력해주세요.");
-                System.out.println("(q 입력 시 메뉴로 돌아갑니다.)");
-                passwordCheck = scanner.nextLine().trim();
-
-                if (passwordCheck.equals("q")) {
-                    System.out.println("메뉴로 이동합니다.");
-                    return;  // q 입력 시 즉시 종료
-                }
-
-                // 비밀번호가 일치하는지 확인
-                if (!password.equals(passwordCheck)) {
-                    System.out.println("비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
-                    continue;
-                }
-
-                // 모든 조건이 만족되면 계좌 생성
-                //010 빼고 계좌생성
-                String accountNum="";
-                if(user.getAccounts().size()==0){
-                    accountNum = "151" + user.getPhoneNum().substring(3);
-
-                } else if (user.getAccounts().size()==1) {
-                    accountNum = "152" + user.getPhoneNum().substring(3);
-
-                } else if (user.getAccounts().size()==2) {
-                    accountNum = "153" + user.getPhoneNum().substring(3);
-                }
-
-                System.out.println(accountNum);
-                Account account =null;
-                if(user.getAccounts().size()==0){
-                    account = new Account151(user.getId(), user.getUsername(), accountNum, password, 0);
-                } else if (user.getAccounts().size()==1) {
-                    account = new Account152(user.getId(), user.getUsername(), accountNum, password, 0);
-                } else if (user.getAccounts().size()==2) {
-                    account = new Account153(user.getId(), user.getUsername(), accountNum, password, 0);
-                }
-
-                //이자 날짜
-                account.setLastInterestDate(todayDate.toString());
-
-
-                user.addAccount(account);
-                userServiceRepository.save(user);
-
-                userServiceRepository.updateUserFile("UserInfo.txt");
-                accountServiceRepository.addAccount(account);
-
-                System.out.println("계좌 개설이 완료되었습니다.");
-                System.out.println(user.getUsername() + "님의 계좌번호는 " + account.getAccountNum() + "입니다.");
-
-                System.out.println();
-                System.out.println("메인화면으로 돌아갑니다");
-                break; // 모든 작업이 완료되면 반복 종료
+                break; // 계좌 생성 종료
             }
         } catch (Exception e) {
             System.out.println("잘못된 입력 형식입니다. 메뉴로 돌아갑니다.");
             return;
         }
     }
+
 }
