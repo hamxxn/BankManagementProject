@@ -33,6 +33,15 @@ public class AccountServiceRepository {
         updateAccountFile("AccountInfo.txt");
     }
 
+    public void removeAccount(String accountNum) {
+        for (Account account : accounts) {
+            if (account.getAccountNum().equals(accountNum)) {
+                accounts.remove(account);
+            }
+        }
+        updateAccountFile("AccountInfo.txt");
+    }
+
     public Account getAccountByAccountNum(String accountNum) {
         for (Account account : accounts) {
             if (account.getAccountNum().equals(accountNum)) {
