@@ -39,7 +39,7 @@ public class UserController {
                     userService.transfer(todayDate);
                     //break;
                 } else if (menu == 4) {
-                    userService.createAccount();
+                    userService.createAccount(todayDate);
                     //break;
                 } else if (menu == 5) {
                     userService.myPage();
