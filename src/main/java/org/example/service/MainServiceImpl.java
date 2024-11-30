@@ -180,7 +180,7 @@ public class MainServiceImpl implements MainService {
                 System.out.println("잘못된 날짜 형식입니다. 다시 입력해 주세요.");
             }
         }
-
+        user.giveInterest(date);
         userServiceRepository.addLoginRecord("LoginRecord.txt",user.getId(), date);
         userServiceRepository.LoginFileReader(("LoginRecord.txt"));
         userController.menu(date);

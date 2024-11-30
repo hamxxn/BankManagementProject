@@ -5,7 +5,9 @@ import org.example.entity.User;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 
 public class AccountServiceRepository {
 
@@ -63,6 +65,7 @@ public class AccountServiceRepository {
         return accounts;
     }
 
+
     public void AccountFileReader(String filename) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line;
@@ -107,6 +110,15 @@ public class AccountServiceRepository {
         } catch (IOException e) {
             System.err.println("파일 업데이트에 실패했습니다.");
         }
+    }
+
+    public boolean checkNewAccount(String newAccountNum) {
+        for (Account account : accounts) {
+            if (account.getAccountNum().equals(newAccountNum)) {
+                return false; // 이미 존재하는 계좌 번호
+            }
+        }
+        return true; // 생성 가능한 계좌 번호
     }
 
 }
