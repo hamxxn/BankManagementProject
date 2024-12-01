@@ -212,7 +212,7 @@ public class UserServiceImpl implements UserService {
 
             // 최종 출력
             System.out.println("입력하신 금액: " + depositAmount + "원");
-            account.setBalance(account.getBalance() + depositAmount); // 계좌에 입금 적용
+            account.deposit(depositAmount);
             System.out.println("입금이 완료되었습니다.");
             System.out.println(account.getName() + "님의 현재 잔액은 " + account.getBalance() + "원입니다.");
 
@@ -298,14 +298,57 @@ public class UserServiceImpl implements UserService {
             }
 
             // 출금 처리
-            account.setBalance(account.getBalance() - withdrawInput);
+            account.withdraw(withdrawInput);
             System.out.println("출금에 성공하셨습니다!");
             System.out.println(account.getName() + "님의 현재 잔액은 " + account.getBalance() + "원입니다.");
+            if (account instanceof Account152) {
+                boolean isMatured = ((Account152) account).EndAccount(todayDate);
+                if(isMatured)
+                    System.out.println("축하합니다. 적금 통장의 적금 만기일이 지났습니다!");
+                else
+                    System.out.println(account.getName()+"님의 적금 통장("+account.getAccountNum()+")은 자동해약 되셨습니다.");
+                if (account.getBalance() > 0) {
+                    System.out.println("잔액 " + account.getBalance() + "원을 송금하실 계좌를 아래에서 선택해주세요.");
+                    user.printAccounts();
 
+                    while (true) {
+                        System.out.println("송금받을 계좌를 선택해주세요.");
+                        String transferAccountInput = scanner.nextLine().trim();
+
+                        try {
+                            int transferAccountNum = Integer.parseInt(transferAccountInput);
+
+                            // 계좌 번호가 유효한지 확인
+                            if (transferAccountNum > user.getAccounts().size() || transferAccountNum == accountNum || transferAccountNum <= 0) {
+                                System.out.println("올바르지 않은 계좌 선택입니다. 다시 시도해주세요.");
+                                continue; // 루프를 다시 시작
+                            }
+
+                            Account targetAccount = user.getAccounts().get(transferAccountNum - 1);
+                            int remainingBalance = account.getBalance();
+
+                            // 송금 처리
+                            account.withdraw(remainingBalance);
+                            targetAccount.deposit(remainingBalance);
+
+                            System.out.println("남은 금액 " + remainingBalance + "원이 " + targetAccount.getAccountNum() + " 계좌로 송금되었습니다.");
+                            break; // 성공적으로 처리되면 루프 종료
+                        } catch (NumberFormatException e) {
+                            System.out.println("올바르지 않은 형식입니다. 다시 시도해주세요.");
+                        }
+                    }
+                }
+
+                System.out.println(account.getName()+"님의 계좌("+account.getAccountNum()+")가 없어집니다.");
+
+                accountServiceRepository.removeAccount(account.getAccountNum());
+                user.removeAccount(account);
+
+            }else{
+
+                accountServiceRepository.save(account);
+            }
             userServiceRepository.save(user);
-            accountServiceRepository.save(account);
-
-            // 데이터 업데이트
             userServiceRepository.updateUserFile("UserInfo.txt");
             accountServiceRepository.updateAccountFile("AccountInfo.txt");
 
@@ -331,28 +374,29 @@ public class UserServiceImpl implements UserService {
 
         Scanner scanner = new Scanner(System.in);
 
-
         System.out.println("*** 계좌 이체 ***");
         System.out.println(" ");
 
-
         try {
             user.printAccounts();
-            //보내는 계좌 입력
+            // 보내는 계좌 입력
             System.out.println("계좌를 선택해주세요.");
             System.out.println("(q 입력시 메뉴로 돌아갑니다.)");
-            String in=scanner.nextLine().trim();
+            String in = scanner.nextLine().trim();
 
             if (in.equals("q")) {
                 System.out.println("메뉴로 돌아갑니다.");
                 return;
             }
-            int accountNum=Integer.parseInt(in);
-            if(accountNum>user.getAccounts().size()) {
-                System.out.println("1-"+user.getAccounts().size()+" 사이의 수만 입력가능합니다. 메뉴로 돌아갑니다.");
+
+            int accountNum = Integer.parseInt(in);
+            if (accountNum > user.getAccounts().size() || accountNum <= 0) {
+                System.out.println("1-" + user.getAccounts().size() + " 사이의 수만 입력가능합니다. 메뉴로 돌아갑니다.");
                 return;
             }
-            Account sourceAccount = user.getAccounts().get(accountNum-1);
+
+            Account sourceAccount = user.getAccounts().get(accountNum - 1);
+
             // 받는 계좌 입력
             System.out.println("이체할 계좌의 계좌번호를 입력해주세요.");
             System.out.println("(q 입력시 메뉴로 돌아갑니다.)");
@@ -367,10 +411,8 @@ public class UserServiceImpl implements UserService {
                 return;
             }
 
-
             // 찾으려는 계좌가 있는지 확인
-            User targetUser;
-            targetUser = userServiceRepository.getUserByAccount(targetAccountNum);
+            User targetUser = userServiceRepository.getUserByAccount(targetAccountNum);
 
             if (targetUser == null) {
                 System.out.println("입력하신 계좌는 존재하지 않습니다.");
@@ -378,7 +420,6 @@ public class UserServiceImpl implements UserService {
                 return;
             }
 
-            // 해당 사용자에서 계좌 찾기
             Account targetAccount = targetUser.getAccounts().stream()
                     .filter(account -> account.getAccountNum().equals(targetAccountNum))
                     .findFirst()
@@ -416,8 +457,6 @@ public class UserServiceImpl implements UserService {
 
             sourceAccount.setLastTransferDate(todayDate.toString());
 
-            // Todo 메모 입력 -------------
-
             // 비밀번호 체크
             System.out.println("계좌 비밀번호 4자리를 입력해주세요.");
             System.out.println("(q 입력시 메뉴로 돌아갑니다.)");
@@ -435,39 +474,77 @@ public class UserServiceImpl implements UserService {
             }
 
             // 이체 처리
-            sourceAccount.setBalance(sourceAccount.getBalance() - transferAmount);
-            targetAccount.setBalance(targetAccount.getBalance() + transferAmount);
-
+            sourceAccount.withdraw(transferAmount);
+            targetAccount.deposit(transferAmount);
             System.out.println("계좌 이체에 성공하셨습니다!");
             System.out.println(sourceAccount.getName() + "님의 현재 잔액은 " + sourceAccount.getBalance() + "원입니다.");
 
-            // targetUser의 accounts에서 targetAccount를 갱신
-            targetUser.getAccounts().stream()
-                    .filter(account -> account.getAccountNum().equals(targetAccount.getAccountNum()))
-                    .forEach(account -> {
-                        account.setBalance(targetAccount.getBalance()); // targetAccount의 새로운 잔액으로 갱신
-                    });
+            // Account152 체크 및 처리
+            if (sourceAccount instanceof Account152) {
+                boolean isMatured = ((Account152) sourceAccount).EndAccount(todayDate);
+                if (isMatured) {
+                    System.out.println("축하합니다. 적금 통장의 적금 만기일이 지났습니다!");
+                } else {
+                    System.out.println(sourceAccount.getName() + "님의 적금 통장(" + sourceAccount.getAccountNum() + ")이 자동해약 되셨습니다.");
+                }
 
-            accountServiceRepository.save(sourceAccount);
+                // 잔액 송금
+                if (sourceAccount.getBalance() > 0) {
+                    System.out.println("잔액 " + sourceAccount.getBalance() + "원을 송금하실 계좌를 아래에서 선택해주세요.");
+                    user.printAccounts();
+
+                    while (true) {
+                        System.out.println("송금받을 계좌를 선택해주세요.");
+                        String transferAccountInput = scanner.nextLine().trim();
+
+                        try {
+                            int transferAccountNum = Integer.parseInt(transferAccountInput);
+
+                            if (transferAccountNum > user.getAccounts().size() || transferAccountNum == accountNum || transferAccountNum <= 0) {
+                                System.out.println("올바르지 않은 계좌 선택입니다. 다시 시도해주세요.");
+                                continue;
+                            }
+
+                            Account additionalTargetAccount = user.getAccounts().get(transferAccountNum - 1);
+                            int remainingBalance = sourceAccount.getBalance();
+
+                            // 송금 처리
+                            sourceAccount.withdraw(remainingBalance);
+                            additionalTargetAccount.deposit(remainingBalance);
+
+                            System.out.println("남은 금액 " + remainingBalance + "원이 " + additionalTargetAccount.getAccountNum() + " 계좌로 송금되었습니다.");
+                            break;
+                        } catch (NumberFormatException e) {
+                            System.out.println("올바르지 않은 형식입니다. 다시 시도해주세요.");
+                        }
+                    }
+                }
+
+                System.out.println(sourceAccount.getName() + "님의 계좌(" + sourceAccount.getAccountNum() + ")가 없어집니다.");
+                user.removeAccount(sourceAccount);
+                userServiceRepository.save(user);
+                accountServiceRepository.removeAccount(sourceAccount.getAccountNum());
+            } else {
+                userServiceRepository.save(user);
+                accountServiceRepository.save(sourceAccount);
+            }
+
             accountServiceRepository.save(targetAccount);
 
             if (user.getId().equals(targetUser.getId())) {
-                // source 계좌와 target 계좌 모두 동일한 사용자에게 속할 경우
-                Account newtargetAccount = null;
+                Account newTargetAccount = null;
                 for (Account a : user.getAccounts()) {
                     if (a.getAccountNum().equals(targetAccountNum)) {
-                        newtargetAccount = a;
+                        newTargetAccount = a;
                     }
                 }
-                if (newtargetAccount!=null) {
-                    newtargetAccount.setBalance(targetAccount.getBalance());
+                if (newTargetAccount != null) {
+                    newTargetAccount.setBalance(targetAccount.getBalance());
                 }
-                // 동일한 사용자이므로, user를 한 번만 저장함.
                 userServiceRepository.save(user);
             } else {
-                // 만약 user와 targetUser가 다를 경우, 각각 다른 계좌에 대해 저장
-                userServiceRepository.save(user); // user의 계좌 업데이트
-                userServiceRepository.save(targetUser); // targetUser의 계좌 업데이트
+                userServiceRepository.save(user);
+                userServiceRepository.save(targetUser);
             }
 
             userServiceRepository.updateUserFile("UserInfo.txt");
@@ -484,6 +561,7 @@ public class UserServiceImpl implements UserService {
             return;
         }
     }
+
 
     // 계좌 개설
     public void createAccount(LocalDate todayDate) {
@@ -526,6 +604,7 @@ public class UserServiceImpl implements UserService {
 
                     try {
                         accountType = Integer.parseInt(typeInput);
+
                         if (accountType == 3) {
                             System.out.println("모임통장은 아직 사용할 수 없는 메뉴입니다. 다른 옵션을 선택해주세요.");
                             continue;
@@ -533,12 +612,21 @@ public class UserServiceImpl implements UserService {
                             System.out.println("1, 2번 중 하나를 선택해주세요.");
                             continue;
                         }
+
+                        // 적금 계좌 선택 시 151 계좌 여부 확인
+                        if (accountType == 2) {
+                            boolean hasAccount151 = user.hasAccount151();
+                            if (!hasAccount151) {
+                                System.out.println("적금 통장을 개설하려면 먼저 자유입출금 계좌(151)가 필요합니다.");
+                                System.out.println("1번 메뉴를 선택하여 자유입출금 계좌를 먼저 생성해주세요.");
+                                continue;
+                            }
+                        }
                         break;
                     } catch (NumberFormatException e) {
                         System.out.println("올바른 숫자를 입력해주세요.");
                     }
                 }
-
 
                 // 비밀번호 설정
                 while (true) {
@@ -573,15 +661,19 @@ public class UserServiceImpl implements UserService {
                         continue;
                     }
                     String accountTypeToString;
-                    switch (accountType){
-                        case 1:accountTypeToString="151";break;
-                        case 2:accountTypeToString="152";break;
-                        default:accountTypeToString="153";break;
+                    switch (accountType) {
+                        case 1:
+                            accountTypeToString = "151";
+                            break;
+                        case 2:
+                            accountTypeToString = "152";
+                            break;
+                        default:
+                            accountTypeToString = "153";
+                            break;
                     }
 
-
                     // 계좌 생성
-
                     String accountNum = "";
                     boolean isValid = false;
                     while (!isValid) {
@@ -603,6 +695,7 @@ public class UserServiceImpl implements UserService {
                             break;
                         case 2:
                             account = new Account152(user.getId(), user.getUsername(), accountNum, password, 0);
+                            ((Account152)account).setMakeAccount(todayDate);
                             break;
                     }
 
@@ -625,8 +718,8 @@ public class UserServiceImpl implements UserService {
             }
         } catch (Exception e) {
             System.out.println("잘못된 입력 형식입니다. 메뉴로 돌아갑니다.");
-            return;
         }
     }
+
 
 }
