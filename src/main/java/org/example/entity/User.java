@@ -76,4 +76,12 @@ public class User {
             account.giveInterest(localDate);
         }
     }
+
+    public boolean hasAccount151() {
+        for(Account account:accounts){
+            if(account.getAccountNum().substring(0,3).equals("151"))
+                return true;
+        }
+        return false;
+    }
 }
