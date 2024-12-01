@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public interface UserService {
 
-    void myPage();
+    void myPage(LocalDate todayDate);
 
     void printMyPageMenu();
 
