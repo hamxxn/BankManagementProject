@@ -2,6 +2,7 @@ package org.example.controller;
 
 import org.example.entity.User;
 import org.example.repository.AccountServiceRepository;
+import org.example.repository.TransactionServiceRepository;
 import org.example.repository.UserServiceRepository;
 import org.example.service.UserService;
 import org.example.service.UserServiceImpl;
@@ -14,15 +15,17 @@ public class UserController {
     private User user;
     private UserServiceRepository userServiceRepository;
     private AccountServiceRepository accountServiceRepository;
+    private TransactionServiceRepository transactionServiceRepository;
 
     public UserController(User user) {
         this.user = user;
         this.userServiceRepository = new UserServiceRepository();
         this.accountServiceRepository = new AccountServiceRepository();
+        this.transactionServiceRepository = new TransactionServiceRepository();
     }
     public void menu(LocalDate todayDate) {
         Scanner scanner = new Scanner(System.in);
-        UserService userService = new UserServiceImpl(user,userServiceRepository, accountServiceRepository);
+        UserService userService = new UserServiceImpl(user,userServiceRepository, accountServiceRepository,transactionServiceRepository);
         while (true) {
             System.out.println();
             try {
@@ -42,7 +45,7 @@ public class UserController {
                     userService.createAccount(todayDate);
                     //break;
                 } else if (menu == 5) {
-                    userService.myPage();
+                    userService.myPage(todayDate);
                     //break;
                 } else if (menu == 6) {
                     System.out.println("로그아웃 되었습니다.");

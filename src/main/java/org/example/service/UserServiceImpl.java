@@ -2,6 +2,7 @@ package org.example.service;
 
 import org.example.entity.*;
 import org.example.repository.AccountServiceRepository;
+import org.example.repository.TransactionServiceRepository;
 import org.example.repository.UserServiceRepository;
 
 import java.time.LocalDate;
@@ -15,14 +16,16 @@ public class UserServiceImpl implements UserService {
     private final User user;
     private final UserServiceRepository userServiceRepository;
     private final AccountServiceRepository accountServiceRepository;
+    private final TransactionServiceRepository transactionServiceRepository;
 
-    public UserServiceImpl(User user, UserServiceRepository userServiceRepository, AccountServiceRepository accountServiceRepository) {
+    public UserServiceImpl(User user, UserServiceRepository userServiceRepository, AccountServiceRepository accountServiceRepository,TransactionServiceRepository transactionServiceRepository) {
         this.user = user;
         this.userServiceRepository = userServiceRepository;
         this.accountServiceRepository = accountServiceRepository;
+        this.transactionServiceRepository = transactionServiceRepository;
     }
 
-    public void myPage() {
+    public void myPage(LocalDate todayDate) {
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println();
@@ -39,7 +42,7 @@ public class UserServiceImpl implements UserService {
                     break;
                 case "3":
                     // 입출금 내역 조회
-                    showAccountHistory();
+                    showAccountHistory(todayDate);
                     break;
                 case "q":
                     System.out.println("이전 메뉴로 돌아갑니다.");
@@ -134,8 +137,89 @@ public class UserServiceImpl implements UserService {
     }
 
     // 입출금 내역 조회
-    public void showAccountHistory(){
-        return;
+    public void showAccountHistory(LocalDate todayDate){
+        try {
+            if (user.getAccounts().isEmpty()) {
+                System.out.println("계좌가 존재하지 않습니다.");
+                System.out.println("메뉴로 돌아갑니다.");
+                return;
+            }
+
+            System.out.println("*** 입출금 내역 조회 ***");
+            System.out.println(" ");
+            Scanner scanner = new Scanner(System.in);
+
+            user.printAccounts();
+            System.out.println("계좌를 선택해주세요.");
+            System.out.println("(q 입력시 메뉴로 돌아갑니다.)");
+            String in=scanner.nextLine().trim();
+
+            if (in.equals("q")) {
+                System.out.println("메뉴로 돌아갑니다.");
+                return;
+            }
+            int accountNum=Integer.parseInt(in);
+            if(accountNum>user.getAccounts().size()) {
+                System.out.println("1-"+user.getAccounts().size()+" 사이의 수만 입력가능합니다. 메뉴로 돌아갑니다.");
+                return;
+            }
+            Account account = user.getAccounts().get(accountNum-1);
+
+
+            //기간 선택
+            System.out.println("조회를 희망하는 기간을 선택해주세요");
+            System.out.println("1. 최근 1개월");
+            System.out.println("2. 최근 3개월");
+            System.out.println("3. 전체 기간");
+            String Selectionperiod = scanner.nextLine().trim();
+
+            LocalDate startDate = null;
+            String period="";
+            switch (Selectionperiod) {
+                case "1":
+                    startDate = todayDate.minusMonths(1);
+                    period = "최근 1개월";
+                    break;
+                case "2":
+                    startDate = todayDate.minusMonths(3);
+                    period = "최근 3개월";
+                    break;
+                case "3":
+                    startDate = LocalDate.MIN; // 전체 기간
+                    period = "전체 기간";
+                    break;
+                default:
+                    System.out.println("잘못된 입력입니다. 메뉴로 돌아갑니다.");
+                    return;
+            }
+
+            // 거래 내역 필터링 및 출력
+            System.out.println("### " +period + " 내역 ###");
+            LocalDate finalStartDate = startDate;
+            List<Transaction> transactions = transactionServiceRepository.getTransactionList().stream()
+                    .filter(t -> t.getAccountNum().equals(account.getAccountNum()) && !t.getDate().isBefore(finalStartDate))
+                    .toList();
+
+            if (transactions.isEmpty()) {
+                System.out.println("선택하신 기간 내 거래 내역이 없습니다.");
+            } else {
+                System.out.println("<일시, 거래 유형, 메모, 거래 금액, 잔액>");
+                for (Transaction transaction : transactions) {
+                    System.out.println(transaction.getDate()+"\t"+transaction.getTransactionType()+"\t"+transaction.getTransactionAmount()+"\t"+transaction.getMemo()+"\t"+transaction.getBalance());
+                }
+            }
+
+
+        } catch (NumberFormatException e) {
+            System.out.println("잘못된 입력 형식입니다. 메뉴로 돌아갑니다.");
+            return;
+        } catch (DateTimeParseException e) {
+            System.out.println("잘못된 날짜 형식입니다. 메뉴로 돌아갑니다.");
+            return;
+        } catch (Exception e) {
+            System.out.println("잘못된 입력 형식입니다. 메뉴로 돌아갑니다.");
+            return;
+        }
     }
 
     // 입금
@@ -222,6 +306,9 @@ public class UserServiceImpl implements UserService {
 
             userServiceRepository.updateUserFile("UserInfo.txt");
             accountServiceRepository.updateAccountFile("AccountInfo.txt");
+
+            Transaction transaction = new Transaction(todayDate,account.getAccountNum(),"입금","memo",depositAmount,account.getBalance());
+            transactionServiceRepository.add(transaction);
 
         } catch (NumberFormatException e) {
             System.out.println("잘못된 입력 형식입니다. 메뉴로 돌아갑니다.");
@@ -347,8 +434,9 @@ public class UserServiceImpl implements UserService {
                 user.removeAccount(account);
 
             }else{
-
                 accountServiceRepository.save(account);
+                Transaction transaction = new Transaction(todayDate,account.getAccountNum(),"출금","memo",withdrawInput,account.getBalance());
+                transactionServiceRepository.add(transaction);
             }
             userServiceRepository.save(user);
             userServiceRepository.updateUserFile("UserInfo.txt");
