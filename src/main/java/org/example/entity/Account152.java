@@ -1,9 +1,12 @@
 package org.example.entity;
 
+import java.time.LocalDate;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Account152 extends Account {
+    private int endAccount;
+    private LocalDate makeAccount;
     public Account152(String userId, String name, String accountNum, String accountPw, int balance) {
         super(userId, name, accountNum, accountPw, balance);
         setInterestRate();
@@ -30,16 +33,19 @@ public class Account152 extends Account {
                 switch (choice) {
                     case 1:
                         interestRate = 3.0;
+                        endAccount = 6;
                         System.out.println("이자율이 3%로 설정되었습니다 (6개월)");
                         validInput = true; // 유효한 입력 처리
                         break;
                     case 2:
                         interestRate = 4.0;
+                        endAccount = 12;
                         System.out.println("이자율이 4%로 설정되었습니다 (1년)");
                         validInput = true; // 유효한 입력 처리
                         break;
                     case 3:
                         interestRate = 5.0;
+                        endAccount = 24;
                         System.out.println("이자율이 5%로 설정되었습니다 (2년)");
                         validInput = true; // 유효한 입력 처리
                         break;
@@ -52,6 +58,19 @@ public class Account152 extends Account {
             }
         }
     }
+    public void setMakeAccount(LocalDate makeAccount) {
+        this.makeAccount = makeAccount;
+    }
+    public boolean EndAccount(LocalDate localDate) {
+        if (makeAccount == null) {
+            throw new IllegalStateException("계좌 생성 날짜가 설정되지 않았습니다.");
+        }
 
+        // makeAccount 날짜에서 endAccount 달을 더함
+        LocalDate maturityDate = makeAccount.plusMonths(endAccount);
+
+        // localDate가 maturityDate 이후인지 확인
+        return !localDate.isBefore(maturityDate);
+    }
 
 }
