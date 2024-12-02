@@ -378,7 +378,7 @@ public class UserServiceImpl implements UserService {
             }
 
             // 메모 입력
-            System.out.println("입금 메모를 입력해주세요. 글자수는 최대 10자입니다.");
+            System.out.println("출금 메모를 입력해주세요. 글자수는 최대 10자입니다.");
             System.out.println("공백은 반영되지 않으며, 메모를 원치 않으신다면 엔터를 눌러주세요.");
 
             String memoInput = scanner.nextLine();  // 사용자 입력
@@ -564,6 +564,18 @@ public class UserServiceImpl implements UserService {
             }
 
             sourceAccount.setLastTransferDate(todayDate.toString());
+
+            // 메모 입력
+            System.out.println("계좌이체 메모를 입력해주세요. 글자수는 최대 10자입니다.");
+            System.out.println("공백은 반영되지 않으며, 메모를 원치 않으신다면 엔터를 눌러주세요.");
+
+            String memoInput = scanner.nextLine();  // 사용자 입력
+            memoInput = memoInput.replaceAll("\\s+", "");  // 모든 공백 제거
+            String memo = memoInput.length() > 10 ? memoInput.substring(0, 10) : memoInput;  // 최대 10글자로 자르기
+
+            if (!memo.isEmpty()) {
+                System.out.println("저장된 메모: " + memo);
+            }
 
             // 비밀번호 체크
             System.out.println("계좌 비밀번호 4자리를 입력해주세요.");
