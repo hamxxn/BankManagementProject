@@ -647,6 +647,10 @@ public class UserServiceImpl implements UserService {
             } else {
                 userServiceRepository.save(user);
                 accountServiceRepository.save(sourceAccount);
+                Transaction transaction1 = new Transaction(todayDate,sourceAccount.getAccountNum(),"출금",memo,transferAmount,sourceAccount.getBalance());
+                transactionServiceRepository.add(transaction1);
+                Transaction transaction2 = new Transaction(todayDate,targetAccount.getAccountNum(),"입금",memo,transferAmount,targetAccount.getBalance());
+                transactionServiceRepository.add(transaction2);
             }
 
             accountServiceRepository.save(targetAccount);
