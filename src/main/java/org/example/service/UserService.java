@@ -8,6 +8,12 @@ public interface UserService {
 
     void printMyPageMenu();
 
+    void changeUserName();
+
+    void changePhoneNumber();
+
+    void showAccountHistory(LocalDate todayDate);
+
     void deposit(LocalDate todayDate);
 
     void withdraw(LocalDate todayDate);
