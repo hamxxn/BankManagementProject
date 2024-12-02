@@ -115,7 +115,7 @@ public class UserServiceImpl implements UserService {
     public void changePhoneNumber(){
         System.out.println();
         System.out.println("*** 전화번호 변경 ***");
-        System.out.println("새로운 전화번호를 입력해주세요. 숫자 11자리 형식만 가능합니다."); //Todo 전화번호 입력 예외 처리 해야 함
+        System.out.println("새로운 전화번호를 입력해주세요. 숫자 11자리 형식만 가능합니다.");
         Scanner scanner = new Scanner(System.in);
         String newPhoneNum = scanner.nextLine().trim();
 
@@ -270,8 +270,17 @@ public class UserServiceImpl implements UserService {
                 return;
             }
 
-            // Todo 메모 입력 -> 채현이가 구현할 기능
-            // Todo 일단 지윤이가 작업할 때는 Transaction 객체 만들 때 메모 값에는 스트링값 "memo"라고 넣어서 테스트 해주세요.
+            // 메모 입력
+            System.out.println("입금 메모를 입력해주세요. 글자수는 최대 10자입니다.");
+            System.out.println("공백은 반영되지 않으며, 메모를 원치 않으신다면 엔터를 눌러주세요.");
+
+            String memoInput = scanner.nextLine();  // 사용자 입력
+            memoInput = memoInput.replaceAll("\\s+", "");  // 모든 공백 제거
+            String memo = memoInput.length() > 10 ? memoInput.substring(0, 10) : memoInput;  // 최대 10글자로 자르기
+
+            if (!memo.isEmpty()) {
+                System.out.println("저장된 메모: " + memo);
+            }
 
             // 계좌 비밀번호 입력
             System.out.println("계좌 비밀번호 4자리를 입력해주세요.");
@@ -307,7 +316,7 @@ public class UserServiceImpl implements UserService {
             userServiceRepository.updateUserFile("UserInfo.txt");
             accountServiceRepository.updateAccountFile("AccountInfo.txt");
 
-            Transaction transaction = new Transaction(todayDate,account.getAccountNum(),"입금","memo",depositAmount,account.getBalance());
+            Transaction transaction = new Transaction(todayDate,account.getAccountNum(),"입금",memo,depositAmount,account.getBalance());
             transactionServiceRepository.add(transaction);
 
         } catch (NumberFormatException e) {
@@ -368,8 +377,17 @@ public class UserServiceImpl implements UserService {
                 return;
             }
 
-            // Todo 메모 입력 -> 채현이가 구현할 기능
-            // Todo 일단 지윤이가 작업할 때는 Transaction 객체 만들 때 메모 값에는 스트링값 "memo"라고 넣어서 테스트 해주세요.
+            // 메모 입력
+            System.out.println("입금 메모를 입력해주세요. 글자수는 최대 10자입니다.");
+            System.out.println("공백은 반영되지 않으며, 메모를 원치 않으신다면 엔터를 눌러주세요.");
+
+            String memoInput = scanner.nextLine();  // 사용자 입력
+            memoInput = memoInput.replaceAll("\\s+", "");  // 모든 공백 제거
+            String memo = memoInput.length() > 10 ? memoInput.substring(0, 10) : memoInput;  // 최대 10글자로 자르기
+
+            if (!memo.isEmpty()) {
+                System.out.println("저장된 메모: " + memo);
+            }
 
             // 비밀번호 입력 확인
             System.out.println("계좌 비밀번호 4자리를 입력해주세요.");
