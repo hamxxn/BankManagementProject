@@ -276,11 +276,9 @@ public class UserServiceImpl implements UserService {
 
             String memoInput = scanner.nextLine();  // 사용자 입력
             memoInput = memoInput.replaceAll("\\s+", "");  // 모든 공백 제거
+            if(memoInput.isEmpty())
+                memoInput="메모없음";
             String memo = memoInput.length() > 10 ? memoInput.substring(0, 10) : memoInput;  // 최대 10글자로 자르기
-
-            if (!memo.isEmpty()) {
-                System.out.println("저장된 메모: " + memo);
-            }
 
             // 계좌 비밀번호 입력
             System.out.println("계좌 비밀번호 4자리를 입력해주세요.");
@@ -383,11 +381,9 @@ public class UserServiceImpl implements UserService {
 
             String memoInput = scanner.nextLine();  // 사용자 입력
             memoInput = memoInput.replaceAll("\\s+", "");  // 모든 공백 제거
+            if(memoInput.isEmpty())
+                memoInput="메모없음";
             String memo = memoInput.length() > 10 ? memoInput.substring(0, 10) : memoInput;  // 최대 10글자로 자르기
-
-            if (!memo.isEmpty()) {
-                System.out.println("저장된 메모: " + memo);
-            }
 
             // 비밀번호 입력 확인
             System.out.println("계좌 비밀번호 4자리를 입력해주세요.");
@@ -416,7 +412,7 @@ public class UserServiceImpl implements UserService {
                     System.out.println(account.getName()+"님의 적금 통장("+account.getAccountNum()+")은 자동해약 되셨습니다.");
                 if (account.getBalance() > 0) {
                     System.out.println("잔액 " + account.getBalance() + "원을 송금하실 계좌를 아래에서 선택해주세요.");
-                    user.printAccounts();
+                    user.printAccounts(account.getAccountNum());
 
                     while (true) {
                         System.out.println("송금받을 계좌를 선택해주세요.");
@@ -571,6 +567,8 @@ public class UserServiceImpl implements UserService {
 
             String memoInput = scanner.nextLine();  // 사용자 입력
             memoInput = memoInput.replaceAll("\\s+", "");  // 모든 공백 제거
+            if(memoInput.isEmpty())
+                memoInput="메모없음";
             String memo = memoInput.length() > 10 ? memoInput.substring(0, 10) : memoInput;  // 최대 10글자로 자르기
 
             if (!memo.isEmpty()) {
@@ -611,7 +609,7 @@ public class UserServiceImpl implements UserService {
                 // 잔액 송금
                 if (sourceAccount.getBalance() > 0) {
                     System.out.println("잔액 " + sourceAccount.getBalance() + "원을 송금하실 계좌를 아래에서 선택해주세요.");
-                    user.printAccounts();
+                    user.printAccounts(sourceAccount.getAccountNum());
 
                     while (true) {
                         System.out.println("송금받을 계좌를 선택해주세요.");

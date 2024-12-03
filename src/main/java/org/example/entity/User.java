@@ -70,6 +70,20 @@ public class User {
                     +" "+ account.getBalance()+"원");
         }
     }
+    public void printAccounts(String sub ) {
+        System.out.println("* "+username+"님의 계좌 리스트 *");
+        for (int i = 0; i < accounts.size(); i++) {
+            Account account = accounts.get(i);
+            if (accounts.get(i).getAccountNum().equals(sub)) {
+                System.out.println(i+1+". "+account.getName() +" "+account.getAccountNum()
+                        +" "+ account.getBalance()+"원 -> 현재 해약될 계좌이기에 선택 불가합니다.");
+            }else {
+
+                System.out.println(i + 1 + ". " + account.getName() + " " + account.getAccountNum()
+                        + " " + account.getBalance() + "원");
+            }
+        }
+    }
 
     public void giveInterest(LocalDate localDate) {
         for(Account account : accounts){
