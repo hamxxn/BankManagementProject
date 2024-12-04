@@ -136,45 +136,50 @@ public class UserServiceRepository {
             String line;
 
             while ((line = reader.readLine()) != null) {
-                //System.out.println("유저 파일 라인 출력 : "+ line);
                 String[] parts = line.split("\t");
                 if (parts.length >= 5) {
                     String id = parts[0];
                     String password = parts[1];
-                    String name= parts[2];
+                    String name = parts[2];
                     String phoneNum = parts[3];
-                    String birth= parts[4];
+                    String birth = parts[4];
 
-
-                    ArrayList<Account> accounts = new ArrayList<>();
-                    if (parts.length>=6) {
+                    List<Account> accounts = new ArrayList<>();
+                    if (parts.length >= 6) {
                         String accountData = parts[5];
 
-                        String[] accountentry = accountData.split(",");
-                        for (String accentry : accountentry) {
-                            String[] accparts = accentry.split(" ");
-                            if (accparts.length == 3) {
+                        String[] accountEntries = accountData.split(",");
+                        for (String entry : accountEntries) {
+                            String[] accParts = entry.split(" ");
+                            if (accParts.length == 5) { // 계좌 번호, 비밀번호, 잔액, 생성 날짜, 계좌 타입
+                                String accNum = accParts[0];
+                                String accPw = accParts[1];
+                                int accBalance = Integer.parseInt(accParts[2]);
+                                String makeDate = accParts[3];
+                                String accountType = accParts[4];
 
-                                String accnum = accparts[0];
-                                String accpw = accparts[1];
-                                int accbalnce = Integer.parseInt(accparts[2]);
-                                accounts.add(new Account(id, name, accnum, accpw, accbalnce));
+                                accounts.add(new Account(id, name, accNum, accPw, accBalance, makeDate, accountType));
+                            } else if (accParts.length == 3) { // 기존 데이터 호환성
+                                String accNum = accParts[0];
+                                String accPw = accParts[1];
+                                int accBalance = Integer.parseInt(accParts[2]);
+                                String makeDate = "2024-01-01"; // 기본값 설정
+                                String accountType = "0";  // 기본값 설정
+
+                                accounts.add(new Account(id, name, accNum, accPw, accBalance, makeDate, accountType));
                             }
                         }
                     }
-                    else {
-                        //System.out.println("계좌정보없음");
-                    }
 
-                    User user = new User(id, password, name, phoneNum, birth, accounts);
-                    assert users != null;
+                    User user = new User(id, password, name, phoneNum, birth, (ArrayList<Account>) accounts);
                     users.add(user);
                 }
             }
         } catch (IOException e) {
-            System.err.println("파일을 찾을 수 없습니다.");
+            System.err.println("파일을 찾을 수 없습니다: " + e.getMessage());
         }
     }
+
 
 
     public void updateUserFile(String filename) {

@@ -10,12 +10,14 @@ public class Account {
     private String name;
     private String accountNum;
     private String accountPw;
-    private int balance;
+    protected int balance;
     private String lastTransferDate;
-    private String lastInterestDate;
+    protected String lastInterestDate;
     protected double interestRate;
+    protected String makeAccount;
+    protected String accountType;
 
-    public Account(String userId, String name, String accountNum, String accountPw, int balance) {
+    public Account(String userId, String name, String accountNum, String accountPw, int balance,String makeAccount,String accountType) {
         this.userId = userId;
         this.name = name;
         this.accountNum = accountNum;
@@ -23,6 +25,9 @@ public class Account {
         this.balance = balance;
         this.lastTransferDate = "1";
         interestRate=1.0;
+        this.makeAccount = makeAccount;
+       this.accountType = accountType;
+       lastInterestDate=makeAccount;
     }
 
     public String getUserId() {
@@ -112,5 +117,13 @@ public class Account {
         } else {
             System.out.println("1달 미만으로 경과했습니다. 이자 지급이 필요 없습니다.");
         }
+    }
+
+    public String getMakeDate() {
+        return makeAccount;
+    }
+
+    public String getAccountType() {
+        return accountType;
     }
 }

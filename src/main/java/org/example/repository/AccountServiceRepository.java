@@ -5,6 +5,9 @@ import org.example.entity.Transaction;
 import org.example.entity.User;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -81,50 +84,73 @@ public class AccountServiceRepository {
 
 
     public void AccountFileReader(String filename) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+        Path path = Paths.get(filename);
+
+        if (Files.notExists(path)) {
+            System.out.println(filename + " 파일이 존재하지 않아 새로 생성합니다.");
+            try {
+                Files.createFile(path);
+            } catch (IOException e) {
+                System.err.println("파일 생성 중 오류 발생: " + e.getMessage());
+                return;
+            }
+        }
+
+        try (BufferedReader reader = Files.newBufferedReader(path)) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split("\t");
-                if (parts.length >= 6) { // ID 포함 5개 필드 체크
-                    String userId = parts[0];
-                    String name = parts[1];
-                    String accountNum = parts[2];
-                    String accountPw = parts[3];
-                    int balance = Integer.parseInt(parts[4]);
-                    String lastinterestDate = parts[5];
+                if (parts.length >= 8) { // 8개의 필드 확인
+                    try {
+                        String userId = parts[0];
+                        String name = parts[1];
+                        String accountNum = parts[2];
+                        String accountPw = parts[3];
+                        int balance = Integer.parseInt(parts[4]);
+                        String makeDate = parts[5];
+                        String accountType = parts[6];
+                        String lastInterestDate = parts[7];
 
-                    Account account = new Account(userId, name, accountNum, accountPw, balance);
-                    account.setLastInterestDate(lastinterestDate);
-                    assert accounts != null;
-                    accounts.add(account);
+                        Account account = new Account(userId, name, accountNum, accountPw, balance, makeDate, accountType);
+                        account.setLastInterestDate(lastInterestDate);
+                        accounts.add(account);
+                    } catch (NumberFormatException e) {
+                        System.err.println("숫자 형식 오류: " + line);
+                    }
+                } else {
+                    System.err.println("잘못된 데이터 형식: " + line);
                 }
             }
         } catch (IOException e) {
-            System.err.println("파일을 찾을 수 없습니다.");
-        } catch (NumberFormatException e) {
-            System.err.println("잔액을 정수로 변환하는 중 오류 발생.");
+            System.err.println("파일 읽기 중 오류 발생: " + e.getMessage());
         }
     }
+
 
 
     public void updateAccountFile(String filename) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
-            for (Account account : accounts) {
-                StringBuilder accountData = new StringBuilder();
-                accountData.append(account.getUserId()).append("\t") // UserId 추가
-                        .append(account.getName()).append("\t")
-                        .append(account.getAccountNum()).append("\t")
-                        .append(account.getAccountPw()).append("\t")
-                        .append(account.getBalance()).append("\t")
-                        .append(account.getLastInterestDate());;
+        Path path = Paths.get(filename);
 
-                writer.write(accountData.toString());
+        try (BufferedWriter writer = Files.newBufferedWriter(path)) {
+            for (Account account : accounts) {
+                String accountData = String.join("\t",
+                        account.getUserId(),
+                        account.getName(),
+                        account.getAccountNum(),
+                        account.getAccountPw(),
+                        String.valueOf(account.getBalance()),
+                        account.getMakeDate(),
+                        account.getAccountType(),
+                        account.getLastInterestDate()
+                );
+                writer.write(accountData);
                 writer.newLine();
             }
         } catch (IOException e) {
-            System.err.println("파일 업데이트에 실패했습니다.");
+            System.err.println("파일 업데이트 중 오류 발생: " + e.getMessage());
         }
     }
+
 
     public boolean checkNewAccount(String newAccountNum) {
         for (Account account : accounts) {
