@@ -346,7 +346,7 @@ public class UserServiceImpl implements UserService {
             user.printAccounts();
             System.out.println("계좌를 선택해주세요.");
             System.out.println("(q 입력시 메뉴로 돌아갑니다.)");
-            String in=scanner.nextLine().trim();
+            String in = scanner.nextLine().trim();
 
             if (in.equals("q")) {
                 System.out.println("메뉴로 돌아갑니다.");
@@ -419,15 +419,15 @@ public class UserServiceImpl implements UserService {
                         String transferAccountInput = scanner.nextLine().trim();
 
                         try {
-                            int transferAccountNum = Integer.parseInt(transferAccountInput);
+                            int accountNumChoice = Integer.parseInt(transferAccountInput);
 
-                            // 계좌 번호가 유효한지 확인
-                            if (transferAccountNum > user.getAccounts().size() || transferAccountNum == accountNum || transferAccountNum <= 0) {
+                            // 계좌 선택이 유효한지 확인
+                            if (accountNumChoice > user.getAccounts().size()|| accountNumChoice <= 0) {
                                 System.out.println("올바르지 않은 계좌 선택입니다. 다시 시도해주세요.");
                                 continue; // 루프를 다시 시작
                             }
 
-                            Account targetAccount = user.getAccounts().get(transferAccountNum - 1);
+                            Account targetAccount = user.getAccounts().get(accountNumChoice - 1);
                             int remainingBalance = account.getBalance();
 
                             // 송금 처리

@@ -38,7 +38,8 @@ public class AccountServiceRepository {
     }
 
     public void removeAccount(String accountNum) {
-        for (Account account : accounts) {
+        List<Account> accountList = new ArrayList<>(accounts); // 복사본 생성
+        for (Account account : accountList) {
             if (account.getAccountNum().equals(accountNum)) {
                 accounts.remove(account);
             }
