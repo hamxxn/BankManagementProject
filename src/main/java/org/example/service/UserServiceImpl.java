@@ -813,11 +813,11 @@ public class UserServiceImpl implements UserService {
                     Account account = null;
                     switch (accountType) {
                         case 1:
-                            account = new Account151(user.getId(), user.getUsername(), accountNum, password, 0);
+                            account = new Account151(user.getId(), user.getUsername(), accountNum, password, 0,todayDate.toString(),"0");
                             break;
                         case 2:
-                            account = new Account152(user.getId(), user.getUsername(), accountNum, password, 0);
-                            ((Account152)account).setMakeAccount(todayDate);
+                            account = new Account152(user.getId(), user.getUsername(), accountNum, password, 0,todayDate.toString(),"0");
+                            ((Account152)account).setInterestRate();
                             break;
                     }
 
