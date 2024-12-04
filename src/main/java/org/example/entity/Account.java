@@ -1,6 +1,7 @@
 package org.example.entity;
 
 import org.example.repository.AccountServiceRepository;
+import org.example.repository.UserServiceRepository;
 
 import java.time.LocalDate;
 
@@ -101,7 +102,11 @@ public class Account {
 
             // 파일 업데이트
             AccountServiceRepository accountServiceRepository = new AccountServiceRepository();
+            accountServiceRepository.save(this);
             accountServiceRepository.updateAccountFile("AccountInfo.txt");
+
+            UserServiceRepository userServiceRepository = new UserServiceRepository();
+            userServiceRepository.updateUserBalance(this);
 
             System.out.println("최종 잔액: " + balance);
         } else {
