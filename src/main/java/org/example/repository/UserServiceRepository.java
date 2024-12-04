@@ -29,6 +29,21 @@ public class UserServiceRepository {
         users.add(user); // 없으면 새로 추가
     }
 
+
+    public void updateUserBalance(Account updatedAccount) {
+        for (User user : users) {
+            for (Account account : user.getAccounts()) {
+                if (account.getAccountNum().equals(updatedAccount.getAccountNum())) {
+                    account.setBalance(updatedAccount.getBalance());
+                    account.setLastInterestDate(updatedAccount.getLastInterestDate());
+                    updateUserFile("UserInfo.txt"); // 파일 동기화
+                    return;
+                }
+            }
+        }
+    }
+
+
     public User getUserByAccount(String accountnum) {
         for (User user : users) {
             for (Account userAccount : user.getAccounts()) {
@@ -186,7 +201,6 @@ public class UserServiceRepository {
             System.err.println("파일 업데이트에 실패했습니다.");
         }
     }
-
 
 
 }
