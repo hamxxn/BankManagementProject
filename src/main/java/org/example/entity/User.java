@@ -75,10 +75,8 @@ public class User {
         for (int i = 0; i < accounts.size(); i++) {
             Account account = accounts.get(i);
             if (accounts.get(i).getAccountNum().equals(sub)) {
-                System.out.println(i+1+". "+account.getName() +" "+account.getAccountNum()
-                        +" "+ account.getBalance()+"원 -> 현재 해약될 계좌이기에 선택 불가합니다.");
+                // 해약될 계좌에 해당하는 애는 출력 안 함.
             }else {
-
                 System.out.println(i + 1 + ". " + account.getName() + " " + account.getAccountNum()
                         + " " + account.getBalance() + "원");
             }
