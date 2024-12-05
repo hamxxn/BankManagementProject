@@ -1,6 +1,8 @@
 package org.example.repository;
 
 import org.example.entity.Account;
+import org.example.entity.Account151;
+import org.example.entity.Account152;
 import org.example.entity.Transaction;
 import org.example.entity.User;
 
@@ -111,8 +113,25 @@ public class AccountServiceRepository {
                         String makeDate = parts[6];
                         String accountType = parts[7];
 
-                        Account account = new Account(userId, name, accountNum, accountPw, balance, lastInterestDate, makeDate, accountType);
-                        account.setLastInterestDate(lastInterestDate);
+                        Account account;
+                        switch (accountType) {
+                            case "0":
+                                account = new Account151(userId, name, accountNum, accountPw, balance, lastInterestDate, makeDate, accountType);
+                                break;
+                            case "1":
+                                account = new Account152(userId, name, accountNum, accountPw, balance, lastInterestDate, makeDate, accountType);
+                                break;
+                            case "2":
+                                account = new Account152(userId, name, accountNum, accountPw, balance, lastInterestDate, makeDate, accountType);
+                                break;
+                            case "3":
+                                account = new Account152(userId, name, accountNum, accountPw, balance, lastInterestDate, makeDate, accountType);
+                                break;
+                            default:
+                                account = new Account(userId, name, accountNum, accountPw, balance, lastInterestDate, makeDate, accountType);
+                                break;
+                        }
+
                         accounts.add(account);
                     } catch (NumberFormatException e) {
                         System.err.println("숫자 형식 오류: " + line);

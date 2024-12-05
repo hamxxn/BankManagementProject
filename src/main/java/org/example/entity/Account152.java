@@ -36,6 +36,12 @@ public class Account152 extends Account {
     }
 
     public void giveInterest(LocalDate loginDate) {
+        // 계좌 만료일 확인: 만료일이 지나면 이자 지급 안 함
+        if (EndAccount(loginDate)) {
+            System.out.println("계좌 만료일이 지나 이자는 지급되지 않습니다.");
+            return;
+        }
+
         // 마지막 이자 지급 날짜가 null 또는 빈 값인 경우 초기화
         if (lastInterestDate == null || lastInterestDate.isEmpty()) {
             System.out.println("이자 지급 기록이 없습니다. 초기화합니다.");
@@ -45,6 +51,8 @@ public class Account152 extends Account {
         setEndAccount();
         // 마지막 이자 지급 날짜를 LocalDate로 변환
         LocalDate lastInterestLocalDate = LocalDate.parse(lastInterestDate);
+
+
 
         // 두 날짜 간 경과된 달 수 계산
         int yearDiff = loginDate.getYear() - lastInterestLocalDate.getYear();
