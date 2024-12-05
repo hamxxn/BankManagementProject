@@ -69,7 +69,7 @@ public class Account152 extends Account {
             accountServiceRepository.save(this);
             accountServiceRepository.updateAccountFile("AccountInfo.txt");
 
-            UserServiceRepository userServiceRepository = new UserServiceRepository();
+            UserServiceRepository userServiceRepository = new UserServiceRepository(accountServiceRepository);
             userServiceRepository.updateUserBalance(this);
 
             System.out.println("최종 잔액: " + balance);

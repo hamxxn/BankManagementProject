@@ -107,9 +107,9 @@ public class AccountServiceRepository {
                         String accountNum = parts[2];
                         String accountPw = parts[3];
                         int balance = Integer.parseInt(parts[4]);
-                        String makeDate = parts[5];
-                        String accountType = parts[6];
-                        String lastInterestDate = parts[7];
+                        String lastInterestDate = parts[5];
+                        String makeDate = parts[6];
+                        String accountType = parts[7];
 
                         Account account = new Account(userId, name, accountNum, accountPw, balance, lastInterestDate, makeDate, accountType);
                         account.setLastInterestDate(lastInterestDate);
@@ -137,9 +137,9 @@ public class AccountServiceRepository {
                         account.getAccountNum(),
                         account.getAccountPw(),
                         String.valueOf(account.getBalance()),
+                        account.getLastInterestDate(),
                         account.getMakeDate(),
-                        account.getAccountType(),
-                        account.getLastInterestDate()
+                        account.getAccountType()
                 );
                 writer.write(accountData);
                 writer.newLine();

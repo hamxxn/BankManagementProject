@@ -13,8 +13,9 @@ public class UserServiceRepository {
 
     List<User> users = new ArrayList<>();
     List<String> loginHistory = new ArrayList<>();
-
-    public UserServiceRepository() {
+    AccountServiceRepository accountServiceRepository;
+    public UserServiceRepository(AccountServiceRepository accountServiceRepository) {
+        this.accountServiceRepository = accountServiceRepository;
         UserFileReader("UserInfo.txt");
     }
 
@@ -145,31 +146,31 @@ public class UserServiceRepository {
                     String birth = parts[4];
 
                     List<Account> accounts = new ArrayList<>();
-                    if (parts.length >= 6) {
-                        String accountData = parts[5];
-
-                        String[] accountEntries = accountData.split(",");
-                        for (String entry : accountEntries) {
-                            String[] accParts = entry.split(" ");
-                            if (accParts.length == 5) { // 계좌 번호, 비밀번호, 잔액, 생성 날짜, 계좌 타입
-                                String accNum = accParts[0];
-                                String accPw = accParts[1];
-                                int accBalance = Integer.parseInt(accParts[2]);
-                                String makeDate = accParts[3];
-                                String accountType = accParts[4];
-
-                                accounts.add(new Account(id, name, accNum, accPw, accBalance, makeDate, makeDate, accountType));
-                            } else if (accParts.length == 3) { // 기존 데이터 호환성
-                                String accNum = accParts[0];
-                                String accPw = accParts[1];
-                                int accBalance = Integer.parseInt(accParts[2]);
-                                String makeDate = "2024-01-01"; // 기본값 설정
-                                String accountType = "0";  // 기본값 설정
-                                // makeDate 두 번 넣은 이유: 생성자에 마지막 이자 지급일도 넣어야 하는데, 여기선 넣어줄 수가 없어서 마지막 이자 지급일에 makeDate를 임시로 넣음.
-
-                                accounts.add(new Account(id, name, accNum, accPw, accBalance, makeDate, makeDate, accountType));
-                            }
-                        }
+                    if (parts.length >= 6) { // 계좌 정보가 있을때
+                        //String accountData = parts[5];
+                        accounts = accountServiceRepository.getAccountsByUserId(id);
+//                        String[] accountEntries = accountData.split(",");
+//                        for (String entry : accountEntries) {
+//                            String[] accParts = entry.split(" ");
+//                            if (accParts.length == 5) { // 계좌 번호, 비밀번호, 잔액, 생성 날짜, 계좌 타입
+//                                String accNum = accParts[0];
+//                                String accPw = accParts[1];
+//                                int accBalance = Integer.parseInt(accParts[2]);
+//                                String makeDate = accParts[3];
+//                                String accountType = accParts[4];
+//
+//                                accounts.add(new Account(id, name, accNum, accPw, accBalance, makeDate, makeDate, accountType));
+//                            } else if (accParts.length == 3) { // 기존 데이터 호환성
+//                                String accNum = accParts[0];
+//                                String accPw = accParts[1];
+//                                int accBalance = Integer.parseInt(accParts[2]);
+//                                String makeDate = "2024-01-01"; // 기본값 설정
+//                                String accountType = "0";  // 기본값 설정
+//                                // makeDate 두 번 넣은 이유: 생성자에 마지막 이자 지급일도 넣어야 하는데, 여기선 넣어줄 수가 없어서 마지막 이자 지급일에 makeDate를 임시로 넣음.
+//
+//                                accounts.add(new Account(id, name, accNum, accPw, accBalance, makeDate, makeDate, accountType));
+//                            }
+//                        }
                     }
 
                     User user = new User(id, password, name, phoneNum, birth, (ArrayList<Account>) accounts);

@@ -1,5 +1,8 @@
 package org.example.controller;
 
+import org.example.repository.AccountServiceRepository;
+import org.example.repository.TransactionServiceRepository;
+import org.example.repository.UserServiceRepository;
 import org.example.service.MainService;
 import org.example.service.MainServiceImpl;
 
@@ -13,7 +16,10 @@ public class MainController {
 
     public void menu() {
         Scanner scanner = new Scanner(System.in);
-        MainService mainService = new MainServiceImpl();
+        AccountServiceRepository accountServiceRepository = new AccountServiceRepository();
+        UserServiceRepository userServiceRepository = new UserServiceRepository(accountServiceRepository);
+        TransactionServiceRepository transactionServiceRepository = new TransactionServiceRepository();
+        MainService mainService = new MainServiceImpl(userServiceRepository,accountServiceRepository,transactionServiceRepository);
         boolean isRunning = true;  // 프로그램이 계속 실행되도록 제어할 플래그
 
         while (isRunning) {  // 프로그램이 종료될 때까지 반복

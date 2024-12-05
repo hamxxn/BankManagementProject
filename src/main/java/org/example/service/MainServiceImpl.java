@@ -3,6 +3,8 @@ package org.example.service;
 import org.example.controller.ManagerController;
 import org.example.controller.UserController;
 import org.example.entity.User;
+import org.example.repository.AccountServiceRepository;
+import org.example.repository.TransactionServiceRepository;
 import org.example.repository.UserServiceRepository;
 
 import java.time.LocalDate;
@@ -14,8 +16,17 @@ import java.util.Scanner;
 import java.util.function.LongConsumer;
 
 public class MainServiceImpl implements MainService {
-    UserServiceRepository userServiceRepository = new UserServiceRepository();
+    private UserServiceRepository userServiceRepository;
+    private AccountServiceRepository accountServiceRepository;
+    private TransactionServiceRepository transactionServiceRepository;
 
+    public MainServiceImpl(UserServiceRepository userServiceRepository,
+                           AccountServiceRepository accountServiceRepository,
+                           TransactionServiceRepository transactionServiceRepository) {
+        this.userServiceRepository = userServiceRepository;
+        this.accountServiceRepository = accountServiceRepository;
+        this.transactionServiceRepository = transactionServiceRepository;
+    }
     // 나이 확인 메서드 (15세 이하인지 확인)
     private boolean isUnder15(String birth) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -147,7 +158,7 @@ public class MainServiceImpl implements MainService {
             System.out.println("로그인이 완료되었습니다.");
             break;
         }
-        UserController userController = new UserController(user);
+        UserController userController = new UserController(user, userServiceRepository, accountServiceRepository, transactionServiceRepository);
         LocalDate date;
         while(true){
             try {

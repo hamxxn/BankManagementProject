@@ -17,12 +17,15 @@ public class UserController {
     private AccountServiceRepository accountServiceRepository;
     private TransactionServiceRepository transactionServiceRepository;
 
-    public UserController(User user) {
+    public UserController(User user, UserServiceRepository userServiceRepository,
+                          AccountServiceRepository accountServiceRepository,
+                          TransactionServiceRepository transactionServiceRepository) {
         this.user = user;
-        this.userServiceRepository = new UserServiceRepository();
-        this.accountServiceRepository = new AccountServiceRepository();
-        this.transactionServiceRepository = new TransactionServiceRepository();
+        this.userServiceRepository = userServiceRepository;
+        this.accountServiceRepository = accountServiceRepository;
+        this.transactionServiceRepository = transactionServiceRepository;
     }
+
     public void menu(LocalDate todayDate) {
         Scanner scanner = new Scanner(System.in);
         UserService userService = new UserServiceImpl(user,userServiceRepository, accountServiceRepository,transactionServiceRepository);
