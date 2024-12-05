@@ -17,7 +17,7 @@ public class Account {
     protected String makeAccount;
     protected String accountType;
 
-    public Account(String userId, String name, String accountNum, String accountPw, int balance,String makeAccount,String accountType) {
+    public Account(String userId, String name, String accountNum, String accountPw, int balance, String lastInterestDate,String makeAccount,String accountType) {
         this.userId = userId;
         this.name = name;
         this.accountNum = accountNum;
@@ -26,8 +26,8 @@ public class Account {
         this.lastTransferDate = "1";
         interestRate=1.0;
         this.makeAccount = makeAccount;
-       this.accountType = accountType;
-       lastInterestDate=makeAccount;
+        this.accountType = accountType;
+        this.lastInterestDate = lastInterestDate;
     }
 
     public String getUserId() {
@@ -78,11 +78,29 @@ public class Account {
         this.name = name;
     }
 
-    public void giveInterest(LocalDate localDate) {
+    public void setInterestRate(){
+        switch (accountType){
+            case "0":
+                this.interestRate = 1.2;
+            case "1":
+                this.interestRate = 3.0;
+//                this.endAccount = 6;
+                break;
+            case "2":
+                this.interestRate = 4.0;
+//                this.endAccount = 12;
+                break;
+            case "3":
+                this.interestRate = 5.0;
+//                this.endAccount = 24;
+                break;
+        }
+    }
+    public void giveInterest(LocalDate loginDate) {
         // 마지막 이자 지급 날짜가 null 또는 빈 값인 경우 초기화
         if (lastInterestDate == null || lastInterestDate.isEmpty()) {
             System.out.println("이자 지급 기록이 없습니다. 초기화합니다.");
-            lastInterestDate = localDate.toString();
+            lastInterestDate = loginDate.toString();
             return;
         }
 
@@ -90,8 +108,8 @@ public class Account {
         LocalDate lastInterestLocalDate = LocalDate.parse(lastInterestDate);
 
         // 두 날짜 간 경과된 달 수 계산
-        int yearDiff = localDate.getYear() - lastInterestLocalDate.getYear();
-        int monthDiff = localDate.getMonthValue() - lastInterestLocalDate.getMonthValue();
+        int yearDiff = loginDate.getYear() - lastInterestLocalDate.getYear();
+        int monthDiff = loginDate.getMonthValue() - lastInterestLocalDate.getMonthValue();
         int totalMonths = (yearDiff * 12) + monthDiff;
 
         if (totalMonths >= 1) {
@@ -103,7 +121,7 @@ public class Account {
             }
 
             // 마지막 이자 지급 날짜 업데이트
-            lastInterestDate = localDate.minusMonths(totalMonths - 1).toString();
+            this.lastInterestDate = loginDate.minusMonths(totalMonths - 1).toString();
 
             // 파일 업데이트
             AccountServiceRepository accountServiceRepository = new AccountServiceRepository();
