@@ -158,15 +158,16 @@ public class UserServiceRepository {
                                 String makeDate = accParts[3];
                                 String accountType = accParts[4];
 
-                                accounts.add(new Account(id, name, accNum, accPw, accBalance, makeDate, accountType));
+                                accounts.add(new Account(id, name, accNum, accPw, accBalance, makeDate, makeDate, accountType));
                             } else if (accParts.length == 3) { // 기존 데이터 호환성
                                 String accNum = accParts[0];
                                 String accPw = accParts[1];
                                 int accBalance = Integer.parseInt(accParts[2]);
                                 String makeDate = "2024-01-01"; // 기본값 설정
                                 String accountType = "0";  // 기본값 설정
+                                // makeDate 두 번 넣은 이유: 생성자에 마지막 이자 지급일도 넣어야 하는데, 여기선 넣어줄 수가 없어서 마지막 이자 지급일에 makeDate를 임시로 넣음.
 
-                                accounts.add(new Account(id, name, accNum, accPw, accBalance, makeDate, accountType));
+                                accounts.add(new Account(id, name, accNum, accPw, accBalance, makeDate, makeDate, accountType));
                             }
                         }
                     }

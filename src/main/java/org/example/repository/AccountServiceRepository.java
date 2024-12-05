@@ -111,7 +111,7 @@ public class AccountServiceRepository {
                         String accountType = parts[6];
                         String lastInterestDate = parts[7];
 
-                        Account account = new Account(userId, name, accountNum, accountPw, balance, makeDate, accountType);
+                        Account account = new Account(userId, name, accountNum, accountPw, balance, lastInterestDate, makeDate, accountType);
                         account.setLastInterestDate(lastInterestDate);
                         accounts.add(account);
                     } catch (NumberFormatException e) {
@@ -125,8 +125,6 @@ public class AccountServiceRepository {
             System.err.println("파일 읽기 중 오류 발생: " + e.getMessage());
         }
     }
-
-
 
     public void updateAccountFile(String filename) {
         Path path = Paths.get(filename);

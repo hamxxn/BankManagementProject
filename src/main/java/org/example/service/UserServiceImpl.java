@@ -8,6 +8,7 @@ import org.example.repository.UserServiceRepository;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
@@ -808,16 +809,16 @@ public class UserServiceImpl implements UserService {
                         isValid = accountServiceRepository.checkNewAccount(accountNum);
                     }
 
-                    System.out.println(accountNum);
-
                     Account account = null;
                     switch (accountType) {
                         case 1:
-                            account = new Account151(user.getId(), user.getUsername(), accountNum, password, 0,todayDate.toString(),"0");
+                            account = new Account151(user.getId(), user.getUsername(), accountNum, password, 0,todayDate.toString(),todayDate.toString(),"0");
+                            account.setInterestRate();
                             break;
                         case 2:
-                            account = new Account152(user.getId(), user.getUsername(), accountNum, password, 0,todayDate.toString(),"0");
-                            ((Account152)account).setInterestRate();
+                            String account152Type = selectInterestRate();
+                            account = new Account152(user.getId(), user.getUsername(), accountNum, password, 0,todayDate.toString(),todayDate.toString(),account152Type);
+                            account.setInterestRate();
                             break;
                     }
 
@@ -842,6 +843,45 @@ public class UserServiceImpl implements UserService {
             System.out.println("잘못된 입력 형식입니다. 메뉴로 돌아갑니다.");
         }
     }
+    public String selectInterestRate() {
+        Scanner scanner = new Scanner(System.in);
+        String accountType = "string";
+        boolean validInput = false; // 입력 유효성을 확인하는 변수
 
+        while (!validInput) { // 유효한 입력이 들어올 때까지 반복
+            try {
+                // 메뉴 출력
+                System.out.println("1: 6개월 → 3%");
+                System.out.println("2: 1년 → 4%");
+                System.out.println("3: 2년 → 5%");
+                System.out.print("원하는 옵션을 선택하세요 (1, 2, 3): ");
+                int intrestRateChoice = scanner.nextInt();
 
+                // 사용자의 선택에 따라 이자율 설정
+                switch (intrestRateChoice) {
+                    case 1:
+                        accountType="1";
+                        System.out.println("이자율이 3%로 설정되었습니다 (6개월)");
+                        validInput = true; // 유효한 입력 처리
+                        break;
+                    case 2:
+                        accountType="2";
+                        System.out.println("이자율이 4%로 설정되었습니다 (1년)");
+                        validInput = true; // 유효한 입력 처리
+                        break;
+                    case 3:
+                        accountType="3";
+                        System.out.println("이자율이 5%로 설정되었습니다 (2년)");
+                        validInput = true; // 유효한 입력 처리
+                        break;
+                    default:
+                        System.out.println("올바른 옵션을 선택하세요."); // 잘못된 입력 안내
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("숫자를 입력해야 합니다. 다시 시도하세요.");
+                scanner.nextLine(); // 잘못된 입력 버퍼 비우기
+            }
+        }
+        return accountType;
+    }
 }

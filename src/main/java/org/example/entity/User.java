@@ -85,9 +85,10 @@ public class User {
         }
     }
 
-    public void giveInterest(LocalDate localDate) {
+    public void giveInterest(LocalDate loginDate) {
         for(Account account : accounts){
-            account.giveInterest(localDate);
+            account.setInterestRate();
+            account.giveInterest(loginDate);
         }
     }
 
