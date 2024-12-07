@@ -29,11 +29,35 @@ public class MainServiceImpl implements MainService {
     }
     // 나이 확인 메서드 (15세 이하인지 확인)
     private boolean isUnder15(String birth) {
-        //LocalDate lastLoginDate = userServiceRepository.getLastLogin("LoginRecord.txt");
+        userServiceRepository.LoginFileReader("LoginRecord.txt");
+        LocalDate lastLoginDate = userServiceRepository.getLastLogin("LoginRecord.txt");
+
+        // lastLoginDate가 null인 경우 사용자에게 날짜 입력받기
+        if (lastLoginDate == null) {
+            Scanner scanner = new Scanner(System.in);
+            while (true) {
+                try {
+                    System.out.println("현재 날짜를 입력해주세요 YYYY-MM-DD 형식입니다.");
+                    String inputDate = scanner.nextLine();
+
+                    // 입력된 날짜를 LocalDate로 변환
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    lastLoginDate = LocalDate.parse(inputDate, formatter);
+                    userServiceRepository.addLoginRecord("LoginRecord.txt", "0", lastLoginDate);
+                    break; // 유효한 날짜 입력 시 루프 종료
+                } catch (DateTimeParseException e) {
+                    System.out.println("잘못된 날짜 형식입니다. YYYY-MM-DD 형식으로 다시 입력해주세요.");
+                }
+            }
+        }
+
+        // 생년월일을 LocalDate로 변환
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate birthDate = LocalDate.parse(birth, formatter);
-       // Period age = Period.between(birthDate, lastLoginDate);
-        Period age = Period.between(birthDate, LocalDate.now());
+
+        // 나이 계산
+        Period age = Period.between(birthDate, lastLoginDate);
+
         return age.getYears() < 15;
     }
 

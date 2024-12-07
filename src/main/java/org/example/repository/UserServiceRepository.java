@@ -120,7 +120,7 @@ public class UserServiceRepository {
 
     public LocalDate getLastLogin(String filename) {
         if (loginHistory.isEmpty()) {
-            return LocalDate.MIN;
+            return null;
         }
         String last = loginHistory.get(loginHistory.size()-1);
         String[] parts = last.split("\t");
