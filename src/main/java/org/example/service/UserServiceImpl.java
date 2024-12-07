@@ -450,7 +450,7 @@ public class UserServiceImpl implements UserService {
 
             }else{
                 accountServiceRepository.save(account);
-                Transaction transaction = new Transaction(todayDate,account.getAccountNum(),"출금","memo",withdrawInput,account.getBalance());
+                Transaction transaction = new Transaction(todayDate,account.getAccountNum(),"출금",memoInput,withdrawInput,account.getBalance());
                 transactionServiceRepository.add(transaction);
             }
             userServiceRepository.save(user);
@@ -571,10 +571,6 @@ public class UserServiceImpl implements UserService {
             if(memoInput.isEmpty())
                 memoInput="메모없음";
             String memo = memoInput.length() > 10 ? memoInput.substring(0, 10) : memoInput;  // 최대 10글자로 자르기
-
-            if (!memo.isEmpty()) {
-                System.out.println("저장된 메모: " + memo);
-            }
 
             // 비밀번호 체크
             System.out.println("계좌 비밀번호 4자리를 입력해주세요.");
@@ -843,6 +839,7 @@ public class UserServiceImpl implements UserService {
             System.out.println("잘못된 입력 형식입니다. 메뉴로 돌아갑니다.");
         }
     }
+
     public String selectInterestRate() {
         Scanner scanner = new Scanner(System.in);
         String accountType = "string";
