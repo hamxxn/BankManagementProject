@@ -29,10 +29,11 @@ public class MainServiceImpl implements MainService {
     }
     // 나이 확인 메서드 (15세 이하인지 확인)
     private boolean isUnder15(String birth) {
-        LocalDate lastLoginDate = userServiceRepository.getLastLogin("LoginRecord.txt");
+        //LocalDate lastLoginDate = userServiceRepository.getLastLogin("LoginRecord.txt");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate birthDate = LocalDate.parse(birth, formatter);
-        Period age = Period.between(birthDate, lastLoginDate);
+       // Period age = Period.between(birthDate, lastLoginDate);
+        Period age = Period.between(birthDate, LocalDate.now());
         return age.getYears() < 15;
     }
 
@@ -47,20 +48,13 @@ public class MainServiceImpl implements MainService {
 
     // 생년월일 유효성 검증 (형식 및 현재 날짜 이전인지 확인)
     private boolean isValidDateFormat(String birth) {
-        LocalDate lastLoginDate = userServiceRepository.getLastLogin("LoginRecord.txt");
         try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            LocalDate birthDate = LocalDate.parse(birth, formatter);
-            if (birthDate.isAfter(lastLoginDate)) {
-                return false;
-            }
-
             String[] parts = birth.split("-");
             int year = Integer.parseInt(parts[0]);
             int month = Integer.parseInt(parts[1]);
             int day = Integer.parseInt(parts[2]);
             return isValidDayForMonth(year, month, day); // 월, 일 유효성 검증
-        } catch (DateTimeParseException | NumberFormatException e) {
+        } catch (NumberFormatException e) {
             return false;
         }
     }
