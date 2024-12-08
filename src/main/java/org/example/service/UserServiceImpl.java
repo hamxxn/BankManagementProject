@@ -560,8 +560,6 @@ public class UserServiceImpl implements UserService {
                 return;
             }
 
-            sourceAccount.setLastTransferDate(todayDate.toString());
-
             // 메모 입력
             System.out.println("계좌이체 메모를 입력해주세요. 글자수는 최대 10자입니다.");
             System.out.println("공백은 반영되지 않으며, 메모를 원치 않으신다면 엔터를 눌러주세요.");
@@ -593,6 +591,7 @@ public class UserServiceImpl implements UserService {
             targetAccount.deposit(transferAmount);
             System.out.println("계좌 이체에 성공하셨습니다!");
             System.out.println(sourceAccount.getName() + "님의 현재 잔액은 " + sourceAccount.getBalance() + "원입니다.");
+            sourceAccount.setLastTransferDate(todayDate.toString());
 
             // Account152 체크 및 처리
             if (sourceAccount instanceof Account152) {
