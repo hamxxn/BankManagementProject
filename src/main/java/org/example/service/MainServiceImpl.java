@@ -140,7 +140,39 @@ public class MainServiceImpl implements MainService {
                 String managerPassword = scanner.nextLine().trim();
                 if(managerPassword.equalsIgnoreCase("admin1234")){
                     ManagerController managerController = new ManagerController();
-                    managerController.menu(); // 관리자 모드로 들어감
+                    LocalDate date;
+                    while(true){
+                        try {
+                            // 날짜 입력
+                            System.out.println("날짜를 입력해주세요. YYYY-MM-DD 형식입니다.");
+                            System.out.println("(q 입력시 메뉴로 돌아갑니다.)");
+                            String dayInput = scanner.nextLine().trim();
+
+                            if (dayInput.equals("q")) { // q 입력시
+                                System.out.println("메뉴로 돌아갑니다.");
+                                return;
+                            }
+
+                            if (dayInput.length() != 10) { // 입력된 값이 10자리가 아닐 경우
+                                System.out.println("잘못된 날짜 형식입니다. 다시 입력해 주세요.");
+                                continue;
+                            }
+
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");  // 날짜 형식 지정
+                            date = LocalDate.parse(dayInput, formatter); // 날짜 파싱 및 유효성 확인
+                            userServiceRepository.LoginFileReader("LoginRecord.txt");
+                            LocalDate last = userServiceRepository.getLastLogin("LoginRecord.txt");
+
+                            if (last == null || date.isBefore(last)) {
+                                System.out.println("과거 날짜는 입력할 수 없습니다. 다시 입력해 주세요.");
+                                continue;
+                            }
+                            break;
+                        } catch (DateTimeParseException e) {
+                            System.out.println("잘못된 날짜 형식입니다. 다시 입력해 주세요.");
+                        }
+                    }
+                    managerController.menu(date); // 관리자 모드로 들어감
                     return; // 끝나면
                 }
                 // 관리자 모드는 비밀번호 한 번 틀리면 로그인 함수 종료시키기
@@ -177,6 +209,8 @@ public class MainServiceImpl implements MainService {
             System.out.println("로그인이 완료되었습니다.");
             break;
         }
+
+
         UserController userController = new UserController(user, userServiceRepository, accountServiceRepository, transactionServiceRepository);
         LocalDate date;
         while(true){
