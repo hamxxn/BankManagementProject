@@ -139,8 +139,17 @@ public class MainServiceImpl implements MainService {
                 System.out.println("비밀번호를 입력해주세요.");
                 String managerPassword = scanner.nextLine().trim();
                 if(managerPassword.equalsIgnoreCase("admin1234")){
+                    System.out.println("날짜를 입력해주세요. YYYY-MM-DD 형식입니다.");
+                    System.out.println("(q 입력시 메뉴로 돌아갑니다.)");
+                    String dayInput = scanner.nextLine().trim();
+
+                    if (dayInput.equals("q")) { // q 입력시
+                        System.out.println("메뉴로 돌아갑니다.");
+                        return;
+                    }
+
                     ManagerController managerController = new ManagerController();
-                    managerController.menu(); // 관리자 모드로 들어감
+                    managerController.menu(dayInput); // 관리자 모드로 들어감
                     return; // 끝나면
                 }
                 // 관리자 모드는 비밀번호 한 번 틀리면 로그인 함수 종료시키기

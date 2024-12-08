@@ -133,7 +133,7 @@ public class Account {
 
             System.out.println("최종 잔액: " + balance);
         } else {
-            System.out.println("1달 미만으로 경과했습니다. 이자 지급이 필요 없습니다.");
+            //System.out.println("1달 미만으로 경과했습니다. 이자 지급이 필요 없습니다.");
         }
     }
 
