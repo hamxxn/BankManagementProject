@@ -3,13 +3,12 @@ package org.example.controller;
 import org.example.service.ManagerService;
 import org.example.service.ManagerServiceImpl;
 
-import java.time.LocalDate;
 import java.util.Scanner;
 
 public class ManagerController {
 
     // 메뉴 선택 함수
-    public void menu(String todayDate) {
+    public void menu() {
         Scanner scanner = new Scanner(System.in);
         ManagerService managerService = new ManagerServiceImpl();
 
@@ -20,7 +19,7 @@ public class ManagerController {
                 String input = scanner.nextLine().trim();
                 int userSelection = Integer.parseInt(input); // 사용자가 선택한 메뉴의 번호를 받는 변수
                 if (userSelection == 1) {
-                    managerService.accountSearch(todayDate);
+                    managerService.accountSearch();
                 } else if (userSelection == 2) {
                     managerService.showAccountList();
                 } else if (userSelection == 3) {
