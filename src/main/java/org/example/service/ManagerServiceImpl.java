@@ -1,8 +1,12 @@
 package org.example.service;
 
 import org.example.entity.Account;
+import org.example.entity.Transaction;
 import org.example.repository.AccountServiceRepository;
+import org.example.repository.TransactionServiceRepository;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -51,7 +55,8 @@ public class ManagerServiceImpl implements ManagerService {
         }
     }
 
-    public void showAccountList() { // 계좌 목록 조회 함수
+    public void showAccountList() {
+        // 계좌 목록 조회 함수
         // <이름, 계좌번호, 잔액> 출력
         List<Account> allAccounts = accountServiceRepository.getAccountsAll();
         System.out.println("*** 계좌 목록 조회 ***");
@@ -70,6 +75,61 @@ public class ManagerServiceImpl implements ManagerService {
         }
         System.out.println("****************************************************");
 
+
         return;
+    }
+
+    @Override
+    public void showAccountHistory(LocalDate todayDate) {
+        System.out.println("**** 조회 메뉴 ***");
+        System.out.println("조회를 희망하는 기간을 선택해주세요");
+        System.out.println("1. 최근 1개월");
+        System.out.println("2. 최근 3개월");
+        System.out.println("3. 전체 기간");
+        try{
+        String Selectionperiod = scanner.nextLine().trim();
+
+        LocalDate startDate = null;
+        String period="";
+        switch (Selectionperiod) {
+            case "1":
+                startDate = todayDate.minusMonths(1);
+                period = "최근 1개월";
+                break;
+            case "2":
+                startDate = todayDate.minusMonths(3);
+                period = "최근 3개월";
+                break;
+            case "3":
+                startDate = LocalDate.MIN; // 전체 기간
+                period = "전체 기간";
+                break;
+            default:
+                System.out.println("잘못된 입력입니다. 메뉴로 돌아갑니다.");
+                return;
+        }
+
+        // 거래 내역 필터링 및 출력
+        System.out.println("### " +period + " 내역 ###");
+        LocalDate finalStartDate = startDate;
+        TransactionServiceRepository transactionServiceRepository=new TransactionServiceRepository();
+        List<Transaction> transactions = transactionServiceRepository.getTransactionList();
+        if (transactions.isEmpty()) {
+            System.out.println("선택하신 기간 내 거래 내역이 없습니다.");
+        } else {
+            System.out.println("<일시, 거래 유형, 메모, 거래 금액, 잔액>");
+            for (Transaction transaction : transactions) {
+                System.out.println(transaction.getDate()+"\t"+transaction.getTransactionType()+"\t"+transaction.getTransactionAmount()+"\t"+transaction.getMemo()+"\t"+transaction.getBalance());
+            }
+        }
+
+
+        } catch (NumberFormatException e) {
+            System.out.println("잘못된 입력 형식입니다. 메뉴로 돌아갑니다.");
+            return;
+        } catch (Exception e) {
+            System.out.println("잘못된 입력 형식입니다. 메뉴로 돌아갑니다.");
+            return;
+        }
     }
 }
