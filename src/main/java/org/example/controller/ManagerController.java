@@ -25,7 +25,6 @@ public class ManagerController {
                     managerService.showAccountList();
                 } else if (userSelection == 3) {
                     managerService.showAccountHistory(today);
-
                 } else if(userSelection==4){
                     break;
                 }else {
