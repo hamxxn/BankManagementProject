@@ -35,7 +35,7 @@ public class ManagerServiceImpl implements ManagerService {
                 List<Account> searchResult = accountServiceRepository.getAccountsByName(searchName);
 
                 if (searchResult.isEmpty()) { // 해당 고객이 존재하지 않을 경우
-                    System.out.println("해당 고객은 존재하지 않습니다.");
+                    System.out.println("해당 고객의 계좌는 존재하지 않습니다.");
                     System.out.println("메뉴로 돌아갑니다.");
                     break;
                 }
@@ -63,8 +63,7 @@ public class ManagerServiceImpl implements ManagerService {
         System.out.println(" ");
 
         if (allAccounts.isEmpty()) { // 단 하나의 계좌도 존재하지 않을 경우
-            System.out.println("현재 존재하는 계좌가 없습니다.");
-            System.out.println();
+            System.out.println("현재 등록된 계좌가 없습니다.");
             System.out.println("메뉴로 돌아갑니다.");
             return;
         }
@@ -83,7 +82,7 @@ public class ManagerServiceImpl implements ManagerService {
     public void showAccountHistory(LocalDate todayDate) {
 
         if (accountServiceRepository.getAccountsAll().isEmpty()) {
-            System.out.println("등록된 계좌가 없습니다.");
+            System.out.println("현재 등록된 계좌가 없습니다.");
             System.out.println("메뉴로 돌아갑니다.");
             return;
         }
