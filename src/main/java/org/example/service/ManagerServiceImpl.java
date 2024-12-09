@@ -81,7 +81,37 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Override
     public void showAccountHistory(LocalDate todayDate) {
-        System.out.println("**** 조회 메뉴 ***");
+
+        if (accountServiceRepository.getAccountsAll().isEmpty()) {
+            System.out.println("등록된 계좌가 없습니다.");
+            System.out.println("메뉴로 돌아갑니다.");
+            return;
+        }
+
+        System.out.println("**** 입출금 메뉴 조회 ***");
+
+        for (int i = 0; i < accountServiceRepository.getAccountsAll().size(); i++) {
+            Account account = accountServiceRepository.getAccountsAll().get(i);
+            System.out.println(i+1+". "+account.getName() +" "+account.getAccountNum()
+                    +" "+ account.getBalance()+"원");
+        }
+
+        System.out.println("조회할 계좌를 선택해주세요.");
+        System.out.println("(q 입력시 메뉴로 돌아갑니다.)");
+        String in=scanner.nextLine().trim();
+
+        if (in.equals("q")) {
+            System.out.println("메뉴로 돌아갑니다.");
+            return;
+        }
+        int accountNum=Integer.parseInt(in);
+        if(accountNum>accountServiceRepository.getAccountsAll().size()) {
+            System.out.println("1-"+accountServiceRepository.getAccountsAll().size()+" 사이의 수만 입력가능합니다. 메뉴로 돌아갑니다.");
+            return;
+        }
+        Account account = accountServiceRepository.getAccountsAll().get(accountNum-1);
+
+
         System.out.println("조회를 희망하는 기간을 선택해주세요");
         System.out.println("1. 최근 1개월");
         System.out.println("2. 최근 3개월");
@@ -113,8 +143,12 @@ public class ManagerServiceImpl implements ManagerService {
         System.out.println("### " +period + " 내역 ###");
         LocalDate finalStartDate = startDate;
         TransactionServiceRepository transactionServiceRepository=new TransactionServiceRepository();
-        List<Transaction> transactions = transactionServiceRepository.getTransactionList();
-        if (transactions.isEmpty()) {
+            List<Transaction> transactions = transactionServiceRepository.getTransactionList().stream()
+                    .filter(t -> t.getAccountNum().equals(account.getAccountNum()) && !t.getDate().isBefore(finalStartDate))
+                    .toList();
+
+
+            if (transactions.isEmpty()) {
             System.out.println("선택하신 기간 내 거래 내역이 없습니다.");
         } else {
             System.out.println("<일시, 거래 유형, 메모, 거래 금액, 잔액>");
