@@ -174,6 +174,14 @@ public class UserServiceImpl implements UserService {
             System.out.println("3. 전체 기간");
             String Selectionperiod = scanner.nextLine().trim();
 
+            if (Selectionperiod.equals("q")) { // q 입력 처리
+                System.out.println("메뉴로 돌아갑니다.");
+                return;
+            }else if (Selectionperiod.isEmpty()) { // 공백 입력 처리
+                System.out.println("잘못된 입력입니다. 메뉴로 돌아갑니다.");
+                return;
+            }
+
             LocalDate startDate = null;
             String period="";
             switch (Selectionperiod) {
@@ -812,6 +820,10 @@ public class UserServiceImpl implements UserService {
                             break;
                         case 2:
                             String account152Type = selectInterestRate();
+                            if(account152Type.equals("q")){
+                                System.out.println("메뉴로 돌아갑니다.");// q 입력 시 메뉴로 돌아감
+                                return;
+                            }
                             account = new Account152(user.getId(), user.getUsername(), accountNum, password, 0,todayDate.toString(),todayDate.toString(),account152Type);
                             account.setInterestRate();
                             break;
@@ -850,34 +862,57 @@ public class UserServiceImpl implements UserService {
                 System.out.println("1: 6개월 → 3%");
                 System.out.println("2: 1년 → 4%");
                 System.out.println("3: 2년 → 5%");
-                System.out.print("원하는 옵션을 선택하세요 (1, 2, 3): ");
-                int intrestRateChoice = scanner.nextInt();
+                System.out.println("원하는 옵션을 선택하세요 (1, 2, 3)");
+                System.out.println("(q 입력 시 메뉴로 돌아갑니다.)");
+
+                String input = scanner.nextLine().trim(); // 사용자 입력 받기 (공백 제거)
+
+                // 공백 입력 처리
+                if (input.isEmpty()) {
+                    System.out.println("공백 입력은 허용되지 않습니다. 다시 입력해주세요.");
+                    System.out.println();
+                    continue;
+                }
+
+                // 'q' 입력시 q 반환
+                if (input.equalsIgnoreCase("q")) {
+                    return "q";
+                }
+
+                // 숫자 입력 확인
+                int interestRateChoice;
+                try {
+                    interestRateChoice = Integer.parseInt(input); // 문자열을 정수로 변환
+                } catch (NumberFormatException e) {
+                    System.out.println("숫자를 입력해야 합니다. 다시 입력해주세요.");
+                    continue;
+                }
 
                 // 사용자의 선택에 따라 이자율 설정
-                switch (intrestRateChoice) {
+                switch (interestRateChoice) {
                     case 1:
-                        accountType="1";
+                        accountType = "1";
                         System.out.println("이자율이 3%로 설정되었습니다 (6개월)");
                         validInput = true; // 유효한 입력 처리
                         break;
                     case 2:
-                        accountType="2";
+                        accountType = "2";
                         System.out.println("이자율이 4%로 설정되었습니다 (1년)");
                         validInput = true; // 유효한 입력 처리
                         break;
                     case 3:
-                        accountType="3";
+                        accountType = "3";
                         System.out.println("이자율이 5%로 설정되었습니다 (2년)");
                         validInput = true; // 유효한 입력 처리
                         break;
                     default:
                         System.out.println("올바른 옵션을 선택하세요."); // 잘못된 입력 안내
                 }
-            } catch (InputMismatchException e) {
-                System.out.println("숫자를 입력해야 합니다. 다시 시도하세요.");
-                scanner.nextLine(); // 잘못된 입력 버퍼 비우기
+            } catch (Exception e) {
+                System.out.println("예기치 않은 오류가 발생했습니다. 다시 시도하세요.");
             }
         }
         return accountType;
     }
+
 }
