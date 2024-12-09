@@ -87,7 +87,7 @@ public class ManagerServiceImpl implements ManagerService {
             return;
         }
 
-        System.out.println("**** 입출금 메뉴 조회 ***");
+        System.out.println("*** 기간별 계좌 조회 ***");
 
         for (int i = 0; i < accountServiceRepository.getAccountsAll().size(); i++) {
             Account account = accountServiceRepository.getAccountsAll().get(i);
@@ -105,7 +105,7 @@ public class ManagerServiceImpl implements ManagerService {
         }
         int accountNum=Integer.parseInt(in);
         if(accountNum>accountServiceRepository.getAccountsAll().size()) {
-            System.out.println("1-"+accountServiceRepository.getAccountsAll().size()+" 사이의 수만 입력가능합니다. 메뉴로 돌아갑니다.");
+            System.out.println("유효한 범위의 입력이 아닙니다. 메뉴로 돌아갑니다.");
             return;
         }
         Account account = accountServiceRepository.getAccountsAll().get(accountNum-1);

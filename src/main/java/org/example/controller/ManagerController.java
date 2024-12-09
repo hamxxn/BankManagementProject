@@ -45,7 +45,7 @@ public class ManagerController {
         System.out.println("---------------------");
         System.out.println("1) 계좌 검색");
         System.out.println("2) 계좌 목록 조회");
-        System.out.println("3) 기간 별 계좌 조회");
+        System.out.println("3) 기간별 계좌 조회");
         System.out.println("4) 관리자 모드 종료");
         System.out.println("---------------------");
         System.out.println("메뉴 번호를 입력하세요!");
