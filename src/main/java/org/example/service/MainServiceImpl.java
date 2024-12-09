@@ -163,7 +163,9 @@ public class MainServiceImpl implements MainService {
                             userServiceRepository.LoginFileReader("LoginRecord.txt");
                             LocalDate last = userServiceRepository.getLastLogin("LoginRecord.txt");
 
-                            if (last == null || date.isBefore(last)) {
+                            if(last == null){
+                                userServiceRepository.addLoginRecord("LoginRecord.txt", "admin", date);
+                            }else if (date.isBefore(last)) {
                                 System.out.println("과거 날짜는 입력할 수 없습니다. 다시 입력해 주세요.");
                                 continue;
                             }
@@ -235,7 +237,9 @@ public class MainServiceImpl implements MainService {
                 userServiceRepository.LoginFileReader("LoginRecord.txt");
                 LocalDate last = userServiceRepository.getLastLogin("LoginRecord.txt");
 
-                if (last == null || date.isBefore(last)) {
+                if(last == null){ // 로그인 기록이 아예 없는 경우 첫 로그인 기록을 등록함.
+                    userServiceRepository.addLoginRecord("LoginRecord.txt", user.getId(), date);
+                }else if (date.isBefore(last)) {
                     System.out.println("과거 날짜는 입력할 수 없습니다. 다시 입력해 주세요.");
                     continue;
                 }
