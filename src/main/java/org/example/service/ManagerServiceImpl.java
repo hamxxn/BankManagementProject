@@ -103,8 +103,15 @@ public class ManagerServiceImpl implements ManagerService {
             System.out.println("메뉴로 돌아갑니다.");
             return;
         }
-        int accountNum=Integer.parseInt(in);
-        if(accountNum>accountServiceRepository.getAccountsAll().size()) {
+
+        int accountNum= 0;
+        try {
+            accountNum = Integer.parseInt(in);
+            if(accountNum > accountServiceRepository.getAccountsAll().size()) {
+                System.out.println("유효한 범위의 입력이 아닙니다. 메뉴로 돌아갑니다.");
+                return;
+            }
+        } catch (NumberFormatException e) {
             System.out.println("유효한 범위의 입력이 아닙니다. 메뉴로 돌아갑니다.");
             return;
         }
